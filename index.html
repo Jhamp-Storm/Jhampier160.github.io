@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio Virtual Académico</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Playfair Display"', 'Georgia', 'serif'],
+            body: ['"DM Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .slide-in { animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+    .glow-pulse { animation: glowPulse 2s ease-in-out infinite; }
+    @keyframes glowPulse { 0%, 100% { text-shadow: 0 0 20px rgba(34, 197, 94, 0.6), 0 0 40px rgba(16, 185, 129, 0.3); } 50% { text-shadow: 0 0 30px rgba(34, 197, 94, 0.9), 0 0 60px rgba(16, 185, 129, 0.6); } }
+    .neon-border { animation: neonBorder 3s ease-in-out infinite; }
+    @keyframes neonBorder { 0%, 100% { border-color: rgba(34, 197, 94, 0.2); box-shadow: 0 0 15px rgba(34, 197, 94, 0.2), inset 0 0 10px rgba(34, 197, 94, 0.1); } 50% { border-color: rgba(34, 197, 94, 0.8); box-shadow: 0 0 30px rgba(34, 197, 94, 0.6), inset 0 0 20px rgba(34, 197, 94, 0.3); } }
+    .hover-lift { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .hover-lift:hover { transform: translateY(-12px) scale(1.05); filter: drop-shadow(0 20px 40px rgba(34, 197, 94, 0.4)); }
+    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(34, 197, 94, 0.3), inset 0 0 20px rgba(34, 197, 94, 0.1); }
+    input:focus, textarea:focus, select:focus { outline: none; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5), inset 0 0 10px rgba(34, 197, 94, 0.2); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0810; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #22c55e, #10b981); border-radius: 4px; }
+    .toast-anim { animation: toastSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes toastSlide { from { opacity:0; transform:translateY(30px) scale(0.8); } to { opacity:1; transform:translateY(0) scale(1); } }
+    .scanlines { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 2px, transparent 2px, transparent 4px); pointer-events: none; z-index: 1; }
+    .cyber-glow { text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px rgba(34, 197, 94, 0.8); }
+    .pulse-glow { animation: pulseGlow 1.5s ease-in-out infinite; }
+    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); } 50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.8), inset 0 0 20px rgba(34, 197, 94, 0.2); } }
+    .btn-pulse { animation: btnPulse 0.4s ease-out; }
+    @keyframes btnPulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    .float-anime { animation: floatAnime 3s ease-in-out infinite; }
+    @keyframes floatAnime { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+    .glow-green { text-shadow: 0 0 10px #22c55e, 0 0 20px #10b981, 0 0 30px rgba(34, 197, 94, 0.6); }
+    .shimmer { animation: shimmer 2s infinite; }
+    @keyframes shimmer { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full bg-[#0f0d1a] text-gray-100 font-body">
+  <div id="app" class="h-full w-full flex flex-col overflow-hidden"></div><!-- Toast container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-[999] flex flex-col gap-2"></div>
+  <script>
+// ==================== STATE ====================
+let allData = [];
+let currentUser = null; // { username, role }
+let darkMode = true;
+let currentView = 'landing'; // landing | browse | login | signup | dashboard
+let selectedUnit = null;
+let selectedWeek = null;
+let sidebarOpen = true;
+let editingWork = null;
+let showAddUnit = false;
+let showAddWork = false;
+let recordCount = 0;
+
+const defaultConfig = {
+  app_title: 'Portafolio Académico',
+  welcome_message: 'Bienvenido al portafolio virtual académico',
+  student_name: 'Ruiz Gcencho Kevin Jhampier',
+  about_text: 'Desarrollador full-stack apasionado por la tecnología y la innovación. Especializado en crear experiencias digitales excepcionales.',
+  background_color: '#0a0810',
+  surface_color: '#1a1730',
+  text_color: '#e2e0ef',
+  primary_color: '#22c55e',
+  secondary_color: '#10b981',
+  font_family: 'DM Sans',
+  font_size: 15
+};
+
+// ==================== HELPERS ====================
+function getUnits() {
+  return allData.filter(d => d.type === 'unit').sort((a,b) => (a.unit_num||0) - (b.unit_num||0));
+}
+function getWorksForWeek(unitId, weekNum) {
+  return allData.filter(d => d.type === 'work' && d.unit_id === unitId && d.week_num === weekNum)
+    .sort((a,b) => (a.date||'').localeCompare(b.date||''));
+}
+function getUsers() {
+  return allData.filter(d => d.type === 'user');
+}
+function isAdmin() { return currentUser && currentUser.role === 'admin'; }
+function simpleHash(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; }
+  return 'h_' + Math.abs(h).toString(36);
+}
+
+function showToast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  const colors = type === 'error' ? 'bg-red-600' : type === 'warning' ? 'bg-amber-600' : 'bg-indigo-600';
+  t.className = `toast-anim ${colors} text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-xs`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
+}
+
+// ==================== DATA SDK ====================
+const dataHandler = {
+  onDataChanged(data) {
+    allData = data;
+    recordCount = data.length;
+    // Ensure admin user exists check
+    const users = getUsers();
+    const adminExists = users.some(u => u.username === 'admin');
+    if (!adminExists && recordCount === 0) {
+      // We'll prompt user to seed admin on first interaction
+    }
+    render();
+  }
+};
+
+async function initApp() {
+  const r = await window.dataSdk.init(dataHandler);
+  if (!r.isOk) { console.error('SDK init failed'); }
+}
+initApp();
+
+async function createRecord(obj) {
+  if (recordCount >= 999) { showToast('Límite de registros alcanzado (999)', 'warning'); return false; }
+  const r = await window.dataSdk.create(obj);
+  if (!r.isOk) { showToast('Error al guardar', 'error'); return false; }
+  return true;
+}
+async function deleteRecord(record) {
+  const r = await window.dataSdk.delete(record);
+  if (!r.isOk) { showToast('Error al eliminar', 'error'); return false; }
+  return true;
+}
+async function updateRecord(record) {
+  const r = await window.dataSdk.update(record);
+  if (!r.isOk) { showToast('Error al actualizar', 'error'); return false; }
+  return true;
+}
+
+// ==================== ELEMENT SDK ====================
+const cfg = { ...defaultConfig };
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    Object.assign(cfg, config);
+    applyTheme();
+    render();
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.primary_color || defaultConfig.primary_color, set: v => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+      { get: () => config.secondary_color || defaultConfig.secondary_color, set: v => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: {
+      get: () => config.font_family || defaultConfig.font_family,
+      set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+    },
+    fontSizeable: {
+      get: () => config.font_size || defaultConfig.font_size,
+      set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+    }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ['app_title', config.app_title || defaultConfig.app_title],
+    ['welcome_message', config.welcome_message || defaultConfig.welcome_message],
+    ['student_name', config.student_name || defaultConfig.student_name],
+    ['about_text', config.about_text || defaultConfig.about_text]
+  ])
+});
+
+function applyTheme() {
+  const bg = cfg.background_color || defaultConfig.background_color;
+  const txt = cfg.text_color || defaultConfig.text_color;
+  document.body.style.backgroundColor = bg;
+  document.body.style.color = txt;
+  document.body.style.fontFamily = `${cfg.font_family || defaultConfig.font_family}, DM Sans, system-ui, sans-serif`;
+}
+applyTheme();
+
+// ==================== RENDER ====================
+function render() {
+  const app = document.getElementById('app');
+  if (currentView === 'landing') return renderLanding(app);
+  if (currentView === 'browse') return renderBrowse(app);
+  if (currentView === 'login') return renderLogin(app);
+  if (currentView === 'signup') return renderSignup(app);
+  renderDashboard(app);
+}
+
+// -------- LANDING --------
+function renderLanding(app) {
+  const pc = cfg.primary_color || defaultConfig.primary_color;
+  const sc = cfg.surface_color || defaultConfig.surface_color;
+  const bs = cfg.font_size || defaultConfig.font_size;
+  const units = getUnits();
+
+  app.innerHTML = `
+    <div class="h-full w-full flex flex-col overflow-hidden p-4" style="background: linear-gradient(135deg, #000000 0%, #001a08 25%, #0a0810 50%, #001a08 75%, #000000 100%); position: relative;">
+      <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.04; background-image: linear-gradient(0deg, transparent 24%, rgba(34, 197, 94, 0.1) 25%, rgba(34, 197, 94, 0.1) 26%, transparent 27%, transparent 74%, rgba(34, 197, 94, 0.1) 75%, rgba(34, 197, 94, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(34, 197, 94, 0.1) 25%, rgba(34, 197, 94, 0.1) 26%, transparent 27%, transparent 74%, rgba(34, 197, 94, 0.1) 75%, rgba(34, 197, 94, 0.1) 76%, transparent 77%, transparent); background-size: 60px 60px; pointer-events: none; z-index: 0;"></div>
+      <div class="scanlines"></div>
+      <div class="relative z-10 h-full flex flex-col overflow-y-auto">
+        <!-- HEADER CON LOGO Y NOMBRE -->
+        <div class="text-center py-8">
+          <div class="inline-flex items-center justify-center w-28 h-28 rounded-3xl mb-6 pulse-glow relative overflow-hidden" style="background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); box-shadow: 0 0 60px rgba(34, 197, 94, 0.8);">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-5xl float-anime">✨</span>
+            </div>
+            <i data-lucide="code-2" class="w-16 h-16 text-white relative z-10"></i>
+          </div>
+          <h1 class="font-heading font-black glow-green" style="font-size: ${bs * 2.8}px; background: linear-gradient(135deg, #22c55e, #10b981, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 0.05em;">${cfg.student_name || defaultConfig.student_name}</h1>
+          <p style="font-size: ${bs * 1.1}px; color: #10b981; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700;">📚 PORTAFOLIO ACADÉMICO</p>
+          <p style="font-size: ${bs}px; opacity: 0.7; margin-top: 1rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">${cfg.about_text || defaultConfig.about_text}</p>
+        </div>
+
+        <!-- SECCIÓN SOBRE MI CON ANIMACIÓN -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8 px-4 max-w-4xl mx-auto">
+          <div class="hover-lift rounded-2xl p-6 border-2 neon-border text-center" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-color: rgba(34, 197, 94, 0.3);">
+            <i data-lucide="zap" class="w-8 h-8 mx-auto mb-3 text-green-400" style="text-shadow: 0 0 10px #22c55e;"></i>
+            <h3 class="font-bold cyber-glow" style="font-size: ${bs * 1.05}px; color: #22c55e;">Innovador</h3>
+            <p style="font-size: ${bs * 0.8}px; opacity: 0.6; margin-top: 0.5rem;">Creando soluciones creativas</p>
+          </div>
+          <div class="hover-lift rounded-2xl p-6 border-2 neon-border text-center" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-color: rgba(34, 197, 94, 0.3);">
+            <i data-lucide="rocket" class="w-8 h-8 mx-auto mb-3 text-green-400" style="text-shadow: 0 0 10px #22c55e;"></i>
+            <h3 class="font-bold cyber-glow" style="font-size: ${bs * 1.05}px; color: #22c55e;">Rápido</h3>
+            <p style="font-size: ${bs * 0.8}px; opacity: 0.6; margin-top: 0.5rem;">Entrega eficiente y ágil</p>
+          </div>
+          <div class="hover-lift rounded-2xl p-6 border-2 neon-border text-center" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-color: rgba(34, 197, 94, 0.3);">
+            <i data-lucide="star" class="w-8 h-8 mx-auto mb-3 text-green-400" style="text-shadow: 0 0 10px #22c55e;"></i>
+            <h3 class="font-bold cyber-glow" style="font-size: ${bs * 1.05}px; color: #22c55e;">Calidad</h3>
+            <p style="font-size: ${bs * 0.8}px; opacity: 0.6; margin-top: 0.5rem;">Excelencia en todo</p>
+          </div>
+        </div>
+
+        <!-- UNIDADES PREVIEW -->
+        <div class="flex-1 overflow-y-auto px-2 sm:px-8 py-6 flex flex-col items-center justify-center">
+          ${units.length === 0 ? `<div class="text-center"><i data-lucide="lock" class="w-20 h-20 mx-auto mb-4 opacity-20"></i><p style="font-size: ${bs}px; opacity: 0.4;">Inicia sesión para explorar las unidades</p></div>` : `<div class="max-w-6xl w-full"><p style="font-size: ${bs * 0.85}px; opacity: 0.5; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.1em; color: #22c55e; font-weight: 700;">► ${units.length} UNIDADES DISPONIBLES ◄</p><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">${units.map((u, i) => `<div class="fade-in hover-lift rounded-2xl p-6 border-2 neon-border group cursor-pointer overflow-hidden" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-color: rgba(34, 197, 94, 0.3); animation-delay: ${i * 0.15}s; position: relative;"><div style="position: absolute; top: -50%; right: -50%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(34, 197, 94, 0.1), transparent); group-hover:opacity: 1;" class="opacity-0 transition-opacity duration-300"></div><div class="relative z-1"><div class="flex items-center justify-between mb-4"><div class="w-14 h-14 rounded-xl flex items-center justify-center font-black text-white text-lg" style="background: linear-gradient(135deg, #22c55e, #10b981); box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);">U${u.unit_num}</div><i data-lucide="zap" class="w-6 h-6 text-green-400 opacity-70 animate-pulse"></i></div><h3 class="font-heading font-bold mb-2 cyber-glow" style="font-size: ${bs * 1.15}px; color: #22c55e;">Unidad ${u.unit_num}</h3><p class="text-sm opacity-60 mb-4 h-10 line-clamp-2">${u.unit_title || 'Sin título'}</p><div class="flex items-center gap-2 text-xs opacity-50 font-mono"><i data-lucide="layers" class="w-4 h-4"></i><span>4 SEMANAS</span></div></div></div>`).join('')}</div></div>`}
+        </div>
+
+        <!-- FOOTER CON BOTONES -->
+        <div class="text-center py-8 space-y-3 border-t px-4" style="border-color: rgba(34, 197, 94, 0.2);"><div class="flex gap-3 justify-center flex-wrap"><button id="land-browse-btn" class="px-8 py-3 rounded-xl font-black text-white transition-all hover:scale-110 uppercase tracking-wider" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); font-size: ${bs}px; box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); border: 2px solid rgba(34, 197, 94, 0.8);">👁️ Explorar</button><button id="land-login-btn" class="px-8 py-3 rounded-xl font-black text-white transition-all hover:scale-110 uppercase tracking-wider" style="background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%); font-size: ${bs}px; box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); border: 2px solid rgba(34, 197, 94, 0.8);">🔓 INGRESAR</button></div><p style="font-size: ${bs * 0.8}px; opacity: 0.4; margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.08em;">¿SIN CUENTA? REGÍSTRATE ↓</p></div>
+      </div>
+    </div>`;
+  lucide.createIcons();
+  document.getElementById('land-browse-btn').addEventListener('click', () => { currentView = 'browse'; render(); });
+  document.getElementById('land-login-btn').addEventListener('click', () => { currentView = 'login'; render(); });
+}
+
+// -------- BROWSE (SIN LOGIN) --------
+function renderBrowse(app) {
+  const pc = cfg.primary_color || defaultConfig.primary_color;
+  const sc = cfg.surface_color || defaultConfig.surface_color;
+  const bg = cfg.background_color || defaultConfig.background_color;
+  const tc = cfg.text_color || defaultConfig.text_color;
+  const sc2 = cfg.secondary_color || defaultConfig.secondary_color;
+  const bs = cfg.font_size || defaultConfig.font_size;
+  const units = getUnits();
+
+  app.innerHTML = `
+    <div class="h-full w-full flex flex-col overflow-hidden" style="background: linear-gradient(135deg, #000000 0%, #001a08 25%, #0a0810 50%, #001a08 75%, #000000 100%); position: relative;">
+      <div class="scanlines"></div>
+      <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.03; background-image: linear-gradient(0deg, transparent 24%, rgba(34, 197, 94, 0.1) 25%, rgba(34, 197, 94, 0.1) 26%, transparent 27%, transparent 74%, rgba(34, 197, 94, 0.1) 75%, rgba(34, 197, 94, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(34, 197, 94, 0.1) 25%, rgba(34, 197, 94, 0.1) 26%, transparent 27%, transparent 74%, rgba(34, 197, 94, 0.1) 75%, rgba(34, 197, 94, 0.1) 76%, transparent 77%, transparent); background-size: 60px 60px; pointer-events: none; z-index: 0;"></div>
+      
+      <!-- Header -->
+      <div class="relative z-10 flex items-center justify-between px-6 py-4 border-b" style="border-color: rgba(34, 197, 94, 0.2); background: linear-gradient(90deg, rgba(34, 197, 94, 0.05) 0%, transparent 100%);">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center font-black text-white" style="background: linear-gradient(135deg, #22c55e, #10b981); box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);">
+            <i data-lucide="book-open" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="font-heading font-bold cyber-glow" style="font-size: ${bs * 1.2}px; color: #22c55e;">${cfg.app_title || defaultConfig.app_title}</div>
+            <div class="text-xs opacity-40 uppercase tracking-widest">MODO VISUALIZACIÓN</div>
+          </div>
+        </div>
+        <button id="browse-back-btn" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-80 transition font-mono text-sm uppercase" style="color: #10b981;">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> ATRÁS
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="relative z-10 flex-1 overflow-y-auto p-6">
+        <div class="max-w-6xl mx-auto">
+          <h2 style="font-size: ${bs * 1.5}px; font-weight: 900; background: linear-gradient(135deg, #22c55e, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em;">📚 CATÁLOGO DE UNIDADES</h2>
+          
+          ${units.length === 0 ? `
+            <div class="flex items-center justify-center py-20 text-center">
+              <div>
+                <i data-lucide="inbox" class="w-16 h-16 mx-auto mb-4 opacity-20"></i>
+                <p style="font-size: ${bs}px; opacity: 0.4;">No hay unidades disponibles aún</p>
+              </div>
+            </div>
+          ` : `
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              ${units.map((u, i) => `
+                <div class="fade-in hover-lift rounded-3xl p-8 border-2 neon-border group overflow-hidden cursor-pointer transition-all" data-unit-browse="${u.__backendId}" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%); border-color: rgba(34, 197, 94, 0.3); animation-delay: ${i * 0.1}s;">
+                  <div style="position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(34, 197, 94, 0.2), transparent); filter: blur(40px); pointer-events: none;"></div>
+                  <div class="relative z-1">
+                    <div class="flex items-start justify-between mb-6">
+                      <div class="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl text-white" style="background: linear-gradient(135deg, #22c55e, #10b981); box-shadow: 0 0 25px rgba(34, 197, 94, 0.6);">U${u.unit_num}</div>
+                      <i data-lucide="star" class="w-6 h-6 text-green-400 opacity-60" style="filter: drop-shadow(0 0 8px #22c55e);"></i>
+                    </div>
+                    <h3 class="font-heading font-black mb-3 cyber-glow" style="font-size: ${bs * 1.3}px; color: #22c55e;">Unidad ${u.unit_num}</h3>
+                    <p class="text-sm opacity-70 mb-6 line-clamp-3">${u.unit_title || 'Sin descripción'}</p>
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                      <div class="px-3 py-2 rounded-lg text-xs font-mono text-center" style="background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.4); color: #22c55e;">
+                        <div class="font-black">4</div>
+                        <div class="opacity-60">SEMANAS</div>
+                      </div>
+                      <div class="px-3 py-2 rounded-lg text-xs font-mono text-center" style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #10b981;">
+                        <div class="font-black">${allData.filter(d => d.type === 'work' && d.unit_id === u.__backendId).length}</div>
+                        <div class="opacity-60">TRABAJOS</div>
+                      </div>
+                    </div>
+                    <button class="unit-browse-view w-full py-2.5 rounded-lg font-black uppercase text-sm transition-all hover:scale-105" data-unit-id="${u.__backendId}" style="background: linear-gradient(135deg, #22c55e, #4ade80); color: white; box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); border: 1px solid rgba(34, 197, 94, 0.6);">
+                      👁️ VER UNIDAD
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `}
+        </div>
+      </div>
+    </div>`;
+  
+  lucide.createIcons();
+  document.getElementById('browse-back-btn').addEventListener('click', () => { currentView = 'landing'; render(); });
+  document.querySelectorAll('.unit-browse-view').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const uid = btn.dataset.unitId;
+      selectedUnit = allData.find(d => d.__backendId === uid);
+      selectedWeek = null;
+      currentView = 'browse-detail';
+      render();
+    });
+  });
+}
+
+// -------- BROWSE DETAIL (SIN LOGIN - VER SEMANAS Y TRABAJOS) --------
+function renderBrowseDetail(app) {
+  const pc = cfg.primary_color || defaultConfig.primary_color;
+  const sc = cfg.surface_color || defaultConfig.surface_color;
+  const bg = cfg.background_color || defaultConfig.background_color;
+  const bs = cfg.font_size || defaultConfig.font_size;
+  const sc2 = cfg.secondary_color || defaultConfig.secondary_color;
+
+  if (!selectedUnit) {
+    currentView = 'browse';
+    render();
+    return;
+  }
+
+  const weeks = [];
+  for (let w = 1; w <= 4; w++) {
+    const works = getWorksForWeek(selectedUnit.__backendId, w);
+    weeks.push({ num: w, works });
+  }
+
+  app.innerHTML = `
+    <div class="h-full w-full flex flex-col overflow-hidden" style="background: linear-gradient(135deg, #000000 0%, #001a08 25%, #0a0810 50%, #001a08 75%, #000000 100%); position: relative;">
+      <div class="scanlines"></div>
+      <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.03; background-image: linear-gradient(0deg, transparent 24%, rgba(34, 197, 94, 0.1) 25%, rgba(34, 197, 94, 0.1) 26%, transparent 27%, transparent 74%, rgba(34, 197, 94, 0.1) 75%, rgba(34, 197, 94, 0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(34, 197, 94, 0.1) 25%, rgba(34, 197, 94, 0.1) 26%, transparent 27%, transparent 74%, rgba(34, 197, 94, 0.1) 75%, rgba(34, 197, 94, 0.1) 76%, transparent 77%, transparent); background-size: 60px 60px; pointer-events: none; z-index: 0;"></div>
+      
+      <!-- Header -->
+      <div class="relative z-10 flex items-center justify-between px-6 py-4 border-b" style="border-color: rgba(34, 197, 94, 0.2); background: linear-gradient(90deg, rgba(34, 197, 94, 0.05) 0%, transparent 100%);">
+        <div class="flex items-center gap-4">
+          <button id="detail-back-btn" class="p-2 rounded-lg hover:opacity-80 transition" style="color: #10b981;"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+          <div>
+            <h1 class="font-heading font-black cyber-glow" style="font-size: ${bs * 1.3}px; color: #22c55e;">U${selectedUnit.unit_num} • ${selectedUnit.unit_title || 'Unidad'}</h1>
+            <div class="text-xs opacity-40 uppercase tracking-widest">VISUALIZACIÓN PÚBLICA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="relative z-10 flex-1 overflow-y-auto p-6">
+        <div class="max-w-4xl mx-auto space-y-4">
+          ${weeks.map(wk => `
+            <details class="group rounded-2xl overflow-hidden border-2 neon-border" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%); border-color: rgba(34, 197, 94, 0.3);">
+              <summary class="flex items-center justify-between px-6 py-4 cursor-pointer select-none hover:opacity-90 transition font-bold" style="border-bottom: 1px solid rgba(34, 197, 94, 0.2);">
+                <div class="flex items-center gap-4">
+                  <div class="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-black text-white" style="background: linear-gradient(135deg, #22c55e, #10b981); box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);">S${wk.num}</div>
+                  <span class="cyber-glow" style="font-size: ${bs * 1.05}px; color: #22c55e;">SEMANA ${wk.num}</span>
+                  <span class="text-xs opacity-40 font-mono">${wk.works.length} TRABAJO${wk.works.length !== 1 ? 'S' : ''}</span>
+                </div>
+                <i data-lucide="chevron-down" class="w-5 h-5 opacity-40 transition-transform group-open:rotate-180"></i>
+              </summary>
+              <div class="px-6 py-4 grid gap-4 sm:grid-cols-2">
+                ${wk.works.length === 0 ? `<p class="text-sm opacity-30 col-span-full py-4 text-center font-mono">--- SIN TRABAJOS ---</p>` :
+                  wk.works.map(work => `
+                    <div class="card-hover rounded-xl p-5 border-2" style="background: ${bg}; border-color: rgba(34, 197, 94, 0.2);">
+                      <h3 class="font-bold mb-2 cyber-glow" style="font-size: ${bs * 1.05}px; color: #22c55e;">${work.title || 'Sin título'}</h3>
+                      <p class="text-xs opacity-60 mb-3 line-clamp-2">${work.description || '---'}</p>
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs opacity-40 font-mono"><i data-lucide="calendar" class="w-3 h-3 inline"></i> ${work.date || '—'}</span>
+                        ${work.link ? `<a href="${work.link}" target="_blank" rel="noopener noreferrer" class="text-xs font-black uppercase transition hover:scale-110" style="color: #10b981;"><i data-lucide="external-link" class="w-3.5 h-3.5 inline"></i> VER</a>` : ''}
+                      </div>
+                    </div>
+                  `).join('')}
+              </div>
+            </details>
+          `).join('')}
+        </div>
+      </div>
+    </div>`;
+  
+  lucide.createIcons();
+  document.getElementById('detail-back-btn').addEventListener('click', () => { selectedUnit = null; currentView = 'browse'; render(); });
+}
+
+// -------- LOGIN --------
+function renderLogin(app) {
+  const pc = cfg.primary_color || defaultConfig.primary_color;
+  const sc = cfg.surface_color || defaultConfig.surface_color;
+  const bs = cfg.font_size || defaultConfig.font_size;
+  app.innerHTML = `
+    <div class="h-full w-full flex items-center justify-center p-4" style="background: linear-gradient(135deg, #000000 0%, #001a08 50%, #000000 100%); position: relative;">
+      <div class="scanlines"></div>
+      <div class="fade-in w-full max-w-md rounded-3xl p-8 shadow-2xl border-2 neon-border" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%); border-color: rgba(34, 197, 94, 0.3); position: relative; z-10;">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 pulse-glow" style="background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); box-shadow: 0 0 40px rgba(34, 197, 94, 0.7);">
+            <i data-lucide="zap" class="w-8 h-8 text-white"></i>
+          </div>
+          <h1 class="font-heading font-black cyber-glow" style="font-size: ${bs * 1.8}px; color: #22c55e; letter-spacing: 0.05em;">INGRESAR</h1>
+          <p style="font-size: ${bs * 0.9}px; opacity: 0.7; margin-top: 0.5rem;">${cfg.welcome_message || defaultConfig.welcome_message}</p>
+        </div>
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label for="login-user" class="block text-xs font-black mb-2 uppercase tracking-widest" style="color: #22c55e;">▸ Usuario</label>
+            <input id="login-user" type="text" placeholder="Nombre de usuario" required
+              class="w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 border-2 font-mono" style="background: rgba(0,0,0,0.3); border-color: rgba(34, 197, 94, 0.3); font-size: ${bs}px;">
+          </div>
+          <div>
+            <label for="login-pass" class="block text-xs font-black mb-2 uppercase tracking-widest" style="color: #22c55e;">▸ Contraseña</label>
+            <input id="login-pass" type="password" placeholder="••••••••" required
+              class="w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 border-2 font-mono" style="background: rgba(0,0,0,0.3); border-color: rgba(34, 197, 94, 0.3); font-size: ${bs}px;">
+          </div>
+          <button type="submit" class="w-full py-3 rounded-xl text-white font-black transition-all hover:scale-105 uppercase tracking-wider btn-pulse" style="background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%); font-size: ${bs}px; box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); border: 2px solid rgba(34, 197, 94, 0.6);">
+            🔓 ACCESO
+          </button>
+        </form>
+        <div class="mt-6 text-center space-y-2">
+          <button id="go-back-landing" class="w-full text-sm hover:opacity-80 transition py-1" style="color: #10b981; opacity: 0.7;">← VOLVER</button>
+          <button id="go-signup" class="w-full text-sm hover:opacity-80 transition py-1" style="color: #22c55e; opacity: 0.7;">¿SIN CUENTA? REGÍSTRATE</button>
+        </div>
+        <div class="mt-6 p-4 rounded-lg text-xs opacity-60 text-center font-mono" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(34, 197, 94, 0.2); color: #10b981;">
+          DEMO: admin / admin123<br>
+          <span style="font-size: 0.7rem; opacity: 0.5;">(Se crea al primer login)</span>
+        </div>
+      </div>
+    </div>`;
+  lucide.createIcons();
+  document.getElementById('login-form').addEventListener('submit', handleLogin);
+  document.getElementById('go-signup').addEventListener('click', () => { currentView = 'signup'; render(); });
+  document.getElementById('go-back-landing').addEventListener('click', () => { currentView = 'landing'; render(); });
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!user || !pass) return;
+
+  const hash = simpleHash(pass);
+  const users = getUsers();
+
+  // Auto-create admin if not exists
+  if (user === 'admin' && pass === 'admin123') {
+    const existing = users.find(u => u.username === 'admin');
+    if (!existing) {
+      await createRecord({ type: 'user', username: 'admin', role: 'admin', password_hash: simpleHash('admin123'), title:'', description:'', date:'', link:'', unit_id:'', week_num:0, unit_num:0, unit_title:'' });
+      // Wait for data refresh
+      showToast('Cuenta admin creada. Inicia sesión de nuevo.');
+      return;
+    }
+  }
+
+  // Re-fetch after possible create
+  const freshUsers = allData.filter(d => d.type === 'user');
+  const found = freshUsers.find(u => u.username === user && u.password_hash === hash);
+  if (found) {
+    currentUser = { username: found.username, role: found.role };
+    currentView = 'dashboard';
+    selectedUnit = null;
+    selectedWeek = null;
+    render();
+    showToast(`¡Hola, ${currentUser.username}!`);
+  } else {
+    showToast('Credenciales incorrectas', 'error');
+  }
+}
+
+// -------- SIGNUP --------
+function renderSignup(app) {
+  const pc = cfg.primary_color || defaultConfig.primary_color;
+  const sc = cfg.surface_color || defaultConfig.surface_color;
+  const bs = cfg.font_size || defaultConfig.font_size;
+  app.innerHTML = `
+    <div class="h-full w-full flex items-center justify-center p-4" style="background: linear-gradient(135deg, #000000 0%, #001a08 50%, #000000 100%); position: relative;">
+      <div class="scanlines"></div>
+      <div class="fade-in w-full max-w-md rounded-3xl p-8 shadow-2xl border-2 neon-border" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%); border-color: rgba(34, 197, 94, 0.3); position: relative; z-10;">
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 pulse-glow" style="background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); box-shadow: 0 0 40px rgba(34, 197, 94, 0.7);">
+            <i data-lucide="zap" class="w-8 h-8 text-white"></i>
+          </div>
+          <h1 class="font-heading font-black cyber-glow" style="font-size: ${bs * 1.6}px; color: #22c55e; letter-spacing: 0.05em;">CREAR CUENTA</h1>
+          <p style="font-size: ${bs * 0.85}px; opacity: 0.7;">Regístrate como visualizador</p>
+        </div>
+        <form id="signup-form" class="space-y-4">
+          <div>
+            <label for="su-user" class="block text-xs font-black mb-2 uppercase tracking-widest" style="color: #22c55e;">▸ Usuario</label>
+            <input id="su-user" type="text" placeholder="Elige tu usuario" required
+              class="w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 border-2 font-mono" style="background: rgba(0,0,0,0.3); border-color: rgba(34, 197, 94, 0.3); font-size: ${bs}px;">
+          </div>
+          <div>
+            <label for="su-pass" class="block text-xs font-black mb-2 uppercase tracking-widest" style="color: #22c55e;">▸ Contraseña</label>
+            <input id="su-pass" type="password" placeholder="Mínimo 4 caracteres" required minlength="4"
+              class="w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 border-2 font-mono" style="background: rgba(0,0,0,0.3); border-color: rgba(34, 197, 94, 0.3); font-size: ${bs}px;">
+          </div>
+          <button type="submit" class="w-full py-3 rounded-xl text-white font-black transition-all hover:scale-105 uppercase tracking-wider btn-pulse" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); font-size: ${bs}px; box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); border: 2px solid rgba(34, 197, 94, 0.6);">
+            ✨ REGISTRARSE
+          </button>
+        </form>
+        <div class="mt-6 text-center">
+          <button id="go-login-from-signup" class="w-full text-sm hover:opacity-80 transition py-1" style="color: #10b981; opacity: 0.7;">¿YA TIENES CUENTA? INICIA SESIÓN</button>
+        </div>
+      </div>
+    </div>`;
+  lucide.createIcons();
+  document.getElementById('signup-form').addEventListener('submit', handleSignup);
+  document.getElementById('go-login-from-signup').addEventListener('click', () => { currentView = 'login'; render(); });
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  const user = document.getElementById('su-user').value.trim();
+  const pass = document.getElementById('su-pass').value;
+  if (!user || pass.length < 4) { showToast('Contraseña mínima: 4 caracteres', 'error'); return; }
+  if (user === 'admin') { showToast('Nombre reservado', 'error'); return; }
+  const existing = getUsers().find(u => u.username === user);
+  if (existing) { showToast('Usuario ya existe', 'error'); return; }
+
+  const ok = await createRecord({ type:'user', username:user, role:'viewer', password_hash:simpleHash(pass), title:'', description:'', date:'', link:'', unit_id:'', week_num:0, unit_num:0, unit_title:'' });
+  if (ok) {
+    showToast('¡Cuenta creada! Inicia sesión.');
+    currentView = 'login';
+    render();
+  }
+}
+
+// -------- DASHBOARD --------
+function renderDashboard(app) {
+  const pc = cfg.primary_color || defaultConfig.primary_color;
+  const sc = cfg.surface_color || defaultConfig.surface_color;
+  const bg = cfg.background_color || defaultConfig.background_color;
+  const tc = cfg.text_color || defaultConfig.text_color;
+  const sc2 = cfg.secondary_color || defaultConfig.secondary_color;
+  const bs = cfg.font_size || defaultConfig.font_size;
+  const units = getUnits();
+
+  app.innerHTML = `
+    <div class="flex h-full w-full overflow-hidden">
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-btn" class="fixed top-3 left-3 z-50 p-2 rounded-xl lg:hidden" style="background:${sc};">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Sidebar -->
+      <aside id="sidebar" class="slide-in fixed lg:relative z-40 h-full w-72 flex-shrink-0 flex flex-col overflow-y-auto transition-transform lg:translate-x-0 ${sidebarOpen ? '' : '-translate-x-full'}"
+        style="background:${sc}; border-right: 1px solid ${sc2};">
+        <div class="p-5 flex items-center gap-3" style="border-bottom: 1px solid ${sc2};">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:${pc};">
+            <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="font-heading font-bold truncate" style="font-size:${bs*1.1}px;">${cfg.app_title||defaultConfig.app_title}</div>
+            <div class="text-xs opacity-50 truncate">${currentUser.username} · ${currentUser.role === 'admin' ? 'Admin' : 'Visualizador'}</div>
+          </div>
+        </div>
+
+        <div class="p-4 flex-1 overflow-y-auto">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider opacity-50">Unidades</span>
+            ${isAdmin() ? `<button id="add-unit-btn" class="p-1 rounded-lg hover:opacity-80 transition" style="color:${pc};"><i data-lucide="plus" class="w-4 h-4"></i></button>` : ''}
+          </div>
+          <nav id="unit-list" class="space-y-1">
+            ${units.length === 0 ? `<p class="text-xs opacity-40 text-center py-4">Sin unidades aún</p>` :
+              units.map(u => {
+                const active = selectedUnit && selectedUnit.__backendId === u.__backendId;
+                return `<button data-uid="${u.__backendId}" class="unit-btn w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2 group"
+                  style="background:${active ? pc : 'transparent'}; color:${active ? '#fff' : tc}; opacity:${active ? 1 : 0.8};">
+                  <i data-lucide="book-open" class="w-4 h-4 flex-shrink-0"></i>
+                  <span class="truncate flex-1">Unidad ${u.unit_num}: ${u.unit_title||'Sin título'}</span>
+                  ${isAdmin() ? `<span class="del-unit opacity-0 group-hover:opacity-60 hover:!opacity-100 flex-shrink-0" data-del-uid="${u.__backendId}"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></span>` : ''}
+                </button>`;
+              }).join('')
+            }
+          </nav>
+        </div>
+
+        <div class="p-4" style="border-top: 1px solid ${sc2};">
+          <button id="logout-btn" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm opacity-60 hover:opacity-100 transition">
+            <i data-lucide="log-out" class="w-4 h-4"></i> Cerrar sesión
+          </button>
+        </div>
+      </aside>
+
+      <!-- Overlay for mobile -->
+      <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 lg:hidden ${sidebarOpen ? '' : 'hidden'}"></div>
+
+      <!-- Main content -->
+      <main class="flex-1 h-full overflow-y-auto p-4 lg:p-8" style="background:${bg};">
+        ${renderMainContent(units, pc, sc, bg, tc, sc2, bs)}
+      </main>
+    </div>
+
+    <!-- Add Unit Modal -->
+    ${showAddUnit ? renderAddUnitModal(pc, sc, bg, bs) : ''}
+    <!-- Add Work Modal -->
+    ${showAddWork ? renderAddWorkModal(pc, sc, bg, bs) : ''}
+    <!-- Edit Work Modal -->
+    ${editingWork ? renderEditWorkModal(pc, sc, bg, bs) : ''}
+  `;
+
+  lucide.createIcons();
+  bindDashboardEvents();
+}
+
+function renderMainContent(units, pc, sc, bg, tc, sc2, bs) {
+  if (!selectedUnit) {
+    return `
+      <div class="fade-in flex flex-col items-center justify-center h-full text-center max-w-lg mx-auto">
+        <div class="w-20 h-20 rounded-3xl flex items-center justify-center mb-6" style="background:${sc};">
+          <i data-lucide="layout-dashboard" class="w-10 h-10" style="color:${pc};"></i>
+        </div>
+        <h2 class="font-heading font-bold mb-3" style="font-size:${bs*1.6}px;">${cfg.app_title||defaultConfig.app_title}</h2>
+        <p style="font-size:${bs}px; opacity:0.6;">${cfg.welcome_message||defaultConfig.welcome_message}</p>
+        <p class="mt-2 opacity-40" style="font-size:${bs*0.85}px;">${units.length > 0 ? 'Selecciona una unidad en el menú lateral' : (isAdmin() ? 'Comienza creando tu primera unidad' : 'El administrador aún no ha creado unidades')}</p>
+      </div>`;
+  }
+
+  // Show weeks 1-16
+  const weeks = [];
+  for (let w = 1; w <= 4; w++) {
+    const works = getWorksForWeek(selectedUnit.__backendId, w);
+    weeks.push({ num: w, works });
+  }
+
+  return `
+    <div class="fade-in max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-6 flex-wrap gap-3 pt-8 lg:pt-0">
+        <div>
+          <h1 class="font-heading font-bold" style="font-size:${bs*1.7}px;">Unidad ${selectedUnit.unit_num}: ${selectedUnit.unit_title||'Sin título'}</h1>
+          <p class="opacity-50" style="font-size:${bs*0.85}px;">16 semanas · ${allData.filter(d=>d.type==='work'&&d.unit_id===selectedUnit.__backendId).length} trabajos</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        ${weeks.map(wk => `
+          <details class="group rounded-2xl overflow-hidden" style="background:${sc};" ${selectedWeek === wk.num ? 'open' : ''}>
+            <summary class="flex items-center justify-between px-5 py-4 cursor-pointer select-none hover:opacity-90 transition" style="border-bottom: 1px solid ${sc2};">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold" style="background:${pc}20; color:${pc};">S${wk.num}</div>
+                <span class="font-semibold" style="font-size:${bs}px;">Semana ${wk.num}</span>
+                <span class="text-xs opacity-40">${wk.works.length} trabajo${wk.works.length!==1?'s':''}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                ${isAdmin() ? `<button class="add-work-btn p-1.5 rounded-lg hover:opacity-80 transition" data-week="${wk.num}" style="color:${pc};" title="Añadir trabajo"><i data-lucide="plus" class="w-4 h-4"></i></button>` : ''}
+                <i data-lucide="chevron-down" class="w-4 h-4 opacity-40 transition-transform group-open:rotate-180"></i>
+              </div>
+            </summary>
+            <div class="px-5 py-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              ${wk.works.length === 0 ? `<p class="text-sm opacity-30 col-span-full py-2">Sin trabajos en esta semana</p>` :
+                wk.works.map(work => `
+                  <div class="card-hover rounded-xl p-4 relative group" style="background:${bg}; border:1px solid ${sc2};">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                      <h3 class="font-semibold truncate" style="font-size:${bs}px;">${work.title||'Sin título'}</h3>
+                      ${isAdmin() ? `
+                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition flex-shrink-0">
+                          <button class="edit-work-btn p-1 rounded hover:opacity-80" data-wid="${work.__backendId}" style="color:${pc};"><i data-lucide="edit" class="w-3.5 h-3.5"></i></button>
+                          <button class="del-work-btn p-1 rounded hover:opacity-80 text-red-400" data-wid="${work.__backendId}"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        </div>` : ''}
+                    </div>
+                    <p class="text-xs opacity-50 mb-2 line-clamp-2" style="font-size:${bs*0.8}px;">${work.description||'Sin descripción'}</p>
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs opacity-40"><i data-lucide="calendar" class="w-3 h-3 inline"></i> ${work.date||'—'}</span>
+                      ${work.link ? `<a href="${work.link}" target="_blank" rel="noopener noreferrer" class="text-xs font-medium hover:underline" style="color:${pc};"><i data-lucide="external-link" class="w-3 h-3 inline"></i> Ver</a>` : ''}
+                    </div>
+                  </div>
+                `).join('')}
+            </div>
+          </details>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+// -------- MODALS --------
+function renderAddUnitModal(pc, sc, bg, bs) {
+  const nextNum = (getUnits().length > 0 ? Math.max(...getUnits().map(u=>u.unit_num||0)) + 1 : 1);
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+      <div class="fade-in w-full max-w-md rounded-2xl p-6 shadow-2xl" style="background:${sc};">
+        <h2 class="font-heading font-bold mb-4" style="font-size:${bs*1.3}px;">Nueva Unidad</h2>
+        <form id="add-unit-form" class="space-y-4">
+          <div>
+            <label for="au-num" class="block text-sm mb-1 opacity-70">Número</label>
+            <input id="au-num" type="number" min="1" value="${nextNum}" required class="w-full px-4 py-2.5 rounded-xl text-white" style="background:${bg}; font-size:${bs}px;">
+          </div>
+          <div>
+            <label for="au-title" class="block text-sm mb-1 opacity-70">Título</label>
+            <input id="au-title" type="text" placeholder="Ej: Fundamentos de Programación" required class="w-full px-4 py-2.5 rounded-xl text-white placeholder-gray-500" style="background:${bg}; font-size:${bs}px;">
+          </div>
+          <div class="flex gap-3 justify-end">
+            <button type="button" id="cancel-add-unit" class="px-4 py-2 rounded-xl text-sm opacity-60 hover:opacity-100 transition">Cancelar</button>
+            <button type="submit" class="px-5 py-2 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition" style="background:${pc};">Crear</button>
+          </div>
+        </form>
+      </div>
+    </div>`;
+}
+
+function renderAddWorkModal(pc, sc, bg, bs) {
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+      <div class="fade-in w-full max-w-md rounded-2xl p-6 shadow-2xl" style="background:${sc};">
+        <h2 class="font-heading font-bold mb-4" style="font-size:${bs*1.3}px;">Nuevo Trabajo — Semana ${selectedWeek}</h2>
+        <form id="add-work-form" class="space-y-4">
+          <div>
+            <label for="aw-title" class="block text-sm mb-1 opacity-70">Título</label>
+            <input id="aw-title" type="text" placeholder="Título del trabajo" required class="w-full px-4 py-2.5 rounded-xl text-white placeholder-gray-500" style="background:${bg}; font-size:${bs}px;">
+          </div>
+          <div>
+            <label for="aw-desc" class="block text-sm mb-1 opacity-70">Descripción</label>
+            <textarea id="aw-desc" rows="3" placeholder="Descripción breve" class="w-full px-4 py-2.5 rounded-xl text-white placeholder-gray-500 resize-none" style="background:${bg}; font-size:${bs}px;"></textarea>
+          </div>
+          <div>
+            <label for="aw-date" class="block text-sm mb-1 opacity-70">Fecha</label>
+            <input id="aw-date" type="date" class="w-full px-4 py-2.5 rounded-xl text-white" style="background:${bg}; font-size:${bs}px; color-scheme:dark;">
+          </div>
+          <div>
+            <label for="aw-link" class="block text-sm mb-1 opacity-70">Enlace (opcional)</label>
+            <input id="aw-link" type="url" placeholder="https://..." class="w-full px-4 py-2.5 rounded-xl text-white placeholder-gray-500" style="background:${bg}; font-size:${bs}px;">
+          </div>
+          <div class="flex gap-3 justify-end">
+            <button type="button" id="cancel-add-work" class="px-4 py-2 rounded-xl text-sm opacity-60 hover:opacity-100 transition">Cancelar</button>
+            <button type="submit" class="px-5 py-2 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition" style="background:${pc};">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>`;
+}
+
+function renderEditWorkModal(pc, sc, bg, bs) {
+  const w = editingWork;
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+      <div class="fade-in w-full max-w-md rounded-2xl p-6 shadow-2xl" style="background:${sc};">
+        <h2 class="font-heading font-bold mb-4" style="font-size:${bs*1.3}px;">Editar Trabajo</h2>
+        <form id="edit-work-form" class="space-y-4">
+          <div>
+            <label for="ew-title" class="block text-sm mb-1 opacity-70">Título</label>
+            <input id="ew-title" type="text" value="${(w.title||'').replace(/"/g,'&quot;')}" required class="w-full px-4 py-2.5 rounded-xl text-white" style="background:${bg}; font-size:${bs}px;">
+          </div>
+          <div>
+            <label for="ew-desc" class="block text-sm mb-1 opacity-70">Descripción</label>
+            <textarea id="ew-desc" rows="3" class="w-full px-4 py-2.5 rounded-xl text-white resize-none" style="background:${bg}; font-size:${bs}px;">${w.description||''}</textarea>
+          </div>
+          <div>
+            <label for="ew-date" class="block text-sm mb-1 opacity-70">Fecha</label>
+            <input id="ew-date" type="date" value="${w.date||''}" class="w-full px-4 py-2.5 rounded-xl text-white" style="background:${bg}; font-size:${bs}px; color-scheme:dark;">
+          </div>
+          <div>
+            <label for="ew-link" class="block text-sm mb-1 opacity-70">Enlace</label>
+            <input id="ew-link" type="url" value="${(w.link||'').replace(/"/g,'&quot;')}" class="w-full px-4 py-2.5 rounded-xl text-white" style="background:${bg}; font-size:${bs}px;">
+          </div>
+          <div class="flex gap-3 justify-end">
+            <button type="button" id="cancel-edit-work" class="px-4 py-2 rounded-xl text-sm opacity-60 hover:opacity-100 transition">Cancelar</button>
+            <button type="submit" class="px-5 py-2 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition" style="background:${pc};">Actualizar</button>
+          </div>
+        </form>
+      </div>
+    </div>`;
+}
+
+// -------- EVENTS --------
+function bindDashboardEvents() {
+  // Mobile menu
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (menuBtn) menuBtn.addEventListener('click', () => { sidebarOpen = !sidebarOpen; render(); });
+  if (overlay) overlay.addEventListener('click', () => { sidebarOpen = false; render(); });
+
+  // Logout
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) logoutBtn.addEventListener('click', () => { currentUser = null; currentView = 'login'; selectedUnit = null; render(); });
+
+  // Unit selection
+  document.querySelectorAll('.unit-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (e.target.closest('.del-unit')) return;
+      const uid = btn.dataset.uid;
+      selectedUnit = allData.find(d => d.__backendId === uid);
+      selectedWeek = null;
+      if (window.innerWidth < 1024) sidebarOpen = false;
+      render();
+    });
+  });
+
+  // Delete unit (with inline confirm)
+  document.querySelectorAll('.del-unit').forEach(el => {
+    el.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const uid = el.dataset.delUid;
+      const unit = allData.find(d => d.__backendId === uid);
+      if (!unit || !isAdmin()) return;
+      // Delete all works in this unit first
+      const works = allData.filter(d => d.type === 'work' && d.unit_id === uid);
+      for (const w of works) await deleteRecord(w);
+      await deleteRecord(unit);
+      if (selectedUnit && selectedUnit.__backendId === uid) selectedUnit = null;
+      showToast('Unidad eliminada');
+    });
+  });
+
+  // Add unit
+  const addUnitBtn = document.getElementById('add-unit-btn');
+  if (addUnitBtn) addUnitBtn.addEventListener('click', () => { showAddUnit = true; render(); });
+  const cancelAddUnit = document.getElementById('cancel-add-unit');
+  if (cancelAddUnit) cancelAddUnit.addEventListener('click', () => { showAddUnit = false; render(); });
+  const addUnitForm = document.getElementById('add-unit-form');
+  if (addUnitForm) addUnitForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const num = parseInt(document.getElementById('au-num').value);
+    const title = document.getElementById('au-title').value.trim();
+    if (!title) return;
+    const ok = await createRecord({ type:'unit', unit_num:num, unit_title:title, title:'', description:'', date:'', link:'', unit_id:'', week_num:0, username:'', role:'', password_hash:'' });
+    if (ok) { showAddUnit = false; showToast('Unidad creada'); }
+  });
+
+  // Add work buttons
+  document.querySelectorAll('.add-work-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedWeek = parseInt(btn.dataset.week);
+      showAddWork = true;
+      render();
+    });
+  });
+  const cancelAddWork = document.getElementById('cancel-add-work');
+  if (cancelAddWork) cancelAddWork.addEventListener('click', () => { showAddWork = false; render(); });
+  const addWorkForm = document.getElementById('add-work-form');
+  if (addWorkForm) addWorkForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('aw-title').value.trim();
+    const desc = document.getElementById('aw-desc').value.trim();
+    const date = document.getElementById('aw-date').value;
+    const link = document.getElementById('aw-link').value.trim();
+    if (!title) return;
+    const ok = await createRecord({ type:'work', title, description:desc, date, link, unit_id:selectedUnit.__backendId, week_num:selectedWeek, unit_num:0, unit_title:'', username:'', role:'', password_hash:'' });
+    if (ok) { showAddWork = false; showToast('Trabajo añadido'); }
+  });
+
+  // Edit work
+  document.querySelectorAll('.edit-work-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wid = btn.dataset.wid;
+      editingWork = allData.find(d => d.__backendId === wid);
+      render();
+    });
+  });
+  const cancelEditWork = document.getElementById('cancel-edit-work');
+  if (cancelEditWork) cancelEditWork.addEventListener('click', () => { editingWork = null; render(); });
+  const editWorkForm = document.getElementById('edit-work-form');
+  if (editWorkForm) editWorkForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const updated = { ...editingWork,
+      title: document.getElementById('ew-title').value.trim(),
+      description: document.getElementById('ew-desc').value.trim(),
+      date: document.getElementById('ew-date').value,
+      link: document.getElementById('ew-link').value.trim()
+    };
+    const ok = await updateRecord(updated);
+    if (ok) { editingWork = null; showToast('Trabajo actualizado'); }
+  });
+
+  // Delete work
+  document.querySelectorAll('.del-work-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const wid = btn.dataset.wid;
+      const work = allData.find(d => d.__backendId === wid);
+      if (work && isAdmin()) {
+        await deleteRecord(work);
+        showToast('Trabajo eliminado');
+      }
+    });
+  });
+}
+
+// Initial render
+render();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f3177ee71e63d82',t:'MTc3NzMzMTA5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
