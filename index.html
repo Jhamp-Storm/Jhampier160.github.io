@@ -366,11 +366,23 @@ async function dbGetLinks(projectId) {
 async function dbAddLink(rec)   { return sbFetch('portfolio_links', { method:'POST', body:JSON.stringify(rec) }); }
 async function dbDeleteLink(id) { return sbFetch(`portfolio_links?id=eq.${id}`, { method:'DELETE' }); }
 
-// ── Auth against DB ───────────────────────────────────────────
+// ── Auth against DB (con respaldo local) ─────────────────────
+// Credenciales locales de respaldo — funcionan SIEMPRE
+// aunque Supabase no esté configurado todavía
+const LOCAL_ADMIN_USER = 'admin';
+const LOCAL_ADMIN_PASS = 'admin123';
+
 async function dbCheckAdmin(username, password) {
-  const r = await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&role=eq.admin&select=*`);
-  if (!r.ok || !r.data || !r.data.length) return false;
-  return r.data[0].password_hash === password;
+  // 1. Verificar credenciales locales primero (siempre funciona)
+  if (username === LOCAL_ADMIN_USER && password === LOCAL_ADMIN_PASS) return true;
+
+  // 2. Si Supabase está configurado, también verificar en BD
+  if (SUPABASE_URL.includes('PEGA_AQUI') || SUPABASE_KEY.includes('PEGA_AQUI')) return false;
+  try {
+    const r = await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&role=eq.admin&select=*`);
+    if (!r.ok || !r.data || !r.data.length) return false;
+    return r.data[0].password_hash === password;
+  } catch { return false; }
 }
 
 // ═══════════════════════════════════════════════════════════════
