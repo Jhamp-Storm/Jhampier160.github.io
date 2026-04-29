@@ -338,7 +338,9 @@ function getActiveKey() {
 }
 
 async function sbFetch(path, opts = {}) {
-  const url = `${SUPABASE_URL}/rest/v1/${path}`;
+  // Limpiar path: quitar slashes iniciales y espacios
+  const cleanPath = path.replace(/^\/+/, '').trim();
+  const url = `${SUPABASE_URL}/rest/v1/${cleanPath}`;
   const activeKey = getActiveKey();
   const res = await fetch(url, {
     ...opts,
