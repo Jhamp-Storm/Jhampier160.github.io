@@ -282,10 +282,10 @@
 //  ▼▼▼ PEGA AQUÍ TUS CREDENCIALES DE SUPABASE ▼▼▼
 // ═══════════════════════════════════════════════════════════════
 
-const SUPABASE_URL = 'https://grcdofidpphocbuqjxdz.supabase.co';
+const SUPABASE_URL = 'PEGA_AQUI_TU_SUPABASE_URL';
 // Ejemplo: 'https://abcdefghijklmnop.supabase.co'
 
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyY2RvZmlkcHBob2NidXFqeGR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjM2MTcsImV4cCI6MjA5Mjg5OTYxN30.tyTUtx72f98WPd0TNLrFvMqp0qwLUCP6dFZxvlnrYPc';
+const SUPABASE_KEY = 'PEGA_AQUI_TU_ANON_API_KEY';
 // Ejemplo: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
 // Encuéntralo en: Supabase → Settings → API → Project API keys → anon public
 
@@ -610,30 +610,100 @@ function openAddModal() {
     <form id="project-form" onsubmit="handleAdd(event)">
       <label class="block mb-1" style="${LS}">&gt; TÍTULO *</label>
       <input id="pf-title" required class="w-full px-3 py-2 rounded mb-3 text-sm" style="${FS}">
+
       <label class="block mb-1" style="${LS}">&gt; DESCRIPCIÓN</label>
       <textarea id="pf-desc" rows="2" class="w-full px-3 py-2 rounded mb-3 text-sm resize-none" style="${FS}"></textarea>
+
       <label class="block mb-1" style="${LS}">&gt; ENLACE URL PRINCIPAL (opcional)</label>
       <input id="pf-link" type="url" class="w-full px-3 py-2 rounded mb-3 text-sm" style="${FS}" placeholder="https://...">
+
       <label class="block mb-1" style="${LS}">&gt; ESTADO</label>
-      <select id="pf-status" class="w-full px-3 py-2 rounded mb-5 text-sm" style="${FS} background:rgba(2,4,8,0.9);">
+      <select id="pf-status" class="w-full px-3 py-2 rounded mb-4 text-sm" style="${FS} background:rgba(2,4,8,0.9);">
         <option value="pendiente">PENDIENTE</option>
         <option value="en progreso">EN PROGRESO</option>
         <option value="completado">COMPLETADO</option>
       </select>
+
+      <label class="block mb-1" style="${LS}">&gt; ARCHIVOS ADJUNTOS (opcional)</label>
+      <div class="drop-zone p-4 text-center rounded mb-1" id="add-drop-zone" onclick="document.getElementById('pf-files').click()">
+        <i data-lucide="upload-cloud" style="width:20px;height:20px;color:var(--c-primary);margin:0 auto 6px;display:block;"></i>
+        <p class="font-mono text-xs" style="color:var(--c-secondary);">Click o arrastra archivos aquí</p>
+        <p class="font-mono text-xs mt-1" style="color:rgba(74,112,144,0.5);">PDF, Word, Excel, imágenes...</p>
+      </div>
+      <input type="file" id="pf-files" style="display:none;" multiple onchange="previewSelectedFiles(event)">
+      <div id="pf-files-preview" class="flex flex-wrap gap-2 mt-2 mb-4"></div>
+
       <div class="flex gap-3 justify-end">
         <button type="button" onclick="closeModal()" class="btn-accent px-4 py-2 rounded text-xs">CANCELAR</button>
         <button type="submit" id="add-btn" class="btn-primary px-4 py-2 rounded text-xs">GUARDAR</button>
       </div>
     </form>`;
   showModal();
+  lucide.createIcons();
+  // drag & drop en modal de nuevo registro
+  const zone = document.getElementById('add-drop-zone');
+  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', ()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e=>{
+    e.preventDefault(); zone.classList.remove('drag-over');
+    const dt = new DataTransfer();
+    const existing = document.getElementById('pf-files').files;
+    for (const f of existing) dt.items.add(f);
+    for (const f of e.dataTransfer.files) dt.items.add(f);
+    document.getElementById('pf-files').files = dt.files;
+    previewSelectedFiles({ target: document.getElementById('pf-files') });
+  });
+}
+
+function previewSelectedFiles(e) {
+  const files = [...e.target.files];
+  const preview = document.getElementById('pf-files-preview');
+  if (!preview) return;
+  preview.innerHTML = files.map((f,i)=>{
+    const type = f.type||'';
+    const cls  = type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
+    const icon = type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';
+    const name = f.name.length>22 ? f.name.substring(0,20)+'…' : f.name;
+    return `<span class="file-badge ${cls} font-mono">
+      <i data-lucide="${icon}" style="width:10px;height:10px;"></i> ${escHtml(name)}
+    </span>`;
+  }).join('');
+  lucide.createIcons();
 }
 
 async function handleAdd(e) {
   e.preventDefault();
   const btn=document.getElementById('add-btn'); btn.disabled=true; btn.textContent='GUARDANDO...';
-  const r=await dbCreate({ unit:selectedUnit, week:selectedWeek, title:document.getElementById('pf-title').value.trim(), description:document.getElementById('pf-desc').value.trim(), link:document.getElementById('pf-link').value.trim(), status:document.getElementById('pf-status').value, created_by:currentUser, created_at:new Date().toISOString() });
-  if (r.ok) { showToast('REGISTRO CREADO'); await loadProjects(); }
-  else { showToast('ERROR: '+(r.err||'fallo al guardar'),'error'); }
+
+  // 1. Crear el proyecto primero
+  const r=await dbCreate({
+    unit:selectedUnit, week:selectedWeek,
+    title:document.getElementById('pf-title').value.trim(),
+    description:document.getElementById('pf-desc').value.trim(),
+    link:document.getElementById('pf-link').value.trim(),
+    status:document.getElementById('pf-status').value,
+    created_by:currentUser, created_at:new Date().toISOString()
+  });
+
+  if (!r.ok) { showToast('ERROR: '+(r.err||'fallo al guardar'),'error'); btn.disabled=false; btn.textContent='GUARDAR'; return; }
+
+  // 2. Subir archivos si hay seleccionados
+  const projectId = r.data && r.data[0] ? r.data[0].id : null;
+  const fileInput = document.getElementById('pf-files');
+  if (projectId && fileInput && fileInput.files.length > 0) {
+    btn.textContent='SUBIENDO ARCHIVOS...';
+    const files = [...fileInput.files];
+    for (const file of files) {
+      const upRes = await sbUploadFile(file);
+      if (upRes.ok) {
+        await dbAddFile({ project_id:projectId, file_name:file.name, file_url:upRes.url, file_type:file.type, file_size:file.size, uploaded_by:currentUser });
+      } else {
+        showToast('Error subiendo: '+file.name,'error');
+      }
+    }
+  }
+
+  showToast('REGISTRO CREADO'); await loadProjects();
   closeModal();
 }
 
