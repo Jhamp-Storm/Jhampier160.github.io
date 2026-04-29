@@ -190,12 +190,24 @@
       <button onclick="showAuthForm('admin')" class="btn-accent w-full py-3 px-4 rounded mb-3 flex items-center justify-center gap-2">
         <i data-lucide="shield" style="width:14px;height:14px;"></i> [ADMIN] MODO CREATOR
       </button>
-      <button onclick="showAuthForm('viewer')" class="btn-primary w-full py-3 px-4 rounded mb-3 flex items-center justify-center gap-2">
+      <button onclick="showViewerOptions()" class="btn-primary w-full py-3 px-4 rounded mb-3 flex items-center justify-center gap-2">
         <i data-lucide="eye" style="width:14px;height:14px;"></i> [USER] MODO VIEWER
       </button>
       <button onclick="goToHome()" class="w-full py-3 px-4 rounded flex items-center justify-center gap-2 font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:var(--c-secondary); letter-spacing:1px;">
         <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> VOLVER
       </button>
+      <!-- VIEWER OPTIONS -->
+      <div id="viewer-options" class="mt-4 pt-4" style="border-top:1px solid rgba(0,245,255,0.1); display:none;">
+        <h3 class="font-display text-xs font-bold mb-3 neon-text tracking-widest text-center">[ MODO VISUALIZADOR ]</h3>
+        <button onclick="showViewerRegister()" class="btn-primary w-full py-2.5 px-4 rounded mb-2 flex items-center justify-center gap-2" style="font-size:10px;">
+          <i data-lucide="user-plus" style="width:12px;height:12px;"></i> REGISTRARSE
+        </button>
+        <button onclick="showAuthForm('viewer')" class="w-full py-2.5 px-4 rounded flex items-center justify-center gap-2 font-display text-xs" style="background:transparent; border:1px solid rgba(0,245,255,0.2); color:var(--c-primary); letter-spacing:1px;">
+          <i data-lucide="log-in" style="width:12px;height:12px;"></i> YA TENGO CUENTA
+        </button>
+        <button onclick="closeViewerOptions()" class="w-full mt-2 py-2 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--c-secondary); letter-spacing:1px;">CANCELAR</button>
+      </div>
+
       <div id="auth-form-container" class="mt-6 pt-6" style="border-top:1px solid rgba(0,245,255,0.1); display:none;">
         <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center" id="auth-title"></h3>
         <form id="auth-form" onsubmit="handleAuth(event)">
@@ -207,6 +219,22 @@
           <button type="button" onclick="closeAuthForm()" class="w-full py-2.5 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,60,110,0.3); color:var(--c-accent); letter-spacing:1px;">CANCELAR</button>
         </form>
         <p class="font-mono text-xs text-center mt-3" id="auth-msg"></p>
+      </div>
+
+      <!-- REGISTRO VISUALIZADOR -->
+      <div id="viewer-register-container" class="mt-6 pt-6" style="border-top:1px solid rgba(0,245,255,0.1); display:none;">
+        <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center">[ NUEVO VISUALIZADOR ]</h3>
+        <form id="register-form" onsubmit="handleRegister(event)">
+          <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; USUARIO</label>
+          <input id="reg-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="elige un nombre...">
+          <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONTRASEÑA</label>
+          <input id="reg-pass" required type="password" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="••••••••">
+          <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONFIRMAR CONTRASEÑA</label>
+          <input id="reg-confirm" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="••••••••">
+          <button type="submit" id="reg-btn" class="btn-primary w-full py-2.5 px-4 rounded mb-2">REGISTRARSE</button>
+          <button type="button" onclick="showViewerOptions()" class="w-full py-2.5 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,60,110,0.3); color:var(--c-accent); letter-spacing:1px;">VOLVER</button>
+        </form>
+        <p class="font-mono text-xs text-center mt-3" id="reg-msg"></p>
       </div>
     </div>
   </div>
@@ -282,14 +310,14 @@
 //  ▼▼▼ PEGA AQUÍ TUS CREDENCIALES DE SUPABASE ▼▼▼
 // ═══════════════════════════════════════════════════════════════
 
-const SUPABASE_URL = 'https://grcdofidpphocbuqjxdz.supabase.co';
+const SUPABASE_URL = 'PEGA_AQUI_TU_SUPABASE_URL';
 // Ejemplo: 'https://abcdefghijklmnop.supabase.co'
 
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyY2RvZmlkcHBob2NidXFqeGR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjM2MTcsImV4cCI6MjA5Mjg5OTYxN30.tyTUtx72f98WPd0TNLrFvMqp0qwLUCP6dFZxvlnrYPc';
+const SUPABASE_KEY = 'PEGA_AQUI_TU_ANON_API_KEY';
 // Ejemplo: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
 // Encuéntralo en: Supabase → Settings → API → Project API keys → anon public
 
-const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyY2RvZmlkcHBob2NidXFqeGR6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzMyMzYxNywiZXhwIjoyMDkyODk5NjE3fQ.h-Fi-dDNbvPwTwzC7Nzhz--RVebNVYQ3Tv4qYCPqzBo';
+const SUPABASE_SERVICE_KEY = 'PEGA_AQUI_TU_SERVICE_ROLE_KEY';
 // Encuéntralo en: Supabase → Settings → API → Project API keys → service_role
 // ⚠ Esta clave solo se usa para subir archivos al storage
 
@@ -429,15 +457,75 @@ async function loadProjects() { allProjects = await dbGetAll(); renderContent();
 function goToHome()  { currentRole=null; currentUser=null; show('home-screen'); hide('login-screen'); hide('main-app'); closeAuthForm(); selectedUnit=1; selectedWeek=null; searchQuery=''; }
 function goToLogin() { hide('home-screen'); show('login-screen','flex'); }
 
+function showViewerOptions() {
+  document.getElementById('viewer-options').style.display='block';
+  document.getElementById('auth-form-container').style.display='none';
+  document.getElementById('viewer-register-container').style.display='none';
+}
+function closeViewerOptions() {
+  document.getElementById('viewer-options').style.display='none';
+}
+
+function showViewerRegister() {
+  document.getElementById('viewer-options').style.display='none';
+  document.getElementById('auth-form-container').style.display='none';
+  document.getElementById('viewer-register-container').style.display='block';
+  document.getElementById('reg-user').focus();
+}
+
 function showAuthForm(role) {
   authPendingRole = role;
+  document.getElementById('viewer-options').style.display='none';
+  document.getElementById('viewer-register-container').style.display='none';
   document.getElementById('auth-title').textContent = role==='admin' ? '[ ACCESO ADMINISTRADOR ]' : '[ ACCESO VISUALIZADOR ]';
   document.getElementById('auth-user').value=''; document.getElementById('auth-pass').value='';
   document.getElementById('auth-msg').textContent='';
   document.getElementById('auth-form-container').style.display='block';
   document.getElementById('auth-user').focus();
 }
-function closeAuthForm() { document.getElementById('auth-form-container').style.display='none'; authPendingRole=null; }
+function closeAuthForm() {
+  document.getElementById('auth-form-container').style.display='none';
+  document.getElementById('viewer-options').style.display='none';
+  document.getElementById('viewer-register-container').style.display='none';
+  authPendingRole=null;
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const username = document.getElementById('reg-user').value.trim();
+  const password = document.getElementById('reg-pass').value.trim();
+  const confirm  = document.getElementById('reg-confirm').value.trim();
+  const msg      = document.getElementById('reg-msg');
+  const btn      = document.getElementById('reg-btn');
+  if (!username || !password) { setMsg(msg,'> ERROR: completa todos los campos','#ef4444'); return; }
+  if (password !== confirm)   { setMsg(msg,'> ERROR: las contraseñas no coinciden','var(--c-accent)'); return; }
+  if (password.length < 4)    { setMsg(msg,'> ERROR: contraseña muy corta (mín. 4 caracteres)','var(--c-accent)'); return; }
+  btn.disabled=true; btn.innerHTML='<span class="spinner inline-block mr-2"></span> REGISTRANDO...';
+  try {
+    // Verificar si el usuario ya existe
+    const check = await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&select=id`);
+    if (check.ok && check.data && check.data.length > 0) {
+      setMsg(msg,'> ERROR: ese usuario ya existe','var(--c-accent)');
+      btn.disabled=false; btn.textContent='REGISTRARSE';
+      return;
+    }
+    // Crear usuario visualizador
+    const r = await sbFetch('portfolio_users', {
+      method: 'POST',
+      body: JSON.stringify({ username, password_hash: password, role: 'viewer' })
+    });
+    if (r.ok) {
+      setMsg(msg,'> REGISTRO EXITOSO — iniciando sesión...','var(--c-green)');
+      setTimeout(()=>{ currentRole='viewer'; currentUser=username; loginSuccess(); }, 800);
+    } else {
+      setMsg(msg,'> ERROR al registrar: '+( r.err||'intenta de nuevo'),'var(--c-accent)');
+    }
+  } catch(err) {
+    setMsg(msg,'> ERROR de conexión','var(--c-accent)');
+  } finally {
+    btn.disabled=false; btn.textContent='REGISTRARSE';
+  }
+}
 
 async function handleAuth(e) {
   e.preventDefault();
