@@ -15,21 +15,21 @@
     .font-mono { font-family: 'Share Tech Mono', monospace; }
 
     :root {
-      --c-bg: #020408;
-      --c-surface: #0a0f1a;
-      --c-text: #c8e6ff;
-      --c-primary: #00f5ff;
-      --c-secondary: #4a7090;
-      --c-accent: #ff3c6e;
-      --c-green: #00ff88;
-      --c-warning: #ffaa00;
+      --c-bg: #06020f;
+      --c-surface: #0d0818;
+      --c-text: #e8d8ff;
+      --c-primary: #b060ff;
+      --c-secondary: #5a3878;
+      --c-accent: #e040fb;
+      --c-green: #cc44ff;
+      --c-warning: #ff44aa;
     }
 
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,255,0.015) 2px, rgba(0,245,255,0.015) 4px);
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(160,60,255,0.018) 2px, rgba(160,60,255,0.018) 4px);
       pointer-events: none;
       z-index: 9999;
     }
@@ -37,7 +37,7 @@
       content: '';
       position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.8) 100%);
       pointer-events: none;
       z-index: 9998;
     }
@@ -45,30 +45,54 @@
     .grid-bg {
       background-color: var(--c-bg);
       background-image:
-        linear-gradient(rgba(0,245,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,245,255,0.05) 1px, transparent 1px);
+        linear-gradient(rgba(140,40,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140,40,255,0.06) 1px, transparent 1px);
       background-size: 40px 40px;
       animation: gridScroll 20s linear infinite;
     }
     @keyframes gridScroll { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
 
-    .neon-text  { text-shadow: 0 0 10px var(--c-primary), 0 0 30px var(--c-primary), 0 0 60px rgba(0,245,255,0.3); }
-    .neon-accent{ text-shadow: 0 0 10px var(--c-accent), 0 0 30px var(--c-accent); }
+    /* Ambient purple glow layers */
+    .grid-bg::before {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: -10%;
+      width: 60%;
+      height: 70%;
+      background: radial-gradient(ellipse, rgba(100,20,200,0.18) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .grid-bg::after {
+      content: '';
+      position: fixed;
+      bottom: -10%;
+      right: -10%;
+      width: 50%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(180,30,220,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .neon-text  { text-shadow: 0 0 10px var(--c-primary), 0 0 30px var(--c-primary), 0 0 60px rgba(160,60,255,0.4); }
+    .neon-accent{ text-shadow: 0 0 10px var(--c-accent), 0 0 30px var(--c-accent), 0 0 60px rgba(224,64,251,0.4); }
     .neon-green { text-shadow: 0 0 10px var(--c-green), 0 0 30px var(--c-green); }
 
-    .neon-border { border: 1px solid var(--c-primary); box-shadow: 0 0 8px rgba(0,245,255,0.3), inset 0 0 8px rgba(0,245,255,0.05); }
-    .neon-border-accent { border: 1px solid var(--c-accent); box-shadow: 0 0 8px rgba(255,60,110,0.3), inset 0 0 8px rgba(255,60,110,0.05); }
+    .neon-border { border: 1px solid var(--c-primary); box-shadow: 0 0 8px rgba(160,60,255,0.35), inset 0 0 8px rgba(160,60,255,0.07); }
+    .neon-border-accent { border: 1px solid var(--c-accent); box-shadow: 0 0 8px rgba(224,64,251,0.35), inset 0 0 8px rgba(224,64,251,0.07); }
 
     .glitch { position: relative; }
     .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .glitch::before { left: 2px; text-shadow: -2px 0 var(--c-accent); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim 3s infinite linear alternate-reverse; }
-    .glitch::after  { left: -2px; text-shadow: -2px 0 var(--c-green), 2px 2px var(--c-primary); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim2 3s infinite linear alternate-reverse; }
+    .glitch::after  { left: -2px; text-shadow: -2px 0 #7b00ff, 2px 2px var(--c-primary); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim2 3s infinite linear alternate-reverse; }
     @keyframes glitch-anim  { 0%{clip:rect(42px,9999px,44px,0)} 25%{clip:rect(12px,9999px,59px,0)} 50%{clip:rect(48px,9999px,29px,0)} 75%{clip:rect(72px,9999px,17px,0)} 100%{clip:rect(2px,9999px,67px,0)} }
     @keyframes glitch-anim2 { 0%{clip:rect(65px,9999px,100px,0)} 25%{clip:rect(52px,9999px,74px,0)} 50%{clip:rect(79px,9999px,55px,0)} 75%{clip:rect(14px,9999px,44px,0)} 100%{clip:rect(34px,9999px,22px,0)} }
 
     .sidebar-item { transition: all 0.2s ease; position: relative; }
     .sidebar-item:hover { transform: translateX(4px); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); }
-    .sidebar-item.active { border-left: 2px solid var(--c-primary); background: rgba(0,245,255,0.07); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); box-shadow: inset 0 0 15px rgba(0,245,255,0.05); }
+    .sidebar-item.active { border-left: 2px solid var(--c-primary); background: rgba(160,60,255,0.08); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); box-shadow: inset 0 0 15px rgba(160,60,255,0.07); }
     .sidebar-item::before { content: '▶'; position: absolute; left: 8px; opacity: 0; color: var(--c-primary); font-size: 8px; transition: opacity 0.2s; }
     .sidebar-item:hover::before, .sidebar-item.active::before { opacity: 1; }
 
@@ -76,9 +100,9 @@
     @keyframes cardIn { from { opacity:0; transform:translateY(12px) scale(0.98); } to { opacity:1; transform:translateY(0) scale(1); } }
 
     .game-card { transition: all 0.25s ease; position: relative; overflow: hidden; }
-    .game-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent 30%, rgba(0,245,255,0.05) 50%, transparent 70%); transform: translateX(-100%) rotate(45deg); transition: transform 0.5s ease; }
+    .game-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent 30%, rgba(160,60,255,0.07) 50%, transparent 70%); transform: translateX(-100%) rotate(45deg); transition: transform 0.5s ease; }
     .game-card:hover::before { transform: translateX(100%) rotate(45deg); }
-    .game-card:hover { border-color: var(--c-primary) !important; box-shadow: 0 0 20px rgba(0,245,255,0.2), inset 0 0 20px rgba(0,245,255,0.03) !important; transform: translateY(-2px); }
+    .game-card:hover { border-color: var(--c-primary) !important; box-shadow: 0 0 22px rgba(160,60,255,0.25), inset 0 0 20px rgba(160,60,255,0.04) !important; transform: translateY(-2px); }
 
     @keyframes toastSlide { from { transform:translateY(20px); opacity:0; } to { transform:translateY(0); opacity:1; } }
     .toast-anim { animation: toastSlide 0.3s ease; }
@@ -86,12 +110,12 @@
     @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
     .scrollbar-thin::-webkit-scrollbar { width: 4px; }
-    .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--c-primary); border-radius: 2px; box-shadow: 0 0 4px var(--c-primary); }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--c-primary); border-radius: 2px; box-shadow: 0 0 6px var(--c-primary); }
 
-    .btn-primary { background: transparent; border: 1px solid var(--c-primary); color: var(--c-primary); text-shadow: 0 0 8px var(--c-primary); box-shadow: 0 0 10px rgba(0,245,255,0.2), inset 0 0 10px rgba(0,245,255,0.05); transition: all 0.2s ease; font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-    .btn-primary:hover { background: rgba(0,245,255,0.15); box-shadow: 0 0 20px rgba(0,245,255,0.4), inset 0 0 20px rgba(0,245,255,0.1); }
-    .btn-accent { background: transparent; border: 1px solid var(--c-accent); color: var(--c-accent); text-shadow: 0 0 8px var(--c-accent); box-shadow: 0 0 10px rgba(255,60,110,0.2); transition: all 0.2s ease; font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-    .btn-accent:hover { background: rgba(255,60,110,0.15); box-shadow: 0 0 20px rgba(255,60,110,0.4); }
+    .btn-primary { background: transparent; border: 1px solid var(--c-primary); color: var(--c-primary); text-shadow: 0 0 8px var(--c-primary); box-shadow: 0 0 12px rgba(160,60,255,0.25), inset 0 0 10px rgba(160,60,255,0.06); transition: all 0.2s ease; font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+    .btn-primary:hover { background: rgba(160,60,255,0.15); box-shadow: 0 0 22px rgba(160,60,255,0.5), inset 0 0 20px rgba(160,60,255,0.12); }
+    .btn-accent { background: transparent; border: 1px solid var(--c-accent); color: var(--c-accent); text-shadow: 0 0 8px var(--c-accent); box-shadow: 0 0 12px rgba(224,64,251,0.25); transition: all 0.2s ease; font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+    .btn-accent:hover { background: rgba(224,64,251,0.15); box-shadow: 0 0 22px rgba(224,64,251,0.5); }
 
     .corner-box { position: relative; }
     .corner-box::before, .corner-box::after { content: ''; position: absolute; width: 12px; height: 12px; }
@@ -101,32 +125,54 @@
     .blink { animation: blink 1s step-end infinite; }
     @keyframes blink { 50% { opacity: 0; } }
 
-    .status-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.1); overflow: hidden; }
+    .status-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.07); overflow: hidden; }
     .status-bar-fill { height: 100%; border-radius: 2px; box-shadow: 0 0 6px currentColor; }
 
-    @keyframes pulse-neon { 0%,100%{box-shadow:0 0 10px rgba(0,245,255,0.3),inset 0 0 10px rgba(0,245,255,0.05)} 50%{box-shadow:0 0 25px rgba(0,245,255,0.6),inset 0 0 25px rgba(0,245,255,0.1)} }
+    @keyframes pulse-neon { 0%,100%{box-shadow:0 0 12px rgba(160,60,255,0.35),inset 0 0 12px rgba(160,60,255,0.06)} 50%{box-shadow:0 0 28px rgba(160,60,255,0.7),0 0 60px rgba(224,64,251,0.2),inset 0 0 28px rgba(160,60,255,0.12)} }
     .pulse-neon { animation: pulse-neon 2s ease-in-out infinite; }
 
-    .spinner { width: 20px; height: 20px; border: 2px solid rgba(0,245,255,0.2); border-top-color: var(--c-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .spinner { width: 20px; height: 20px; border: 2px solid rgba(160,60,255,0.2); border-top-color: var(--c-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     input, textarea, select { font-family: 'Share Tech Mono', monospace; }
     input::placeholder, textarea::placeholder { color: var(--c-secondary) !important; }
-    input:focus, textarea:focus, select:focus { border-color: var(--c-primary) !important; box-shadow: 0 0 8px rgba(0,245,255,0.3) !important; outline: none; }
+    input:focus, textarea:focus, select:focus { border-color: var(--c-primary) !important; box-shadow: 0 0 8px rgba(160,60,255,0.35) !important; outline: none; }
 
     /* File drop zone */
-    .drop-zone { border: 2px dashed rgba(0,245,255,0.3); border-radius: 6px; transition: all 0.2s; cursor: pointer; }
-    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--c-primary); background: rgba(0,245,255,0.05); box-shadow: 0 0 12px rgba(0,245,255,0.2); }
+    .drop-zone { border: 2px dashed rgba(160,60,255,0.3); border-radius: 6px; transition: all 0.2s; cursor: pointer; }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--c-primary); background: rgba(160,60,255,0.06); box-shadow: 0 0 14px rgba(160,60,255,0.25); }
 
     /* File badge */
     .file-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:4px; font-size:10px; }
-    .file-badge-pdf   { background:rgba(255,60,110,0.15); border:1px solid rgba(255,60,110,0.3); color:var(--c-accent); }
-    .file-badge-word  { background:rgba(0,120,215,0.15);  border:1px solid rgba(0,120,215,0.4);  color:#60aaff; }
-    .file-badge-other { background:rgba(0,245,255,0.08);  border:1px solid rgba(0,245,255,0.2);  color:var(--c-primary); }
+    .file-badge-pdf   { background:rgba(224,64,251,0.12); border:1px solid rgba(224,64,251,0.35); color:var(--c-accent); }
+    .file-badge-word  { background:rgba(100,40,200,0.15);  border:1px solid rgba(100,40,200,0.4);  color:#c090ff; }
+    .file-badge-other { background:rgba(160,60,255,0.08);  border:1px solid rgba(160,60,255,0.25);  color:var(--c-primary); }
 
     /* Upload progress */
-    .upload-bar { height:3px; border-radius:2px; background:rgba(0,245,255,0.1); overflow:hidden; margin-top:4px; }
+    .upload-bar { height:3px; border-radius:2px; background:rgba(160,60,255,0.1); overflow:hidden; margin-top:4px; }
     .upload-bar-fill { height:100%; background:var(--c-primary); box-shadow:0 0 6px var(--c-primary); transition:width 0.3s; }
+
+    /* Header gradient line */
+    header {
+      background: rgba(8,3,18,0.97) !important;
+      border-bottom: 1px solid rgba(160,60,255,0.25) !important;
+    }
+
+    /* Sidebar deeper dark */
+    #sidebar {
+      background: rgba(5,2,12,0.95) !important;
+      border-right: 1px solid rgba(140,40,255,0.12) !important;
+    }
+
+    /* Modal overlay deeper */
+    #modal-overlay > div, #delete-overlay > div {
+      background: rgba(8,3,18,0.99) !important;
+    }
+
+    /* Login card */
+    #login-screen > div {
+      box-shadow: 0 0 60px rgba(160,60,255,0.18) !important;
+    }
   </style>
 </head>
 <body class="h-full grid-bg" style="color:var(--c-text);">
@@ -134,9 +180,9 @@
 
   <!-- HOME SCREEN -->
   <div id="home-screen" class="h-full w-full overflow-y-auto scrollbar-thin flex flex-col">
-    <header class="flex items-center justify-between px-6 py-4 shrink-0" style="background:rgba(10,15,26,0.95); border-bottom:1px solid rgba(0,245,255,0.2); backdrop-filter:blur(10px);">
+    <header class="flex items-center justify-between px-6 py-4 shrink-0" style="background:rgba(8,3,18,0.97); border-bottom:1px solid rgba(160,60,255,0.22); backdrop-filter:blur(10px);">
       <div class="flex items-center gap-3">
-        <div class="w-2 h-2 rounded-full bg-green-400 blink" style="box-shadow:0 0 6px #00ff88;"></div>
+        <div class="w-2 h-2 rounded-full blink" style="background:var(--c-green); box-shadow:0 0 6px var(--c-green);"></div>
         <h1 class="font-display text-sm font-bold neon-text tracking-widest" id="home-title">PORTFOLIO.EXE</h1>
       </div>
       <div class="flex gap-2">
@@ -151,10 +197,10 @@
     <main class="flex-1 flex items-center justify-center px-6 py-12">
       <div class="w-full max-w-3xl">
         <div class="text-center mb-12">
-          <div class="w-28 h-28 rounded-none mx-auto mb-6 flex items-center justify-center pulse-neon corner-box" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.3);">
-            <i data-lucide="user" style="width:52px;height:52px;color:var(--c-primary); filter:drop-shadow(0 0 8px var(--c-primary));"></i>
+          <div class="w-28 h-28 rounded-none mx-auto mb-6 flex items-center justify-center pulse-neon corner-box" style="background:rgba(160,60,255,0.06); border:1px solid rgba(160,60,255,0.32);">
+            <i data-lucide="user" style="width:52px;height:52px;color:var(--c-primary); filter:drop-shadow(0 0 10px var(--c-primary));"></i>
           </div>
-          <div class="font-mono text-xs mb-3" style="color:var(--c-secondary);">SISTEMA INICIADO <span class="blink text-green-400">█</span></div>
+          <div class="font-mono text-xs mb-3" style="color:var(--c-secondary);">SISTEMA INICIADO <span class="blink" style="color:var(--c-green);">█</span></div>
           <h2 class="font-display text-3xl md:text-5xl font-black mb-3 neon-text glitch" id="about-heading" data-text="BIENVENIDO">BIENVENIDO</h2>
           <p class="font-mono text-sm mb-3" style="color:var(--c-primary);" id="about-subtitle">&gt; Estudiante | Desarrollador | Creativo</p>
           <p class="text-base" style="color:var(--c-secondary);" id="about-bio">Una breve descripción sobre ti...</p>
@@ -162,10 +208,10 @@
         <div class="mb-12">
           <div class="font-display text-xs text-center mb-6 neon-text tracking-widest">── HABILIDADES DESBLOQUEADAS ──</div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(10,15,26,0.8); border:1px solid rgba(0,245,255,0.2);"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-1">JavaScript</p></div>
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(10,15,26,0.8); border:1px solid rgba(0,245,255,0.2); animation-delay:60ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-2">Diseño UX</p></div>
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(10,15,26,0.8); border:1px solid rgba(0,245,255,0.2); animation-delay:120ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-3">Comunicación</p></div>
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(10,15,26,0.8); border:1px solid rgba(0,245,255,0.2); animation-delay:180ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-4">Liderazgo</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2);"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-1">JavaScript</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2); animation-delay:60ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-2">Diseño UX</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2); animation-delay:120ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-3">Comunicación</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2); animation-delay:180ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-4">Liderazgo</p></div>
           </div>
         </div>
         <div class="text-center">
@@ -176,14 +222,14 @@
         </div>
       </div>
     </main>
-    <footer class="shrink-0 text-center py-3" style="color:var(--c-secondary); border-top:1px solid rgba(0,245,255,0.1);">
+    <footer class="shrink-0 text-center py-3" style="color:var(--c-secondary); border-top:1px solid rgba(160,60,255,0.1);">
       <span class="font-mono text-xs" id="footer-home">// © 2024 Mi Portafolio //</span>
     </footer>
   </div>
 
   <!-- LOGIN SCREEN -->
   <div id="login-screen" class="h-full w-full flex items-center justify-center hidden">
-    <div class="w-full max-w-sm p-8 corner-box" style="background:rgba(10,15,26,0.95); border:1px solid rgba(0,245,255,0.3); box-shadow:0 0 40px rgba(0,245,255,0.1);">
+    <div class="w-full max-w-sm p-8 corner-box" style="background:rgba(8,3,18,0.98); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 50px rgba(160,60,255,0.15);">
       <div class="font-mono text-xs mb-1" style="color:var(--c-secondary);">SISTEMA DE ACCESO v2.0</div>
       <h1 class="font-display text-xl font-black mb-1 neon-text" id="login-title">PORTFOLIO.EXE</h1>
       <p class="font-mono text-xs mb-6" style="color:var(--c-secondary);">SELECCIONA ROL PARA CONTINUAR <span class="blink">█</span></p>
@@ -193,46 +239,46 @@
       <button onclick="showViewerOptions()" class="btn-primary w-full py-3 px-4 rounded mb-3 flex items-center justify-center gap-2">
         <i data-lucide="eye" style="width:14px;height:14px;"></i> [USER] MODO VIEWER
       </button>
-      <button onclick="goToHome()" class="w-full py-3 px-4 rounded flex items-center justify-center gap-2 font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:var(--c-secondary); letter-spacing:1px;">
+      <button onclick="goToHome()" class="w-full py-3 px-4 rounded flex items-center justify-center gap-2 font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--c-secondary); letter-spacing:1px;">
         <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> VOLVER
       </button>
       <!-- VIEWER OPTIONS -->
-      <div id="viewer-options" class="mt-4 pt-4" style="border-top:1px solid rgba(0,245,255,0.1); display:none;">
+      <div id="viewer-options" class="mt-4 pt-4" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-3 neon-text tracking-widest text-center">[ MODO VISUALIZADOR ]</h3>
         <button onclick="showViewerRegister()" class="btn-primary w-full py-2.5 px-4 rounded mb-2 flex items-center justify-center gap-2" style="font-size:10px;">
           <i data-lucide="user-plus" style="width:12px;height:12px;"></i> REGISTRARSE
         </button>
-        <button onclick="showAuthForm('viewer')" class="w-full py-2.5 px-4 rounded flex items-center justify-center gap-2 font-display text-xs" style="background:transparent; border:1px solid rgba(0,245,255,0.2); color:var(--c-primary); letter-spacing:1px;">
+        <button onclick="showAuthForm('viewer')" class="w-full py-2.5 px-4 rounded flex items-center justify-center gap-2 font-display text-xs" style="background:transparent; border:1px solid rgba(160,60,255,0.22); color:var(--c-primary); letter-spacing:1px;">
           <i data-lucide="log-in" style="width:12px;height:12px;"></i> YA TENGO CUENTA
         </button>
         <button onclick="closeViewerOptions()" class="w-full mt-2 py-2 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--c-secondary); letter-spacing:1px;">CANCELAR</button>
       </div>
 
-      <div id="auth-form-container" class="mt-6 pt-6" style="border-top:1px solid rgba(0,245,255,0.1); display:none;">
+      <div id="auth-form-container" class="mt-6 pt-6" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center" id="auth-title"></h3>
         <form id="auth-form" onsubmit="handleAuth(event)">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; USUARIO</label>
-          <input id="auth-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="identificador...">
+          <input id="auth-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="identificador...">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONTRASEÑA</label>
-          <input id="auth-pass" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="••••••••">
+          <input id="auth-pass" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="••••••••">
           <button type="submit" id="auth-btn" class="btn-primary w-full py-2.5 px-4 rounded mb-2">INICIAR SESIÓN</button>
-          <button type="button" onclick="closeAuthForm()" class="w-full py-2.5 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,60,110,0.3); color:var(--c-accent); letter-spacing:1px;">CANCELAR</button>
+          <button type="button" onclick="closeAuthForm()" class="w-full py-2.5 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(224,64,251,0.3); color:var(--c-accent); letter-spacing:1px;">CANCELAR</button>
         </form>
         <p class="font-mono text-xs text-center mt-3" id="auth-msg"></p>
       </div>
 
       <!-- REGISTRO VISUALIZADOR -->
-      <div id="viewer-register-container" class="mt-6 pt-6" style="border-top:1px solid rgba(0,245,255,0.1); display:none;">
+      <div id="viewer-register-container" class="mt-6 pt-6" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center">[ NUEVO VISUALIZADOR ]</h3>
         <form id="register-form" onsubmit="handleRegister(event)">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; USUARIO</label>
-          <input id="reg-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="elige un nombre...">
+          <input id="reg-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="elige un nombre...">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONTRASEÑA</label>
-          <input id="reg-pass" required type="password" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="••••••••">
+          <input id="reg-pass" required type="password" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="••••••••">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONFIRMAR CONTRASEÑA</label>
-          <input id="reg-confirm" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);" placeholder="••••••••">
+          <input id="reg-confirm" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="••••••••">
           <button type="submit" id="reg-btn" class="btn-primary w-full py-2.5 px-4 rounded mb-2">REGISTRARSE</button>
-          <button type="button" onclick="showViewerOptions()" class="w-full py-2.5 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,60,110,0.3); color:var(--c-accent); letter-spacing:1px;">VOLVER</button>
+          <button type="button" onclick="showViewerOptions()" class="w-full py-2.5 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(224,64,251,0.3); color:var(--c-accent); letter-spacing:1px;">VOLVER</button>
         </form>
         <p class="font-mono text-xs text-center mt-3" id="reg-msg"></p>
       </div>
@@ -242,7 +288,7 @@
   <!-- MAIN APP -->
   <div id="main-app" class="h-full w-full hidden" style="display:none;">
     <div class="h-full w-full flex flex-col overflow-hidden">
-      <header class="flex items-center justify-between px-5 py-3 shrink-0" style="background:rgba(10,15,26,0.95); border-bottom:1px solid rgba(0,245,255,0.2); backdrop-filter:blur(10px);">
+      <header class="flex items-center justify-between px-5 py-3 shrink-0" style="background:rgba(8,3,18,0.97); border-bottom:1px solid rgba(160,60,255,0.22); backdrop-filter:blur(10px);">
         <div class="flex items-center gap-3">
           <button id="menu-toggle" class="lg:hidden p-1" onclick="toggleSidebar()">
             <i data-lucide="menu" style="width:18px;height:18px; color:var(--c-primary);"></i>
@@ -251,7 +297,7 @@
           <h1 class="font-display text-sm font-bold neon-text tracking-widest" id="app-title">PORTFOLIO.EXE</h1>
         </div>
         <div class="flex items-center gap-3">
-          <div id="search-box" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded text-sm" style="background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.15);">
+          <div id="search-box" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded text-sm" style="background:rgba(160,60,255,0.05); border:1px solid rgba(160,60,255,0.16);">
             <i data-lucide="search" style="width:12px;height:12px;color:var(--c-secondary);"></i>
             <input id="search-input" type="text" placeholder="buscar misiones..." class="bg-transparent border-none text-sm font-mono" style="color:var(--c-primary); width:140px;" oninput="handleSearch(this.value)">
           </div>
@@ -262,13 +308,13 @@
         </div>
       </header>
       <div class="flex flex-1 overflow-hidden">
-        <aside id="sidebar" class="w-56 shrink-0 overflow-y-auto scrollbar-thin p-4 hidden lg:block" style="background:rgba(5,10,18,0.9); border-right:1px solid rgba(0,245,255,0.1);">
+        <aside id="sidebar" class="w-56 shrink-0 overflow-y-auto scrollbar-thin p-4 hidden lg:block" style="background:rgba(5,2,12,0.94); border-right:1px solid rgba(140,40,255,0.12);">
           <p class="font-display text-xs tracking-widest mb-4" style="color:var(--c-secondary);" id="sidebar-owner">── ÁRBOL ──</p>
           <nav id="unit-nav"></nav>
         </aside>
         <main id="content-area" class="flex-1 overflow-y-auto scrollbar-thin p-5 lg:p-8"></main>
       </div>
-      <footer class="shrink-0 text-center py-2" style="color:var(--c-secondary); border-top:1px solid rgba(0,245,255,0.1);">
+      <footer class="shrink-0 text-center py-2" style="color:var(--c-secondary); border-top:1px solid rgba(160,60,255,0.1);">
         <span class="font-mono text-xs" id="footer-text-el">// © 2024 Mi Portafolio //</span>
       </footer>
     </div>
@@ -279,15 +325,15 @@
 <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
 
 <!-- MODAL -->
-<div id="modal-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.8); overflow-y:auto;">
-  <div class="w-full max-w-lg p-6 corner-box my-4" style="background:rgba(10,15,26,0.98); border:1px solid rgba(0,245,255,0.3); box-shadow:0 0 40px rgba(0,245,255,0.15);">
+<div id="modal-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.85); overflow-y:auto;">
+  <div class="w-full max-w-lg p-6 corner-box my-4" style="background:rgba(8,3,18,0.99); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 50px rgba(160,60,255,0.18);">
     <div id="modal-content"></div>
   </div>
 </div>
 
 <!-- DELETE CONFIRM -->
-<div id="delete-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.8);">
-  <div class="w-full max-w-sm p-6 text-center corner-box" style="background:rgba(10,15,26,0.98); border:1px solid rgba(255,60,110,0.4); box-shadow:0 0 30px rgba(255,60,110,0.2);">
+<div id="delete-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.85);">
+  <div class="w-full max-w-sm p-6 text-center corner-box" style="background:rgba(8,3,18,0.99); border:1px solid rgba(224,64,251,0.4); box-shadow:0 0 35px rgba(224,64,251,0.22);">
     <div class="font-display text-3xl mb-3" style="color:var(--c-accent); text-shadow:0 0 20px var(--c-accent);">⚠</div>
     <p class="font-display text-sm font-bold mb-1" style="color:var(--c-accent); letter-spacing:2px;">¿ELIMINAR REGISTRO?</p>
     <p class="font-mono text-xs mb-5" style="color:var(--c-secondary);">Esta acción no se puede deshacer.</p>
@@ -311,15 +357,8 @@
 // ═══════════════════════════════════════════════════════════════
 
 const SUPABASE_URL = 'https://grcdofidpphocbuqjxdz.supabase.co';
-// Ejemplo: 'https://abcdefghijklmnop.supabase.co'
-
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyY2RvZmlkcHBob2NidXFqeGR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjM2MTcsImV4cCI6MjA5Mjg5OTYxN30.tyTUtx72f98WPd0TNLrFvMqp0qwLUCP6dFZxvlnrYPc';
-// Ejemplo: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-// Encuéntralo en: Supabase → Settings → API → Project API keys → anon public
-
 const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyY2RvZmlkcHBob2NidXFqeGR6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzMyMzYxNywiZXhwIjoyMDkyODk5NjE3fQ.h-Fi-dDNbvPwTwzC7Nzhz--RVebNVYQ3Tv4qYCPqzBo';
-// Encuéntralo en: Supabase → Settings → API → Project API keys → service_role
-// ⚠ Esta clave solo se usa para subir archivos al storage
 
 // ═══════════════════════════════════════════════════════════════
 //  FIN DE CONFIGURACIÓN
@@ -327,9 +366,6 @@ const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 
 const STORAGE_BUCKET = 'portfolio-files';
 
-// ── Fetch helper ──────────────────────────────────────────────
-// Usar service key para todas las operaciones REST
-// (el nuevo sistema de Supabase requiere esto para escritura)
 function getActiveKey() {
   if (typeof SUPABASE_SERVICE_KEY !== 'undefined' && !SUPABASE_SERVICE_KEY.includes('PEGA_AQUI')) {
     return SUPABASE_SERVICE_KEY;
@@ -338,7 +374,6 @@ function getActiveKey() {
 }
 
 async function sbFetch(path, opts = {}) {
-  // Limpiar path: quitar slashes iniciales y espacios
   const cleanPath = path.replace(/^\/+/, '').trim();
   const url = `${SUPABASE_URL}/rest/v1/${cleanPath}`;
   const activeKey = getActiveKey();
@@ -360,11 +395,9 @@ async function sbFetch(path, opts = {}) {
   return { ok: true, data };
 }
 
-// ── Storage upload ────────────────────────────────────────────
 async function sbUploadFile(file) {
   const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
   const filePath = `uploads/${Date.now()}_${safe}`;
-  // Usar service_role key para subidas — la anon key no tiene permiso de escritura en storage
   const uploadKey = (typeof SUPABASE_SERVICE_KEY !== 'undefined' && !SUPABASE_SERVICE_KEY.includes('PEGA_AQUI'))
     ? SUPABASE_SERVICE_KEY : SUPABASE_KEY;
 
@@ -406,7 +439,6 @@ async function sbDeleteFile(filePath) {
   return { ok: res.ok };
 }
 
-// ── DB helpers ────────────────────────────────────────────────
 async function dbGetAll()        { const r = await sbFetch('portfolio_projects?order=created_at.asc'); return r.ok ? (r.data||[]) : []; }
 async function dbCreate(rec)     { return sbFetch('portfolio_projects', { method:'POST', body:JSON.stringify(rec) }); }
 async function dbUpdate(id, rec) { return sbFetch(`portfolio_projects?id=eq.${id}`, { method:'PATCH', body:JSON.stringify(rec) }); }
@@ -426,17 +458,11 @@ async function dbGetLinks(projectId) {
 async function dbAddLink(rec)   { return sbFetch('portfolio_links', { method:'POST', body:JSON.stringify(rec) }); }
 async function dbDeleteLink(id) { return sbFetch(`portfolio_links?id=eq.${id}`, { method:'DELETE' }); }
 
-// ── Auth against DB (con respaldo local) ─────────────────────
-// Credenciales locales de respaldo — funcionan SIEMPRE
-// aunque Supabase no esté configurado todavía
 const LOCAL_ADMIN_USER = 'admin';
 const LOCAL_ADMIN_PASS = 'admin123';
 
 async function dbCheckAdmin(username, password) {
-  // 1. Verificar credenciales locales primero (siempre funciona)
   if (username === LOCAL_ADMIN_USER && password === LOCAL_ADMIN_PASS) return true;
-
-  // 2. Si Supabase está configurado, también verificar en BD
   if (SUPABASE_URL.includes('PEGA_AQUI') || SUPABASE_KEY.includes('PEGA_AQUI')) return false;
   try {
     const r = await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&role=eq.admin&select=*`);
@@ -514,14 +540,12 @@ async function handleRegister(e) {
   if (password.length < 4)    { setMsg(msg,'> ERROR: contraseña muy corta (mín. 4 caracteres)','var(--c-accent)'); return; }
   btn.disabled=true; btn.innerHTML='<span class="spinner inline-block mr-2"></span> REGISTRANDO...';
   try {
-    // Verificar si el usuario ya existe
     const check = await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&select=id`);
     if (check.ok && check.data && check.data.length > 0) {
       setMsg(msg,'> ERROR: ese usuario ya existe','var(--c-accent)');
       btn.disabled=false; btn.textContent='REGISTRARSE';
       return;
     }
-    // Crear usuario visualizador
     const r = await sbFetch('portfolio_users', {
       method: 'POST',
       body: JSON.stringify({ username, password_hash: password, role: 'viewer' })
@@ -566,9 +590,9 @@ function loginSuccess() {
   document.getElementById('main-app').style.display='flex';
   const badge = document.getElementById('role-badge');
   if (currentRole==='admin') {
-    badge.textContent='◈ ADMIN'; badge.style.background='rgba(255,60,110,0.1)'; badge.style.border='1px solid rgba(255,60,110,0.3)'; badge.style.color='var(--c-accent)';
+    badge.textContent='◈ ADMIN'; badge.style.background='rgba(224,64,251,0.1)'; badge.style.border='1px solid rgba(224,64,251,0.3)'; badge.style.color='var(--c-accent)';
   } else {
-    badge.textContent=`◉ ${currentUser.toUpperCase()}`; badge.style.background='rgba(0,245,255,0.05)'; badge.style.border='1px solid rgba(0,245,255,0.2)'; badge.style.color='var(--c-primary)';
+    badge.textContent=`◉ ${currentUser.toUpperCase()}`; badge.style.background='rgba(160,60,255,0.06)'; badge.style.border='1px solid rgba(160,60,255,0.22)'; badge.style.color='var(--c-primary)';
   }
   document.getElementById('logout-btn').onclick=logout;
   renderSidebar(); loadProjects(); lucide.createIcons();
@@ -579,7 +603,7 @@ function goToGuestView() {
   hide('home-screen'); hide('login-screen');
   document.getElementById('main-app').style.display='flex';
   const badge=document.getElementById('role-badge');
-  badge.textContent='◌ VISITANTE'; badge.style.background='rgba(255,255,255,0.05)'; badge.style.border='1px solid rgba(255,255,255,0.1)'; badge.style.color='var(--c-secondary)';
+  badge.textContent='◌ VISITANTE'; badge.style.background='rgba(255,255,255,0.04)'; badge.style.border='1px solid rgba(255,255,255,0.08)'; badge.style.color='var(--c-secondary)';
   document.getElementById('logout-btn').onclick=goToHome;
   document.getElementById('logout-btn').innerHTML='<i data-lucide="home" style="width:14px;height:14px;"></i>';
   renderSidebar(); loadProjects(); lucide.createIcons();
@@ -625,10 +649,10 @@ function renderContent() {
     html += '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">';
     weeks.forEach((w,i) => {
       const count = allProjects.filter(p=>p.unit==selectedUnit&&p.week==w).length;
-      html += `<div class="card-enter game-card rounded p-5 cursor-pointer" style="background:rgba(10,15,26,0.8); border:1px solid rgba(0,245,255,0.15); animation-delay:${i*60}ms;" onclick="selectWeek(${w})">
+      html += `<div class="card-enter game-card rounded p-5 cursor-pointer" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.16); animation-delay:${i*60}ms;" onclick="selectWeek(${w})">
         <div class="flex items-center justify-between mb-3">
           <span class="font-display text-xs neon-text tracking-wider">SEMANA ${w}</span>
-          <span class="font-mono text-xs px-2 py-0.5 rounded" style="background:rgba(0,245,255,0.08); color:var(--c-secondary); border:1px solid rgba(0,245,255,0.1);">${count} trabajos</span>
+          <span class="font-mono text-xs px-2 py-0.5 rounded" style="background:rgba(160,60,255,0.08); color:var(--c-secondary); border:1px solid rgba(160,60,255,0.12);">${count} trabajos</span>
         </div>
         <div class="status-bar mb-2"><div class="status-bar-fill" style="width:${Math.min(count*33,100)}%; background:var(--c-primary); color:var(--c-primary);"></div></div>
         <p class="font-mono text-xs" style="color:var(--c-secondary);">&gt; click para explorar</p>
@@ -654,8 +678,8 @@ function renderWeekDetail(w) {
     ${currentRole==='admin'?`<button onclick="openAddModal()" class="btn-primary flex items-center gap-1.5 px-3 py-2 rounded text-xs"><i data-lucide="plus" style="width:12px;height:12px;"></i> AGREGAR</button>`:''}
   </div>`;
   if (!projects.length) {
-    html+=`<div class="text-center py-16 corner-box" style="border:1px solid rgba(0,245,255,0.1); background:rgba(10,15,26,0.5);">
-      <div class="font-display text-4xl mb-3" style="color:rgba(0,245,255,0.2);">□</div>
+    html+=`<div class="text-center py-16 corner-box" style="border:1px solid rgba(160,60,255,0.12); background:rgba(13,8,24,0.6);">
+      <div class="font-display text-4xl mb-3" style="color:rgba(160,60,255,0.2);">□</div>
       <p class="font-mono text-sm" style="color:var(--c-secondary);">// sin registros en esta semana</p>
     </div>`;
     return html;
@@ -663,7 +687,7 @@ function renderWeekDetail(w) {
   projects.forEach((p,i)=>{
     const sc=p.status==='completado'?'var(--c-green)':p.status==='en progreso'?'var(--c-warning)':'var(--c-secondary)';
     const si=p.status==='completado'?'✓':p.status==='en progreso'?'◈':'○';
-    html+=`<div class="card-enter game-card rounded p-5 mb-3" style="background:rgba(10,15,26,0.8); border:1px solid rgba(0,245,255,0.1); animation-delay:${i*60}ms;">
+    html+=`<div class="card-enter game-card rounded p-5 mb-3" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.12); animation-delay:${i*60}ms;">
       <div class="flex items-start justify-between gap-3">
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1">
@@ -678,14 +702,13 @@ function renderWeekDetail(w) {
           <div id="attachments-${p.id}" class="mt-2"></div>
         </div>
         ${currentRole==='admin'?`<div class="flex gap-1 shrink-0">
-          <button onclick="openEditModal(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-primary); border:1px solid rgba(0,245,255,0.1);"><i data-lucide="edit" style="width:12px;height:12px;"></i></button>
-          <button onclick="openAttachmentsModal(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-green); border:1px solid rgba(0,255,136,0.15);" title="Archivos y enlaces"><i data-lucide="paperclip" style="width:12px;height:12px;"></i></button>
-          <button onclick="confirmDelete(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-accent); border:1px solid rgba(255,60,110,0.1);"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
+          <button onclick="openEditModal(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-primary); border:1px solid rgba(160,60,255,0.12);"><i data-lucide="edit" style="width:12px;height:12px;"></i></button>
+          <button onclick="openAttachmentsModal(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-green); border:1px solid rgba(160,60,255,0.18);" title="Archivos y enlaces"><i data-lucide="paperclip" style="width:12px;height:12px;"></i></button>
+          <button onclick="confirmDelete(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.15);"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
         </div>`:''}
       </div>
     </div>`;
   });
-  // load attachments for each card after render
   setTimeout(()=>{ projects.forEach(p=>loadAttachmentsInline(p.id)); }, 100);
   return html;
 }
@@ -719,7 +742,7 @@ function renderSearchResults(area) {
   const results=allProjects.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.description||'').toLowerCase().includes(q));
   let html=`<div class="mb-5"><h2 class="font-display text-lg neon-text tracking-widest">BÚSQUEDA: "${escHtml(searchQuery)}"</h2><p class="font-mono text-xs" style="color:var(--c-secondary);">// ${results.length} resultado${results.length!==1?'s':''} encontrado${results.length!==1?'s':''}</p></div>`;
   results.forEach((p,i)=>{
-    html+=`<div class="card-enter game-card rounded p-4 mb-2 cursor-pointer" style="background:rgba(10,15,26,0.8); border:1px solid rgba(0,245,255,0.1); animation-delay:${i*40}ms;" onclick="selectedUnit=${p.unit};selectedWeek=${p.week};searchQuery='';document.getElementById('search-input').value='';renderSidebar();renderContent();">
+    html+=`<div class="card-enter game-card rounded p-4 mb-2 cursor-pointer" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.12); animation-delay:${i*40}ms;" onclick="selectedUnit=${p.unit};selectedWeek=${p.week};searchQuery='';document.getElementById('search-input').value='';renderSidebar();renderContent();">
       <div class="font-mono text-xs mb-1" style="color:var(--c-secondary);">// unidad ${p.unit} · semana ${p.week}</div>
       <h4 class="font-display text-sm" style="color:var(--c-primary);">${escHtml(p.title)}</h4>
     </div>`;
@@ -732,7 +755,7 @@ function handleSearch(v) { searchQuery=v; renderContent(); }
 // ═══════════════════════════════════════════════════════════════
 // MODAL — ADD / EDIT PROJECT
 // ═══════════════════════════════════════════════════════════════
-const FS=`background:rgba(0,245,255,0.03); border:1px solid rgba(0,245,255,0.2); color:var(--c-primary);`;
+const FS=`background:rgba(160,60,255,0.03); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);`;
 const LS=`font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--c-secondary);`;
 
 function openAddModal() {
@@ -750,7 +773,7 @@ function openAddModal() {
       <input id="pf-link" type="url" class="w-full px-3 py-2 rounded mb-3 text-sm" style="${FS}" placeholder="https://...">
 
       <label class="block mb-1" style="${LS}">&gt; ESTADO</label>
-      <select id="pf-status" class="w-full px-3 py-2 rounded mb-4 text-sm" style="${FS} background:rgba(2,4,8,0.9);">
+      <select id="pf-status" class="w-full px-3 py-2 rounded mb-4 text-sm" style="${FS} background:rgba(6,2,15,0.95);">
         <option value="pendiente">PENDIENTE</option>
         <option value="en progreso">EN PROGRESO</option>
         <option value="completado">COMPLETADO</option>
@@ -760,7 +783,7 @@ function openAddModal() {
       <div class="drop-zone p-4 text-center rounded mb-1" id="add-drop-zone" onclick="document.getElementById('pf-files').click()">
         <i data-lucide="upload-cloud" style="width:20px;height:20px;color:var(--c-primary);margin:0 auto 6px;display:block;"></i>
         <p class="font-mono text-xs" style="color:var(--c-secondary);">Click o arrastra archivos aquí</p>
-        <p class="font-mono text-xs mt-1" style="color:rgba(74,112,144,0.5);">PDF, Word, Excel, imágenes...</p>
+        <p class="font-mono text-xs mt-1" style="color:rgba(90,56,120,0.6);">PDF, Word, Excel, imágenes...</p>
       </div>
       <input type="file" id="pf-files" style="display:none;" multiple onchange="previewSelectedFiles(event)">
       <div id="pf-files-preview" class="flex flex-wrap gap-2 mt-2 mb-4"></div>
@@ -772,7 +795,6 @@ function openAddModal() {
     </form>`;
   showModal();
   lucide.createIcons();
-  // drag & drop en modal de nuevo registro
   const zone = document.getElementById('add-drop-zone');
   zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag-over'); });
   zone.addEventListener('dragleave', ()=>zone.classList.remove('drag-over'));
@@ -807,7 +829,6 @@ async function handleAdd(e) {
   e.preventDefault();
   const btn=document.getElementById('add-btn'); btn.disabled=true; btn.textContent='GUARDANDO...';
 
-  // 1. Crear el proyecto primero
   const r=await dbCreate({
     unit:selectedUnit, week:selectedWeek,
     title:document.getElementById('pf-title').value.trim(),
@@ -819,7 +840,6 @@ async function handleAdd(e) {
 
   if (!r.ok) { showToast('ERROR: '+(r.err||'fallo al guardar'),'error'); btn.disabled=false; btn.textContent='GUARDAR'; return; }
 
-  // 2. Subir archivos si hay seleccionados
   const projectId = r.data && r.data[0] ? r.data[0].id : null;
   const fileInput = document.getElementById('pf-files');
   if (projectId && fileInput && fileInput.files.length > 0) {
@@ -851,7 +871,7 @@ function openEditModal(id) {
       <label class="block mb-1" style="${LS}">&gt; ENLACE URL PRINCIPAL</label>
       <input id="ef-link" type="url" value="${escAttr(p.link||'')}" class="w-full px-3 py-2 rounded mb-3 text-sm" style="${FS}">
       <label class="block mb-1" style="${LS}">&gt; ESTADO</label>
-      <select id="ef-status" class="w-full px-3 py-2 rounded mb-5 text-sm" style="${FS} background:rgba(2,4,8,0.9);">
+      <select id="ef-status" class="w-full px-3 py-2 rounded mb-5 text-sm" style="${FS} background:rgba(6,2,15,0.95);">
         <option value="pendiente" ${p.status==='pendiente'?'selected':''}>PENDIENTE</option>
         <option value="en progreso" ${p.status==='en progreso'?'selected':''}>EN PROGRESO</option>
         <option value="completado" ${p.status==='completado'?'selected':''}>COMPLETADO</option>
@@ -884,20 +904,18 @@ async function openAttachmentsModal(projectId) {
     <h3 class="font-display text-xs font-black tracking-widest mb-1" style="color:var(--c-green); text-shadow:0 0 10px var(--c-green);">◈ ARCHIVOS &amp; ENLACES</h3>
     <p class="font-mono text-xs mb-4" style="color:var(--c-secondary);">// ${escHtml(p.title)}</p>
 
-    <!-- ARCHIVOS -->
     <div class="mb-5">
       <p class="font-mono text-xs mb-2" style="color:var(--c-primary);">&gt; ARCHIVOS ADJUNTOS</p>
       <div id="files-list" class="mb-3 min-h-8"><div class="spinner mx-auto"></div></div>
       <div class="drop-zone p-4 text-center rounded mb-1" id="drop-zone" onclick="document.getElementById('file-input').click()">
         <i data-lucide="upload-cloud" style="width:20px;height:20px;color:var(--c-primary);margin:0 auto 6px;display:block;"></i>
         <p class="font-mono text-xs" style="color:var(--c-secondary);">Click o arrastra archivos aquí</p>
-        <p class="font-mono text-xs mt-1" style="color:rgba(74,112,144,0.6);">PDF, Word, Excel, imágenes y más</p>
+        <p class="font-mono text-xs mt-1" style="color:rgba(90,56,120,0.7);">PDF, Word, Excel, imágenes y más</p>
         <div class="upload-bar mt-2" id="upload-bar" style="display:none;"><div class="upload-bar-fill" id="upload-bar-fill" style="width:0%;"></div></div>
       </div>
       <input type="file" id="file-input" style="display:none;" multiple onchange="handleFileSelect(event,${projectId})">
     </div>
 
-    <!-- ENLACES URL -->
     <div class="mb-5">
       <p class="font-mono text-xs mb-2" style="color:var(--c-primary);">&gt; ENLACES URL</p>
       <div id="links-list" class="mb-3 min-h-8"><div class="spinner mx-auto"></div></div>
@@ -922,36 +940,34 @@ async function openAttachmentsModal(projectId) {
 
 async function refreshAttachmentLists(projectId) {
   const [files, links] = await Promise.all([dbGetFiles(projectId), dbGetLinks(projectId)]);
-  // Files list
   const fl = document.getElementById('files-list'); if(!fl) return;
-  if (!files.length) { fl.innerHTML=`<p class="font-mono text-xs" style="color:rgba(74,112,144,0.5);">// sin archivos adjuntos</p>`; }
+  if (!files.length) { fl.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin archivos adjuntos</p>`; }
   else {
     fl.innerHTML=files.map(f=>{
       const type=f.file_type||'';
       const cls=type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
       const icon=type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';
       const size=f.file_size?` (${(f.file_size/1024).toFixed(1)}KB)`:'';
-      return `<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded" style="background:rgba(0,245,255,0.03); border:1px solid rgba(0,245,255,0.1);">
+      return `<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.12);">
         <a href="${escHtml(f.file_url)}" target="_blank" rel="noopener" class="file-badge ${cls} font-mono" style="text-decoration:none; flex:1; min-width:0;">
           <i data-lucide="${icon}" style="width:10px;height:10px; shrink:0;"></i>
           <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(f.file_name)}${size}</span>
         </a>
-        <button onclick="handleDeleteFile(${f.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(255,60,110,0.2);" title="Eliminar">
+        <button onclick="handleDeleteFile(${f.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);" title="Eliminar">
           <i data-lucide="x" style="width:10px;height:10px;"></i>
         </button>
       </div>`;
     }).join('');
   }
-  // Links list
   const ll = document.getElementById('links-list'); if(!ll) return;
-  if (!links.length) { ll.innerHTML=`<p class="font-mono text-xs" style="color:rgba(74,112,144,0.5);">// sin enlaces añadidos</p>`; }
+  if (!links.length) { ll.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin enlaces añadidos</p>`; }
   else {
-    ll.innerHTML=links.map(l=>`<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded" style="background:rgba(0,245,255,0.03); border:1px solid rgba(0,245,255,0.1);">
+    ll.innerHTML=links.map(l=>`<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.12);">
       <a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="file-badge file-badge-other font-mono" style="text-decoration:none; flex:1; min-width:0;">
         <i data-lucide="link" style="width:10px;height:10px; shrink:0;"></i>
         <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(l.label)}</span>
       </a>
-      <button onclick="handleDeleteLink(${l.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(255,60,110,0.2);" title="Eliminar">
+      <button onclick="handleDeleteLink(${l.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);" title="Eliminar">
         <i data-lucide="x" style="width:10px;height:10px;"></i>
       </button>
     </div>`).join('');
@@ -1044,10 +1060,10 @@ function showToast(msg, type='success') {
   const t=document.createElement('div');
   t.className='toast-anim flex items-center gap-2 px-4 py-2.5 rounded font-mono text-xs shadow-lg';
   if (type==='error') {
-    t.style.cssText='background:rgba(10,15,26,0.98); border:1px solid rgba(255,60,110,0.5); color:var(--c-accent); box-shadow:0 0 15px rgba(255,60,110,0.3);';
+    t.style.cssText='background:rgba(8,3,18,0.99); border:1px solid rgba(224,64,251,0.5); color:var(--c-accent); box-shadow:0 0 18px rgba(224,64,251,0.3);';
     t.innerHTML=`<span style="color:var(--c-accent);">✗</span> ${escHtml(msg)}`;
   } else {
-    t.style.cssText='background:rgba(10,15,26,0.98); border:1px solid rgba(0,255,136,0.4); color:var(--c-green); box-shadow:0 0 15px rgba(0,255,136,0.2);';
+    t.style.cssText='background:rgba(8,3,18,0.99); border:1px solid rgba(160,60,255,0.45); color:var(--c-green); box-shadow:0 0 18px rgba(160,60,255,0.25);';
     t.innerHTML=`<span style="color:var(--c-green);">✓</span> ${escHtml(msg)}`;
   }
   c.appendChild(t);
