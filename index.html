@@ -25,64 +25,99 @@
       --c-warning: #ff44aa;
     }
 
+    /* ═══════════════════════════════════
+       SPACE BACKGROUND SYSTEM
+    ═══════════════════════════════════ */
+    #space-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* CRT scanlines overlay */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(160,60,255,0.018) 2px, rgba(160,60,255,0.018) 4px);
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(160,60,255,0.012) 2px, rgba(160,60,255,0.012) 4px);
       pointer-events: none;
       z-index: 9999;
     }
+    /* Vignette */
     body::after {
       content: '';
       position: fixed;
       inset: 0;
-      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.8) 100%);
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.85) 100%);
       pointer-events: none;
       z-index: 9998;
     }
 
+    /* Grid overlay on top of space */
     .grid-bg {
-      background-color: var(--c-bg);
+      background-color: transparent;
       background-image:
-        linear-gradient(rgba(140,40,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(140,40,255,0.06) 1px, transparent 1px);
+        linear-gradient(rgba(140,40,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140,40,255,0.04) 1px, transparent 1px);
       background-size: 40px 40px;
-      animation: gridScroll 20s linear infinite;
+      animation: gridScroll 25s linear infinite;
     }
     @keyframes gridScroll { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
 
-    /* Ambient purple glow layers */
-    .grid-bg::before {
-      content: '';
+    /* ═══════════════════════════════════
+       NEBULA GLOWS (static CSS layers)
+    ═══════════════════════════════════ */
+    #nebula-layer {
       position: fixed;
-      top: -20%;
-      left: -10%;
-      width: 60%;
-      height: 70%;
-      background: radial-gradient(ellipse, rgba(100,20,200,0.18) 0%, transparent 70%);
+      inset: 0;
+      z-index: 1;
       pointer-events: none;
-      z-index: 0;
+      overflow: hidden;
     }
-    .grid-bg::after {
-      content: '';
-      position: fixed;
-      bottom: -10%;
-      right: -10%;
-      width: 50%;
-      height: 60%;
-      background: radial-gradient(ellipse, rgba(180,30,220,0.12) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+    .nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: nebulaPulse 8s ease-in-out infinite alternate;
+    }
+    .nebula-1 {
+      width: 700px; height: 500px;
+      top: -15%; left: -10%;
+      background: radial-gradient(ellipse, rgba(100,20,220,0.22) 0%, transparent 70%);
+      animation-delay: 0s;
+    }
+    .nebula-2 {
+      width: 600px; height: 600px;
+      bottom: -20%; right: -15%;
+      background: radial-gradient(ellipse, rgba(200,30,240,0.18) 0%, transparent 70%);
+      animation-delay: 3s;
+    }
+    .nebula-3 {
+      width: 400px; height: 300px;
+      top: 40%; left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(80,10,160,0.12) 0%, transparent 70%);
+      animation-delay: 1.5s;
+    }
+    @keyframes nebulaPulse {
+      from { opacity: 0.7; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.08); }
     }
 
-    .neon-text  { text-shadow: 0 0 10px var(--c-primary), 0 0 30px var(--c-primary), 0 0 60px rgba(160,60,255,0.4); }
-    .neon-accent{ text-shadow: 0 0 10px var(--c-accent), 0 0 30px var(--c-accent), 0 0 60px rgba(224,64,251,0.4); }
-    .neon-green { text-shadow: 0 0 10px var(--c-green), 0 0 30px var(--c-green); }
+    /* ═══════════════════════════════════
+       NEON TEXT & BORDERS
+    ═══════════════════════════════════ */
+    .neon-text   { text-shadow: 0 0 10px var(--c-primary), 0 0 30px var(--c-primary), 0 0 60px rgba(160,60,255,0.4); }
+    .neon-accent { text-shadow: 0 0 10px var(--c-accent), 0 0 30px var(--c-accent), 0 0 60px rgba(224,64,251,0.4); }
+    .neon-green  { text-shadow: 0 0 10px var(--c-green), 0 0 30px var(--c-green); }
 
     .neon-border { border: 1px solid var(--c-primary); box-shadow: 0 0 8px rgba(160,60,255,0.35), inset 0 0 8px rgba(160,60,255,0.07); }
     .neon-border-accent { border: 1px solid var(--c-accent); box-shadow: 0 0 8px rgba(224,64,251,0.35), inset 0 0 8px rgba(224,64,251,0.07); }
 
+    /* ═══════════════════════════════════
+       GLITCH EFFECT
+    ═══════════════════════════════════ */
     .glitch { position: relative; }
     .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .glitch::before { left: 2px; text-shadow: -2px 0 var(--c-accent); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim 3s infinite linear alternate-reverse; }
@@ -90,12 +125,37 @@
     @keyframes glitch-anim  { 0%{clip:rect(42px,9999px,44px,0)} 25%{clip:rect(12px,9999px,59px,0)} 50%{clip:rect(48px,9999px,29px,0)} 75%{clip:rect(72px,9999px,17px,0)} 100%{clip:rect(2px,9999px,67px,0)} }
     @keyframes glitch-anim2 { 0%{clip:rect(65px,9999px,100px,0)} 25%{clip:rect(52px,9999px,74px,0)} 50%{clip:rect(79px,9999px,55px,0)} 75%{clip:rect(14px,9999px,44px,0)} 100%{clip:rect(34px,9999px,22px,0)} }
 
+    /* ═══════════════════════════════════
+       SHOOTING STAR
+    ═══════════════════════════════════ */
+    .shooting-star {
+      position: fixed;
+      width: 120px; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(200,100,255,0.9), transparent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+    }
+    @keyframes shoot {
+      0%   { opacity: 0; transform: translate(0,0) rotate(-35deg); }
+      10%  { opacity: 1; }
+      70%  { opacity: 0.8; }
+      100% { opacity: 0; transform: translate(400px, 200px) rotate(-35deg); }
+    }
+
+    /* ═══════════════════════════════════
+       SIDEBAR & NAV
+    ═══════════════════════════════════ */
     .sidebar-item { transition: all 0.2s ease; position: relative; }
     .sidebar-item:hover { transform: translateX(4px); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); }
     .sidebar-item.active { border-left: 2px solid var(--c-primary); background: rgba(160,60,255,0.08); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); box-shadow: inset 0 0 15px rgba(160,60,255,0.07); }
     .sidebar-item::before { content: '▶'; position: absolute; left: 8px; opacity: 0; color: var(--c-primary); font-size: 8px; transition: opacity 0.2s; }
     .sidebar-item:hover::before, .sidebar-item.active::before { opacity: 1; }
 
+    /* ═══════════════════════════════════
+       CARDS & ANIMATIONS
+    ═══════════════════════════════════ */
     .card-enter { animation: cardIn 0.3s ease forwards; }
     @keyframes cardIn { from { opacity:0; transform:translateY(12px) scale(0.98); } to { opacity:1; transform:translateY(0) scale(1); } }
 
@@ -112,6 +172,9 @@
     .scrollbar-thin::-webkit-scrollbar { width: 4px; }
     .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--c-primary); border-radius: 2px; box-shadow: 0 0 6px var(--c-primary); }
 
+    /* ═══════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════ */
     .btn-primary { background: transparent; border: 1px solid var(--c-primary); color: var(--c-primary); text-shadow: 0 0 8px var(--c-primary); box-shadow: 0 0 12px rgba(160,60,255,0.25), inset 0 0 10px rgba(160,60,255,0.06); transition: all 0.2s ease; font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
     .btn-primary:hover { background: rgba(160,60,255,0.15); box-shadow: 0 0 22px rgba(160,60,255,0.5), inset 0 0 20px rgba(160,60,255,0.12); }
     .btn-accent { background: transparent; border: 1px solid var(--c-accent); color: var(--c-accent); text-shadow: 0 0 8px var(--c-accent); box-shadow: 0 0 12px rgba(224,64,251,0.25); transition: all 0.2s ease; font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
@@ -138,49 +201,236 @@
     input::placeholder, textarea::placeholder { color: var(--c-secondary) !important; }
     input:focus, textarea:focus, select:focus { border-color: var(--c-primary) !important; box-shadow: 0 0 8px rgba(160,60,255,0.35) !important; outline: none; }
 
-    /* File drop zone */
     .drop-zone { border: 2px dashed rgba(160,60,255,0.3); border-radius: 6px; transition: all 0.2s; cursor: pointer; }
     .drop-zone:hover, .drop-zone.drag-over { border-color: var(--c-primary); background: rgba(160,60,255,0.06); box-shadow: 0 0 14px rgba(160,60,255,0.25); }
 
-    /* File badge */
     .file-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:4px; font-size:10px; }
     .file-badge-pdf   { background:rgba(224,64,251,0.12); border:1px solid rgba(224,64,251,0.35); color:var(--c-accent); }
     .file-badge-word  { background:rgba(100,40,200,0.15);  border:1px solid rgba(100,40,200,0.4);  color:#c090ff; }
     .file-badge-other { background:rgba(160,60,255,0.08);  border:1px solid rgba(160,60,255,0.25);  color:var(--c-primary); }
 
-    /* Upload progress */
     .upload-bar { height:3px; border-radius:2px; background:rgba(160,60,255,0.1); overflow:hidden; margin-top:4px; }
     .upload-bar-fill { height:100%; background:var(--c-primary); box-shadow:0 0 6px var(--c-primary); transition:width 0.3s; }
 
-    /* Header gradient line */
+    /* Glassmorphism headers */
     header {
-      background: rgba(8,3,18,0.97) !important;
-      border-bottom: 1px solid rgba(160,60,255,0.25) !important;
+      background: rgba(6,2,15,0.85) !important;
+      border-bottom: 1px solid rgba(160,60,255,0.2) !important;
+      backdrop-filter: blur(20px) !important;
     }
-
-    /* Sidebar deeper dark */
     #sidebar {
-      background: rgba(5,2,12,0.95) !important;
-      border-right: 1px solid rgba(140,40,255,0.12) !important;
+      background: rgba(4,1,10,0.88) !important;
+      border-right: 1px solid rgba(140,40,255,0.1) !important;
+      backdrop-filter: blur(16px) !important;
     }
-
-    /* Modal overlay deeper */
     #modal-overlay > div, #delete-overlay > div {
-      background: rgba(8,3,18,0.99) !important;
+      background: rgba(6,2,15,0.98) !important;
+    }
+    #login-screen > div {
+      box-shadow: 0 0 80px rgba(160,60,255,0.2) !important;
+      backdrop-filter: blur(10px);
     }
 
-    /* Login card */
-    #login-screen > div {
-      box-shadow: 0 0 60px rgba(160,60,255,0.18) !important;
+    /* ═══════════════════════════════════
+       CHATBOT STYLES
+    ═══════════════════════════════════ */
+    #chatbot-bubble {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: rgba(6,2,15,0.95);
+      border: 1px solid var(--c-primary);
+      box-shadow: 0 0 20px rgba(160,60,255,0.5), 0 0 40px rgba(160,60,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: bubblePulse 2.5s ease-in-out infinite;
     }
+    @keyframes bubblePulse {
+      0%,100% { box-shadow: 0 0 20px rgba(160,60,255,0.5), 0 0 40px rgba(160,60,255,0.2); }
+      50% { box-shadow: 0 0 35px rgba(160,60,255,0.8), 0 0 70px rgba(224,64,251,0.3); }
+    }
+    #chatbot-bubble:hover { transform: scale(1.1); }
+    #chatbot-bubble.open { animation: none; border-color: var(--c-accent); box-shadow: 0 0 25px rgba(224,64,251,0.6); }
+
+    #chatbot-panel {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      z-index: 999;
+      width: 320px;
+      max-height: 480px;
+      background: rgba(6,2,15,0.97);
+      border: 1px solid rgba(160,60,255,0.35);
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(160,60,255,0.25), 0 20px 60px rgba(0,0,0,0.8);
+      backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: bottom right;
+      animation: chatOpen 0.25s ease;
+    }
+    @keyframes chatOpen {
+      from { opacity:0; transform: scale(0.85) translateY(10px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+
+    #chatbot-panel.visible { display: flex; }
+
+    #chatbot-header {
+      padding: 12px 16px;
+      background: rgba(160,60,255,0.06);
+      border-bottom: 1px solid rgba(160,60,255,0.15);
+      display: flex; align-items: center; gap: 10px;
+    }
+    #chatbot-header .bot-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(160,60,255,0.1);
+      border: 1px solid rgba(160,60,255,0.35);
+      display: flex; align-items: center; justify-content: center;
+      animation: pulse-neon 2s ease-in-out infinite;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 340px;
+    }
+    #chatbot-messages::-webkit-scrollbar { width: 3px; }
+    #chatbot-messages::-webkit-scrollbar-thumb { background: var(--c-primary); border-radius: 2px; }
+
+    .chat-msg {
+      max-width: 85%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      animation: msgIn 0.2s ease;
+    }
+    @keyframes msgIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+    .chat-msg.bot {
+      background: rgba(160,60,255,0.08);
+      border: 1px solid rgba(160,60,255,0.2);
+      color: var(--c-text);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+    .chat-msg.user {
+      background: rgba(224,64,251,0.08);
+      border: 1px solid rgba(224,64,251,0.2);
+      color: var(--c-accent);
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .chat-quick-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(160,60,255,0.06);
+      border: 1px solid rgba(160,60,255,0.25);
+      color: var(--c-primary);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .chat-quick-btn:hover {
+      background: rgba(160,60,255,0.15);
+      box-shadow: 0 0 8px rgba(160,60,255,0.3);
+    }
+
+    #chatbot-input-area {
+      padding: 10px;
+      border-top: 1px solid rgba(160,60,255,0.12);
+      display: flex; gap: 8px;
+      align-items: center;
+    }
+    #chatbot-input {
+      flex: 1;
+      background: rgba(160,60,255,0.04);
+      border: 1px solid rgba(160,60,255,0.2);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--c-primary);
+      outline: none;
+    }
+    #chatbot-input:focus { border-color: var(--c-primary); box-shadow: 0 0 8px rgba(160,60,255,0.3); }
+    #chatbot-send {
+      width: 30px; height: 30px;
+      border-radius: 6px;
+      background: rgba(160,60,255,0.1);
+      border: 1px solid rgba(160,60,255,0.3);
+      color: var(--c-primary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    #chatbot-send:hover { background: rgba(160,60,255,0.25); box-shadow: 0 0 10px rgba(160,60,255,0.4); }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex; gap: 4px; align-items: center; padding: 6px 4px;
+    }
+    .typing-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--c-primary);
+      animation: typingBounce 0.8s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typingBounce { 0%,100% { transform:translateY(0); opacity:0.4; } 50% { transform:translateY(-4px); opacity:1; } }
+
+    /* ═══════════════════════════════════
+       PLANET DECORATION (home screen)
+    ═══════════════════════════════════ */
+    .planet-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(160,60,255,0.15);
+      animation: ringRotate 20s linear infinite;
+    }
+    @keyframes ringRotate { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+
+    /* Z-index layering */
+    #home-screen, #login-screen, #main-app { position: relative; z-index: 10; }
   </style>
 </head>
-<body class="h-full grid-bg" style="color:var(--c-text);">
-<div id="app" class="h-full w-full flex flex-col">
+<body class="h-full" style="color:var(--c-text); background:#06020f;">
+
+<!-- ═══════════════════════════════════
+     SPACE CANVAS (stars, constellations, fireflies)
+═══════════════════════════════════ -->
+<canvas id="space-canvas"></canvas>
+
+<!-- NEBULA LAYERS -->
+<div id="nebula-layer">
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+  <div class="nebula nebula-3"></div>
+</div>
+
+<!-- GRID OVERLAY -->
+<div style="position:fixed;inset:0;z-index:2;pointer-events:none;" class="grid-bg"></div>
+
+<div id="app" class="h-full w-full flex flex-col" style="position:relative; z-index:10;">
 
   <!-- HOME SCREEN -->
   <div id="home-screen" class="h-full w-full overflow-y-auto scrollbar-thin flex flex-col">
-    <header class="flex items-center justify-between px-6 py-4 shrink-0" style="background:rgba(8,3,18,0.97); border-bottom:1px solid rgba(160,60,255,0.22); backdrop-filter:blur(10px);">
+    <header class="flex items-center justify-between px-6 py-4 shrink-0" style="background:rgba(6,2,15,0.85); border-bottom:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(20px);">
       <div class="flex items-center gap-3">
         <div class="w-2 h-2 rounded-full blink" style="background:var(--c-green); box-shadow:0 0 6px var(--c-green);"></div>
         <h1 class="font-display text-sm font-bold neon-text tracking-widest" id="home-title">PORTFOLIO.EXE</h1>
@@ -196,8 +446,15 @@
     </header>
     <main class="flex-1 flex items-center justify-center px-6 py-12">
       <div class="w-full max-w-3xl">
-        <div class="text-center mb-12">
-          <div class="w-28 h-28 rounded-none mx-auto mb-6 flex items-center justify-center pulse-neon corner-box" style="background:rgba(160,60,255,0.06); border:1px solid rgba(160,60,255,0.32);">
+        <!-- Planet rings decoration -->
+        <div class="text-center mb-12" style="position:relative;">
+          <div style="position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:300px; height:300px; pointer-events:none; opacity:0.3;">
+            <div class="planet-ring" style="inset:20px; animation-duration:30s;"></div>
+            <div class="planet-ring" style="inset:40px; animation-duration:22s; animation-direction:reverse;"></div>
+            <div class="planet-ring" style="inset:65px; animation-duration:15s;"></div>
+          </div>
+
+          <div class="w-28 h-28 rounded-none mx-auto mb-6 flex items-center justify-center pulse-neon corner-box" style="background:rgba(160,60,255,0.06); border:1px solid rgba(160,60,255,0.32); position:relative; z-index:2;">
             <i data-lucide="user" style="width:52px;height:52px;color:var(--c-primary); filter:drop-shadow(0 0 10px var(--c-primary));"></i>
           </div>
           <div class="font-mono text-xs mb-3" style="color:var(--c-secondary);">SISTEMA INICIADO <span class="blink" style="color:var(--c-green);">█</span></div>
@@ -208,10 +465,10 @@
         <div class="mb-12">
           <div class="font-display text-xs text-center mb-6 neon-text tracking-widest">── HABILIDADES DESBLOQUEADAS ──</div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2);"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-1">JavaScript</p></div>
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2); animation-delay:60ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-2">Diseño UX</p></div>
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2); animation-delay:120ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-3">Comunicación</p></div>
-            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.2); animation-delay:180ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-4">Liderazgo</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px);"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-1">JavaScript</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px); animation-delay:60ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-2">Diseño UX</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px); animation-delay:120ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-3">Comunicación</p></div>
+            <div class="card-enter game-card p-4 text-center corner-box" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px); animation-delay:180ms;"><div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div><p class="font-mono text-xs font-semibold" id="skill-4">Liderazgo</p></div>
           </div>
         </div>
         <div class="text-center">
@@ -229,7 +486,7 @@
 
   <!-- LOGIN SCREEN -->
   <div id="login-screen" class="h-full w-full flex items-center justify-center hidden">
-    <div class="w-full max-w-sm p-8 corner-box" style="background:rgba(8,3,18,0.98); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 50px rgba(160,60,255,0.15);">
+    <div class="w-full max-w-sm p-8 corner-box" style="background:rgba(6,2,15,0.92); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 70px rgba(160,60,255,0.18); backdrop-filter:blur(16px);">
       <div class="font-mono text-xs mb-1" style="color:var(--c-secondary);">SISTEMA DE ACCESO v2.0</div>
       <h1 class="font-display text-xl font-black mb-1 neon-text" id="login-title">PORTFOLIO.EXE</h1>
       <p class="font-mono text-xs mb-6" style="color:var(--c-secondary);">SELECCIONA ROL PARA CONTINUAR <span class="blink">█</span></p>
@@ -242,7 +499,6 @@
       <button onclick="goToHome()" class="w-full py-3 px-4 rounded flex items-center justify-center gap-2 font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--c-secondary); letter-spacing:1px;">
         <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> VOLVER
       </button>
-      <!-- VIEWER OPTIONS -->
       <div id="viewer-options" class="mt-4 pt-4" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-3 neon-text tracking-widest text-center">[ MODO VISUALIZADOR ]</h3>
         <button onclick="showViewerRegister()" class="btn-primary w-full py-2.5 px-4 rounded mb-2 flex items-center justify-center gap-2" style="font-size:10px;">
@@ -253,7 +509,6 @@
         </button>
         <button onclick="closeViewerOptions()" class="w-full mt-2 py-2 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--c-secondary); letter-spacing:1px;">CANCELAR</button>
       </div>
-
       <div id="auth-form-container" class="mt-6 pt-6" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center" id="auth-title"></h3>
         <form id="auth-form" onsubmit="handleAuth(event)">
@@ -266,8 +521,6 @@
         </form>
         <p class="font-mono text-xs text-center mt-3" id="auth-msg"></p>
       </div>
-
-      <!-- REGISTRO VISUALIZADOR -->
       <div id="viewer-register-container" class="mt-6 pt-6" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center">[ NUEVO VISUALIZADOR ]</h3>
         <form id="register-form" onsubmit="handleRegister(event)">
@@ -288,7 +541,7 @@
   <!-- MAIN APP -->
   <div id="main-app" class="h-full w-full hidden" style="display:none;">
     <div class="h-full w-full flex flex-col overflow-hidden">
-      <header class="flex items-center justify-between px-5 py-3 shrink-0" style="background:rgba(8,3,18,0.97); border-bottom:1px solid rgba(160,60,255,0.22); backdrop-filter:blur(10px);">
+      <header class="flex items-center justify-between px-5 py-3 shrink-0" style="background:rgba(6,2,15,0.85); border-bottom:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(20px);">
         <div class="flex items-center gap-3">
           <button id="menu-toggle" class="lg:hidden p-1" onclick="toggleSidebar()">
             <i data-lucide="menu" style="width:18px;height:18px; color:var(--c-primary);"></i>
@@ -297,7 +550,7 @@
           <h1 class="font-display text-sm font-bold neon-text tracking-widest" id="app-title">PORTFOLIO.EXE</h1>
         </div>
         <div class="flex items-center gap-3">
-          <div id="search-box" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded text-sm" style="background:rgba(160,60,255,0.05); border:1px solid rgba(160,60,255,0.16);">
+          <div id="search-box" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded text-sm" style="background:rgba(160,60,255,0.05); border:1px solid rgba(160,60,255,0.16); backdrop-filter:blur(8px);">
             <i data-lucide="search" style="width:12px;height:12px;color:var(--c-secondary);"></i>
             <input id="search-input" type="text" placeholder="buscar misiones..." class="bg-transparent border-none text-sm font-mono" style="color:var(--c-primary); width:140px;" oninput="handleSearch(this.value)">
           </div>
@@ -308,7 +561,7 @@
         </div>
       </header>
       <div class="flex flex-1 overflow-hidden">
-        <aside id="sidebar" class="w-56 shrink-0 overflow-y-auto scrollbar-thin p-4 hidden lg:block" style="background:rgba(5,2,12,0.94); border-right:1px solid rgba(140,40,255,0.12);">
+        <aside id="sidebar" class="w-56 shrink-0 overflow-y-auto scrollbar-thin p-4 hidden lg:block" style="background:rgba(4,1,10,0.88); border-right:1px solid rgba(140,40,255,0.1); backdrop-filter:blur(16px);">
           <p class="font-display text-xs tracking-widest mb-4" style="color:var(--c-secondary);" id="sidebar-owner">── ÁRBOL ──</p>
           <nav id="unit-nav"></nav>
         </aside>
@@ -322,18 +575,18 @@
 </div>
 
 <!-- TOAST -->
-<div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+<div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2" style="right:88px;"></div>
 
 <!-- MODAL -->
-<div id="modal-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.85); overflow-y:auto;">
-  <div class="w-full max-w-lg p-6 corner-box my-4" style="background:rgba(8,3,18,0.99); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 50px rgba(160,60,255,0.18);">
+<div id="modal-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.88); overflow-y:auto; backdrop-filter:blur(6px);">
+  <div class="w-full max-w-lg p-6 corner-box my-4" style="background:rgba(6,2,15,0.99); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 60px rgba(160,60,255,0.2);">
     <div id="modal-content"></div>
   </div>
 </div>
 
 <!-- DELETE CONFIRM -->
-<div id="delete-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.85);">
-  <div class="w-full max-w-sm p-6 text-center corner-box" style="background:rgba(8,3,18,0.99); border:1px solid rgba(224,64,251,0.4); box-shadow:0 0 35px rgba(224,64,251,0.22);">
+<div id="delete-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.88); backdrop-filter:blur(6px);">
+  <div class="w-full max-w-sm p-6 text-center corner-box" style="background:rgba(6,2,15,0.99); border:1px solid rgba(224,64,251,0.4); box-shadow:0 0 40px rgba(224,64,251,0.25);">
     <div class="font-display text-3xl mb-3" style="color:var(--c-accent); text-shadow:0 0 20px var(--c-accent);">⚠</div>
     <p class="font-display text-sm font-bold mb-1" style="color:var(--c-accent); letter-spacing:2px;">¿ELIMINAR REGISTRO?</p>
     <p class="font-mono text-xs mb-5" style="color:var(--c-secondary);">Esta acción no se puede deshacer.</p>
@@ -344,261 +597,553 @@
   </div>
 </div>
 
+<!-- ═══════════════════════════════════
+     CHATBOT
+═══════════════════════════════════ -->
+<div id="chatbot-bubble" onclick="toggleChatbot()" title="Asistente de navegación">
+  <i data-lucide="bot" style="width:22px;height:22px;color:var(--c-primary);"></i>
+</div>
+
+<div id="chatbot-panel">
+  <div id="chatbot-header">
+    <div class="bot-avatar">
+      <i data-lucide="cpu" style="width:16px;height:16px;color:var(--c-primary);"></i>
+    </div>
+    <div style="flex:1;">
+      <div class="font-display text-xs neon-text tracking-wider">NEXUS</div>
+      <div class="font-mono" style="font-size:9px; color:var(--c-secondary);">Asistente de navegación</div>
+    </div>
+    <div class="w-2 h-2 rounded-full blink" style="background:var(--c-green); box-shadow:0 0 5px var(--c-green);"></div>
+  </div>
+  <div id="chatbot-messages"></div>
+  <div id="chatbot-input-area">
+    <input id="chatbot-input" placeholder="escribe aquí..." onkeydown="if(event.key==='Enter')sendChatMessage()">
+    <button id="chatbot-send" onclick="sendChatMessage()">
+      <i data-lucide="send" style="width:13px;height:13px;"></i>
+    </button>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════════════════
-//  ██████╗  ██████╗ ███╗   ██╗███████╗██╗ ██████╗
-//  ██╔════╝██╔═══██╗████╗  ██║██╔════╝██║██╔════╝
-//  ██║     ██║   ██║██╔██╗ ██║█████╗  ██║██║  ███╗
-//  ██║     ██║   ██║██║╚██╗██║██╔══╝  ██║██║   ██║
-//  ╚██████╗╚██████╔╝██║ ╚████║██║     ██║╚██████╔╝
-//   ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
-//
-//  ▼▼▼ PEGA AQUÍ TUS CREDENCIALES DE SUPABASE ▼▼▼
+//  SPACE CANVAS — Stars, Constellations & Fireflies
 // ═══════════════════════════════════════════════════════════════
+(function initSpace() {
+  const canvas = document.getElementById('space-canvas');
+  const ctx = canvas.getContext('2d');
 
+  let W, H, stars = [], fireflies = [], constellationLines = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    initStars();
+    initConstellations();
+  }
+
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  // ── STARS ──────────────────────────────────────────
+  function initStars() {
+    stars = [];
+    const count = Math.floor((W * H) / 2200);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: rnd(0, W), y: rnd(0, H),
+        r: rnd(0.2, 1.8),
+        alpha: rnd(0.3, 1),
+        twinkleSpeed: rnd(0.005, 0.02),
+        twinkleDir: Math.random() > 0.5 ? 1 : -1,
+        color: Math.random() > 0.85
+          ? `hsl(${rnd(260,300)}, 80%, 80%)`
+          : Math.random() > 0.6
+            ? '#ffffff'
+            : `hsl(${rnd(200,240)}, 60%, 90%)`
+      });
+    }
+  }
+
+  // ── CONSTELLATIONS ─────────────────────────────────
+  function initConstellations() {
+    constellationLines = [];
+    const nodeCount = 18;
+    const nodes = [];
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push({ x: rnd(W*0.05, W*0.95), y: rnd(H*0.05, H*0.95) });
+    }
+    // Connect nearby nodes
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i+1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < W * 0.18 && constellationLines.length < 22) {
+          constellationLines.push({ a: nodes[i], b: nodes[j], alpha: rnd(0.06, 0.18) });
+        }
+      }
+    }
+  }
+
+  // ── FIREFLIES ──────────────────────────────────────
+  (function initFireflies() {
+    const count = 55;
+    for (let i = 0; i < count; i++) {
+      fireflies.push({
+        x: rnd(0, window.innerWidth),
+        y: rnd(window.innerHeight * 0.1, window.innerHeight),
+        vx: rnd(-0.4, 0.4),
+        vy: rnd(-1.2, -0.3),   // drift upward
+        r: rnd(1.5, 3.5),
+        alpha: rnd(0.4, 1),
+        alphaDir: Math.random() > 0.5 ? 1 : -1,
+        alphaSpeed: rnd(0.008, 0.025),
+        hue: rnd(260, 310),
+        wobble: rnd(0, Math.PI * 2),
+        wobbleSpeed: rnd(0.01, 0.04),
+        wobbleAmp: rnd(0.2, 0.6)
+      });
+    }
+  })();
+
+  // ── RENDER LOOP ────────────────────────────────────
+  function drawStars() {
+    stars.forEach(s => {
+      s.alpha += s.twinkleSpeed * s.twinkleDir;
+      if (s.alpha >= 1) { s.alpha = 1; s.twinkleDir = -1; }
+      if (s.alpha <= 0.1) { s.alpha = 0.1; s.twinkleDir = 1; }
+
+      ctx.save();
+      ctx.globalAlpha = s.alpha;
+      ctx.fillStyle = s.color;
+      ctx.shadowColor = s.color;
+      ctx.shadowBlur = s.r > 1.2 ? 6 : 2;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function drawConstellations() {
+    constellationLines.forEach(line => {
+      ctx.save();
+      ctx.globalAlpha = line.alpha;
+      ctx.strokeStyle = 'rgba(160,80,255,1)';
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([3, 8]);
+      ctx.beginPath();
+      ctx.moveTo(line.a.x, line.a.y);
+      ctx.lineTo(line.b.x, line.b.y);
+      ctx.stroke();
+      ctx.restore();
+
+      // Node dots
+      [line.a, line.b].forEach(n => {
+        ctx.save();
+        ctx.globalAlpha = line.alpha * 2.5;
+        ctx.fillStyle = 'rgba(180,100,255,1)';
+        ctx.shadowColor = 'rgba(180,100,255,1)';
+        ctx.shadowBlur = 5;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 1.5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      });
+    });
+  }
+
+  function drawFireflies() {
+    fireflies.forEach(f => {
+      // Wobble horizontal
+      f.wobble += f.wobbleSpeed;
+      f.x += f.vx + Math.sin(f.wobble) * f.wobbleAmp;
+      f.y += f.vy;
+
+      // Alpha pulse
+      f.alpha += f.alphaSpeed * f.alphaDir;
+      if (f.alpha >= 1)   { f.alpha = 1;   f.alphaDir = -1; }
+      if (f.alpha <= 0.1) { f.alpha = 0.1; f.alphaDir = 1;  }
+
+      // Wrap around when off-screen
+      if (f.y < -10) { f.y = H + 10; f.x = rnd(0, W); }
+      if (f.x < -10) f.x = W + 10;
+      if (f.x > W+10) f.x = -10;
+
+      // Draw glow
+      ctx.save();
+      ctx.globalAlpha = f.alpha * 0.25;
+      const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 5);
+      g.addColorStop(0, `hsla(${f.hue}, 80%, 70%, 1)`);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r * 5, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+
+      // Draw core
+      ctx.save();
+      ctx.globalAlpha = f.alpha;
+      ctx.fillStyle = `hsl(${f.hue}, 90%, 80%)`;
+      ctx.shadowColor = `hsl(${f.hue}, 80%, 70%)`;
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r * 0.5, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    drawConstellations();
+    drawStars();
+    drawFireflies();
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  loop();
+
+  // ── SHOOTING STARS ─────────────────────────────────
+  function launchStar() {
+    const el = document.createElement('div');
+    el.className = 'shooting-star';
+    const startX = rnd(0, window.innerWidth * 0.7);
+    const startY = rnd(0, window.innerHeight * 0.4);
+    el.style.left = startX + 'px';
+    el.style.top  = startY + 'px';
+    el.style.animation = `shoot ${rnd(0.8,1.6)}s ease-out forwards`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 2000);
+  }
+  setInterval(launchStar, rnd(3000,6000));
+  setInterval(()=>launchStar(), rnd(4000,9000));
+})();
+
+
+// ═══════════════════════════════════════════════════════════════
+//  CHATBOT — NEXUS Navigation Assistant
+// ═══════════════════════════════════════════════════════════════
+let chatOpen = false;
+let chatReady = false;
+
+const NEXUS_RESPONSES = {
+  inicio: {
+    keywords: ['inicio','home','principal','portada','volver','regresar'],
+    action: () => { goToHome(); },
+    text: '↩ Te llevo al inicio. Allí puedes ver el perfil y elegir tu modo de acceso.'
+  },
+  login: {
+    keywords: ['acceder','login','entrar','sesión','cuenta','ingresar'],
+    action: () => { goToLogin(); },
+    text: '🔐 Abriendo la pantalla de acceso. Elige modo Admin o Viewer.'
+  },
+  admin: {
+    keywords: ['admin','administrador','creator','crear','agregar','añadir','editar'],
+    action: () => { goToLogin(); setTimeout(()=>showAuthForm('admin'),200); },
+    text: '🛡 Acceso de administrador. Usuario: admin / Contraseña: admin123'
+  },
+  visualizar: {
+    keywords: ['visualizar','ver','explorar','visitante','guest','portafolio','portfolio'],
+    action: () => { goToGuestView(); },
+    text: '👁 Entrando como visitante. Puedes explorar todas las unidades y semanas.'
+  },
+  unidad1: {
+    keywords: ['unidad 1','unidad1','primera unidad','unit 1'],
+    action: () => { if(document.getElementById('main-app').style.display!=='none'){ selectedUnit=1; selectedWeek=null; renderSidebar(); renderContent(); } else { goToGuestView(); setTimeout(()=>{ selectedUnit=1; selectedWeek=null; renderSidebar(); renderContent(); },400); }},
+    text: '📁 Navegando a Unidad 1 — semanas 1 al 4.'
+  },
+  unidad2: {
+    keywords: ['unidad 2','unidad2','segunda unidad','unit 2'],
+    action: () => { if(document.getElementById('main-app').style.display!=='none'){ selectedUnit=2; selectedWeek=null; renderSidebar(); renderContent(); } else { goToGuestView(); setTimeout(()=>{ selectedUnit=2; selectedWeek=null; renderSidebar(); renderContent(); },400); }},
+    text: '📁 Navegando a Unidad 2 — semanas 5 al 8.'
+  },
+  unidad3: {
+    keywords: ['unidad 3','unidad3','tercera unidad','unit 3'],
+    action: () => { if(document.getElementById('main-app').style.display!=='none'){ selectedUnit=3; selectedWeek=null; renderSidebar(); renderContent(); } else { goToGuestView(); setTimeout(()=>{ selectedUnit=3; selectedWeek=null; renderSidebar(); renderContent(); },400); }},
+    text: '📁 Navegando a Unidad 3 — semanas 9 al 12.'
+  },
+  unidad4: {
+    keywords: ['unidad 4','unidad4','cuarta unidad','unit 4'],
+    action: () => { if(document.getElementById('main-app').style.display!=='none'){ selectedUnit=4; selectedWeek=null; renderSidebar(); renderContent(); } else { goToGuestView(); setTimeout(()=>{ selectedUnit=4; selectedWeek=null; renderSidebar(); renderContent(); },400); }},
+    text: '📁 Navegando a Unidad 4 — semanas 13 al 16.'
+  },
+  buscar: {
+    keywords: ['buscar','search','encontrar','busca'],
+    action: () => {
+      if(document.getElementById('main-app').style.display!=='none') {
+        const si = document.getElementById('search-input');
+        if(si){ si.focus(); showToast('Escribe en la barra de búsqueda'); }
+      } else { goToGuestView(); }
+    },
+    text: '🔍 La barra de búsqueda está en la parte superior. Escribe el título o descripción de lo que buscas.'
+  },
+  ayuda: {
+    keywords: ['ayuda','help','que puedes','qué puedes','cómo','como funciona','opciones','comandos'],
+    action: null,
+    text: null
+  }
+};
+
+const QUICK_ACTIONS = [
+  { label: '🏠 Ir al inicio', msg: 'inicio' },
+  { label: '🔐 Acceder', msg: 'login' },
+  { label: '👁 Explorar', msg: 'visualizar' },
+  { label: '📁 Unidad 1', msg: 'unidad 1' },
+  { label: '🛡 Admin', msg: 'admin' },
+  { label: '🔍 Buscar', msg: 'buscar' }
+];
+
+function toggleChatbot() {
+  chatOpen = !chatOpen;
+  const panel  = document.getElementById('chatbot-panel');
+  const bubble = document.getElementById('chatbot-bubble');
+  if (chatOpen) {
+    panel.classList.add('visible');
+    bubble.classList.add('open');
+    bubble.innerHTML = '<i data-lucide="x" style="width:20px;height:20px;color:var(--c-accent);"></i>';
+    lucide.createIcons();
+    if (!chatReady) { chatReady = true; initChatbot(); }
+    scrollChatToBottom();
+  } else {
+    panel.classList.remove('visible');
+    bubble.classList.remove('open');
+    bubble.innerHTML = '<i data-lucide="bot" style="width:22px;height:22px;color:var(--c-primary);"></i>';
+    lucide.createIcons();
+  }
+}
+
+function initChatbot() {
+  addBotMessage('¡Hola! Soy <span style="color:var(--c-primary);">NEXUS</span>, tu asistente de navegación. ¿A dónde quieres ir?');
+  setTimeout(()=>addQuickReplies(), 600);
+}
+
+function addBotMessage(html, delay=0) {
+  setTimeout(()=>{
+    const msgs = document.getElementById('chatbot-messages');
+    // Remove typing if present
+    const typing = msgs.querySelector('.typing-msg');
+    if(typing) typing.remove();
+
+    const div = document.createElement('div');
+    div.className = 'chat-msg bot';
+    div.innerHTML = html;
+    msgs.appendChild(div);
+    lucide.createIcons();
+    scrollChatToBottom();
+  }, delay);
+}
+
+function addTyping() {
+  const msgs = document.getElementById('chatbot-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot typing-msg';
+  div.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  msgs.appendChild(div);
+  scrollChatToBottom();
+  return div;
+}
+
+function addQuickReplies() {
+  const msgs = document.getElementById('chatbot-messages');
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-msg bot';
+  wrap.style.background = 'transparent';
+  wrap.style.border = 'none';
+  wrap.style.padding = '4px 0';
+  wrap.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:5px;">' +
+    QUICK_ACTIONS.map(a => `<button class="chat-quick-btn" onclick="sendChatMessage('${a.msg}')">${a.label}</button>`).join('') +
+    '</div>';
+  msgs.appendChild(wrap);
+  scrollChatToBottom();
+}
+
+function sendChatMessage(preset) {
+  const input = document.getElementById('chatbot-input');
+  const text = preset || input.value.trim();
+  if (!text) return;
+  if (!preset) input.value = '';
+
+  // Add user message
+  const msgs = document.getElementById('chatbot-messages');
+  const uDiv = document.createElement('div');
+  uDiv.className = 'chat-msg user';
+  uDiv.textContent = text;
+  msgs.appendChild(uDiv);
+  scrollChatToBottom();
+
+  // Process
+  addTyping();
+  setTimeout(()=>processChat(text.toLowerCase()), 700);
+}
+
+function processChat(text) {
+  // Help menu
+  if (NEXUS_RESPONSES.ayuda.keywords.some(k=>text.includes(k))) {
+    addBotMessage('Puedo llevarte a cualquier sección. Aquí están mis acciones:');
+    setTimeout(()=>addQuickReplies(), 300);
+    return;
+  }
+
+  // Match other intents
+  for (const [key, intent] of Object.entries(NEXUS_RESPONSES)) {
+    if (key === 'ayuda') continue;
+    if (intent.keywords.some(k=>text.includes(k))) {
+      addBotMessage(intent.text);
+      if (intent.action) {
+        setTimeout(()=>{
+          intent.action();
+          // Close chatbot after navigation
+          setTimeout(()=>{ if(chatOpen) toggleChatbot(); }, 800);
+        }, 600);
+      }
+      return;
+    }
+  }
+
+  // Fallback
+  addBotMessage('No reconocí esa ruta 🌌 Aquí tienes mis destinos disponibles:');
+  setTimeout(()=>addQuickReplies(), 300);
+}
+
+function scrollChatToBottom() {
+  const msgs = document.getElementById('chatbot-messages');
+  setTimeout(()=>{ msgs.scrollTop = msgs.scrollHeight; }, 50);
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+//  SUPABASE CONFIG
+// ═══════════════════════════════════════════════════════════════
 const SUPABASE_URL = 'https://grcdofidpphocbuqjxdz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyY2RvZmlkcHBob2NidXFqeGR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjM2MTcsImV4cCI6MjA5Mjg5OTYxN30.tyTUtx72f98WPd0TNLrFvMqp0qwLUCP6dFZxvlnrYPc';
 const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyY2RvZmlkcHBob2NidXFqeGR6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzMyMzYxNywiZXhwIjoyMDkyODk5NjE3fQ.h-Fi-dDNbvPwTwzC7Nzhz--RVebNVYQ3Tv4qYCPqzBo';
-
-// ═══════════════════════════════════════════════════════════════
-//  FIN DE CONFIGURACIÓN
-// ═══════════════════════════════════════════════════════════════
-
 const STORAGE_BUCKET = 'portfolio-files';
 
 function getActiveKey() {
-  if (typeof SUPABASE_SERVICE_KEY !== 'undefined' && !SUPABASE_SERVICE_KEY.includes('PEGA_AQUI')) {
-    return SUPABASE_SERVICE_KEY;
-  }
+  if (typeof SUPABASE_SERVICE_KEY !== 'undefined' && !SUPABASE_SERVICE_KEY.includes('PEGA_AQUI')) return SUPABASE_SERVICE_KEY;
   return SUPABASE_KEY;
 }
 
-async function sbFetch(path, opts = {}) {
-  const cleanPath = path.replace(/^\/+/, '').trim();
-  const url = `${SUPABASE_URL}/rest/v1/${cleanPath}`;
-  const activeKey = getActiveKey();
-  const res = await fetch(url, {
-    ...opts,
-    headers: {
-      'apikey': activeKey,
-      'Authorization': `Bearer ${activeKey}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-      ...(opts.headers || {})
-    }
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    return { ok: false, data: null, err };
-  }
-  const data = res.status === 204 ? null : await res.json();
-  return { ok: true, data };
+async function sbFetch(path, opts={}) {
+  const cleanPath=path.replace(/^\/+/,'').trim();
+  const url=`${SUPABASE_URL}/rest/v1/${cleanPath}`;
+  const activeKey=getActiveKey();
+  const res=await fetch(url,{ ...opts, headers:{ 'apikey':activeKey,'Authorization':`Bearer ${activeKey}`,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{}) }});
+  if(!res.ok){ const err=await res.text(); return{ok:false,data:null,err}; }
+  const data=res.status===204?null:await res.json();
+  return{ok:true,data};
 }
 
 async function sbUploadFile(file) {
-  const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const filePath = `uploads/${Date.now()}_${safe}`;
-  const uploadKey = (typeof SUPABASE_SERVICE_KEY !== 'undefined' && !SUPABASE_SERVICE_KEY.includes('PEGA_AQUI'))
-    ? SUPABASE_SERVICE_KEY : SUPABASE_KEY;
-
-  const res = await fetch(
-    `${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${filePath}`,
-    {
-      method: 'POST',
-      headers: {
-        'apikey': uploadKey,
-        'Authorization': `Bearer ${uploadKey}`,
-        'Content-Type': file.type || 'application/octet-stream',
-        'x-upsert': 'true',
-        'Cache-Control': '3600'
-      },
-      body: file
-    }
-  );
-
-  if (!res.ok) {
-    const e = await res.text();
-    return { ok: false, err: e };
-  }
-
-  const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${filePath}`;
-  return { ok: true, url: publicUrl, path: filePath };
+  const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+  const filePath=`uploads/${Date.now()}_${safe}`;
+  const uploadKey=(typeof SUPABASE_SERVICE_KEY!=='undefined'&&!SUPABASE_SERVICE_KEY.includes('PEGA_AQUI'))?SUPABASE_SERVICE_KEY:SUPABASE_KEY;
+  const res=await fetch(`${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${filePath}`,{ method:'POST', headers:{ 'apikey':uploadKey,'Authorization':`Bearer ${uploadKey}`,'Content-Type':file.type||'application/octet-stream','x-upsert':'true','Cache-Control':'3600' }, body:file });
+  if(!res.ok){ const e=await res.text(); return{ok:false,err:e}; }
+  const publicUrl=`${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${filePath}`;
+  return{ok:true,url:publicUrl,path:filePath};
 }
 
 async function sbDeleteFile(filePath) {
-  const res = await fetch(
-    `${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${filePath}`,
-    {
-      method: 'DELETE',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    }
-  );
-  return { ok: res.ok };
+  const res=await fetch(`${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${filePath}`,{ method:'DELETE', headers:{ 'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}` }});
+  return{ok:res.ok};
 }
 
-async function dbGetAll()        { const r = await sbFetch('portfolio_projects?order=created_at.asc'); return r.ok ? (r.data||[]) : []; }
-async function dbCreate(rec)     { return sbFetch('portfolio_projects', { method:'POST', body:JSON.stringify(rec) }); }
-async function dbUpdate(id, rec) { return sbFetch(`portfolio_projects?id=eq.${id}`, { method:'PATCH', body:JSON.stringify(rec) }); }
-async function dbDelete(id)      { return sbFetch(`portfolio_projects?id=eq.${id}`, { method:'DELETE' }); }
+async function dbGetAll()        { const r=await sbFetch('portfolio_projects?order=created_at.asc'); return r.ok?(r.data||[]): []; }
+async function dbCreate(rec)     { return sbFetch('portfolio_projects',{method:'POST',body:JSON.stringify(rec)}); }
+async function dbUpdate(id,rec)  { return sbFetch(`portfolio_projects?id=eq.${id}`,{method:'PATCH',body:JSON.stringify(rec)}); }
+async function dbDelete(id)      { return sbFetch(`portfolio_projects?id=eq.${id}`,{method:'DELETE'}); }
+async function dbGetFiles(pid)   { const r=await sbFetch(`portfolio_files?project_id=eq.${pid}&order=uploaded_at.asc`); return r.ok?(r.data||[]): []; }
+async function dbAddFile(rec)    { return sbFetch('portfolio_files',{method:'POST',body:JSON.stringify(rec)}); }
+async function dbDeleteFile(id)  { return sbFetch(`portfolio_files?id=eq.${id}`,{method:'DELETE'}); }
+async function dbGetLinks(pid)   { const r=await sbFetch(`portfolio_links?project_id=eq.${pid}&order=added_at.asc`); return r.ok?(r.data||[]): []; }
+async function dbAddLink(rec)    { return sbFetch('portfolio_links',{method:'POST',body:JSON.stringify(rec)}); }
+async function dbDeleteLink(id)  { return sbFetch(`portfolio_links?id=eq.${id}`,{method:'DELETE'}); }
 
-async function dbGetFiles(projectId) {
-  const r = await sbFetch(`portfolio_files?project_id=eq.${projectId}&order=uploaded_at.asc`);
-  return r.ok ? (r.data||[]) : [];
-}
-async function dbAddFile(rec)         { return sbFetch('portfolio_files', { method:'POST', body:JSON.stringify(rec) }); }
-async function dbDeleteFile(id)       { return sbFetch(`portfolio_files?id=eq.${id}`, { method:'DELETE' }); }
-
-async function dbGetLinks(projectId) {
-  const r = await sbFetch(`portfolio_links?project_id=eq.${projectId}&order=added_at.asc`);
-  return r.ok ? (r.data||[]) : [];
-}
-async function dbAddLink(rec)   { return sbFetch('portfolio_links', { method:'POST', body:JSON.stringify(rec) }); }
-async function dbDeleteLink(id) { return sbFetch(`portfolio_links?id=eq.${id}`, { method:'DELETE' }); }
-
-const LOCAL_ADMIN_USER = 'admin';
-const LOCAL_ADMIN_PASS = 'admin123';
-
-async function dbCheckAdmin(username, password) {
-  if (username === LOCAL_ADMIN_USER && password === LOCAL_ADMIN_PASS) return true;
-  if (SUPABASE_URL.includes('PEGA_AQUI') || SUPABASE_KEY.includes('PEGA_AQUI')) return false;
-  try {
-    const r = await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&role=eq.admin&select=*`);
-    if (!r.ok || !r.data || !r.data.length) return false;
-    return r.data[0].password_hash === password;
-  } catch { return false; }
+const LOCAL_ADMIN_USER='admin', LOCAL_ADMIN_PASS='admin123';
+async function dbCheckAdmin(username,password) {
+  if(username===LOCAL_ADMIN_USER&&password===LOCAL_ADMIN_PASS) return true;
+  if(SUPABASE_URL.includes('PEGA_AQUI')||SUPABASE_KEY.includes('PEGA_AQUI')) return false;
+  try{ const r=await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&role=eq.admin&select=*`); if(!r.ok||!r.data||!r.data.length) return false; return r.data[0].password_hash===password; }catch{return false;}
 }
 
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-let currentRole = null, currentUser = null;
-let allProjects = [];
-let authPendingRole = null;
-let selectedUnit = 1, selectedWeek = null;
-let searchQuery = '', pendingDeleteId = null;
+let currentRole=null, currentUser=null;
+let allProjects=[];
+let authPendingRole=null;
+let selectedUnit=1, selectedWeek=null;
+let searchQuery='', pendingDeleteId=null;
 
-const UNITS = [1,2,3,4];
-const WEEKS_PER_UNIT = 4;
-function getWeeksForUnit(u) { const s=(u-1)*WEEKS_PER_UNIT+1; return Array.from({length:WEEKS_PER_UNIT},(_,i)=>s+i); }
+const UNITS=[1,2,3,4];
+const WEEKS_PER_UNIT=4;
+function getWeeksForUnit(u){ const s=(u-1)*WEEKS_PER_UNIT+1; return Array.from({length:WEEKS_PER_UNIT},(_,i)=>s+i); }
 
-// ═══════════════════════════════════════════════════════════════
-// DATA LOADING
-// ═══════════════════════════════════════════════════════════════
-async function loadProjects() { allProjects = await dbGetAll(); renderContent(); }
+async function loadProjects(){ allProjects=await dbGetAll(); renderContent(); }
 
 // ═══════════════════════════════════════════════════════════════
 // AUTH
 // ═══════════════════════════════════════════════════════════════
-function goToHome()  { currentRole=null; currentUser=null; show('home-screen'); hide('login-screen'); hide('main-app'); closeAuthForm(); selectedUnit=1; selectedWeek=null; searchQuery=''; }
-function goToLogin() { hide('home-screen'); show('login-screen','flex'); }
+function goToHome(){ currentRole=null; currentUser=null; show('home-screen'); hide('login-screen'); hide('main-app'); closeAuthForm(); selectedUnit=1; selectedWeek=null; searchQuery=''; }
+function goToLogin(){ hide('home-screen'); show('login-screen','flex'); }
 
-function showViewerOptions() {
-  document.getElementById('viewer-options').style.display='block';
-  document.getElementById('auth-form-container').style.display='none';
-  document.getElementById('viewer-register-container').style.display='none';
-}
-function closeViewerOptions() {
-  document.getElementById('viewer-options').style.display='none';
-}
+function showViewerOptions(){ document.getElementById('viewer-options').style.display='block'; document.getElementById('auth-form-container').style.display='none'; document.getElementById('viewer-register-container').style.display='none'; }
+function closeViewerOptions(){ document.getElementById('viewer-options').style.display='none'; }
+function showViewerRegister(){ document.getElementById('viewer-options').style.display='none'; document.getElementById('auth-form-container').style.display='none'; document.getElementById('viewer-register-container').style.display='block'; document.getElementById('reg-user').focus(); }
+function showAuthForm(role){ authPendingRole=role; document.getElementById('viewer-options').style.display='none'; document.getElementById('viewer-register-container').style.display='none'; document.getElementById('auth-title').textContent=role==='admin'?'[ ACCESO ADMINISTRADOR ]':'[ ACCESO VISUALIZADOR ]'; document.getElementById('auth-user').value=''; document.getElementById('auth-pass').value=''; document.getElementById('auth-msg').textContent=''; document.getElementById('auth-form-container').style.display='block'; document.getElementById('auth-user').focus(); }
+function closeAuthForm(){ document.getElementById('auth-form-container').style.display='none'; document.getElementById('viewer-options').style.display='none'; document.getElementById('viewer-register-container').style.display='none'; authPendingRole=null; }
 
-function showViewerRegister() {
-  document.getElementById('viewer-options').style.display='none';
-  document.getElementById('auth-form-container').style.display='none';
-  document.getElementById('viewer-register-container').style.display='block';
-  document.getElementById('reg-user').focus();
-}
-
-function showAuthForm(role) {
-  authPendingRole = role;
-  document.getElementById('viewer-options').style.display='none';
-  document.getElementById('viewer-register-container').style.display='none';
-  document.getElementById('auth-title').textContent = role==='admin' ? '[ ACCESO ADMINISTRADOR ]' : '[ ACCESO VISUALIZADOR ]';
-  document.getElementById('auth-user').value=''; document.getElementById('auth-pass').value='';
-  document.getElementById('auth-msg').textContent='';
-  document.getElementById('auth-form-container').style.display='block';
-  document.getElementById('auth-user').focus();
-}
-function closeAuthForm() {
-  document.getElementById('auth-form-container').style.display='none';
-  document.getElementById('viewer-options').style.display='none';
-  document.getElementById('viewer-register-container').style.display='none';
-  authPendingRole=null;
-}
-
-async function handleRegister(e) {
+async function handleRegister(e){
   e.preventDefault();
-  const username = document.getElementById('reg-user').value.trim();
-  const password = document.getElementById('reg-pass').value.trim();
-  const confirm  = document.getElementById('reg-confirm').value.trim();
-  const msg      = document.getElementById('reg-msg');
-  const btn      = document.getElementById('reg-btn');
-  if (!username || !password) { setMsg(msg,'> ERROR: completa todos los campos','#ef4444'); return; }
-  if (password !== confirm)   { setMsg(msg,'> ERROR: las contraseñas no coinciden','var(--c-accent)'); return; }
-  if (password.length < 4)    { setMsg(msg,'> ERROR: contraseña muy corta (mín. 4 caracteres)','var(--c-accent)'); return; }
+  const username=document.getElementById('reg-user').value.trim();
+  const password=document.getElementById('reg-pass').value.trim();
+  const confirm=document.getElementById('reg-confirm').value.trim();
+  const msg=document.getElementById('reg-msg'); const btn=document.getElementById('reg-btn');
+  if(!username||!password){setMsg(msg,'> ERROR: completa todos los campos','#ef4444');return;}
+  if(password!==confirm){setMsg(msg,'> ERROR: las contraseñas no coinciden','var(--c-accent)');return;}
+  if(password.length<4){setMsg(msg,'> ERROR: contraseña muy corta (mín. 4 caracteres)','var(--c-accent)');return;}
   btn.disabled=true; btn.innerHTML='<span class="spinner inline-block mr-2"></span> REGISTRANDO...';
-  try {
-    const check = await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&select=id`);
-    if (check.ok && check.data && check.data.length > 0) {
-      setMsg(msg,'> ERROR: ese usuario ya existe','var(--c-accent)');
-      btn.disabled=false; btn.textContent='REGISTRARSE';
-      return;
-    }
-    const r = await sbFetch('portfolio_users', {
-      method: 'POST',
-      body: JSON.stringify({ username, password_hash: password, role: 'viewer' })
-    });
-    if (r.ok) {
-      setMsg(msg,'> REGISTRO EXITOSO — iniciando sesión...','var(--c-green)');
-      setTimeout(()=>{ currentRole='viewer'; currentUser=username; loginSuccess(); }, 800);
-    } else {
-      setMsg(msg,'> ERROR al registrar: '+( r.err||'intenta de nuevo'),'var(--c-accent)');
-    }
-  } catch(err) {
-    setMsg(msg,'> ERROR de conexión','var(--c-accent)');
-  } finally {
-    btn.disabled=false; btn.textContent='REGISTRARSE';
-  }
+  try{
+    const check=await sbFetch(`portfolio_users?username=eq.${encodeURIComponent(username)}&select=id`);
+    if(check.ok&&check.data&&check.data.length>0){setMsg(msg,'> ERROR: ese usuario ya existe','var(--c-accent)'); btn.disabled=false; btn.textContent='REGISTRARSE'; return;}
+    const r=await sbFetch('portfolio_users',{method:'POST',body:JSON.stringify({username,password_hash:password,role:'viewer'})});
+    if(r.ok){setMsg(msg,'> REGISTRO EXITOSO — iniciando sesión...','var(--c-green)'); setTimeout(()=>{currentRole='viewer';currentUser=username;loginSuccess();},800);}
+    else{setMsg(msg,'> ERROR al registrar: '+(r.err||'intenta de nuevo'),'var(--c-accent)');}
+  }catch(err){setMsg(msg,'> ERROR de conexión','var(--c-accent)');}
+  finally{btn.disabled=false; btn.textContent='REGISTRARSE';}
 }
 
-async function handleAuth(e) {
+async function handleAuth(e){
   e.preventDefault();
-  const username = document.getElementById('auth-user').value.trim();
-  const password = document.getElementById('auth-pass').value.trim();
-  const msg = document.getElementById('auth-msg');
-  const btn = document.getElementById('auth-btn');
-  if (!username||!password) { setMsg(msg,'> ERROR: campos vacíos','#ef4444'); return; }
+  const username=document.getElementById('auth-user').value.trim();
+  const password=document.getElementById('auth-pass').value.trim();
+  const msg=document.getElementById('auth-msg'); const btn=document.getElementById('auth-btn');
+  if(!username||!password){setMsg(msg,'> ERROR: campos vacíos','#ef4444');return;}
   btn.disabled=true; btn.innerHTML='<span class="spinner inline-block mr-2"></span> PROCESANDO...';
-  try {
-    if (authPendingRole==='admin') {
-      const ok = await dbCheckAdmin(username, password);
-      if (ok) { currentRole='admin'; currentUser=username; loginSuccess(); }
-      else { setMsg(msg,'> ERROR: credenciales incorrectas','var(--c-accent)'); }
-    } else {
-      currentRole='viewer'; currentUser=username; loginSuccess();
-    }
-  } catch(err) { setMsg(msg,'> ERROR: fallo de conexión','var(--c-accent)'); }
-  finally { btn.disabled=false; btn.textContent='INICIAR SESIÓN'; }
+  try{
+    if(authPendingRole==='admin'){const ok=await dbCheckAdmin(username,password); if(ok){currentRole='admin';currentUser=username;loginSuccess();}else{setMsg(msg,'> ERROR: credenciales incorrectas','var(--c-accent)');}}
+    else{currentRole='viewer';currentUser=username;loginSuccess();}
+  }catch(err){setMsg(msg,'> ERROR: fallo de conexión','var(--c-accent)');}
+  finally{btn.disabled=false; btn.textContent='INICIAR SESIÓN';}
 }
 
-function setMsg(el,text,color){ el.textContent=text; el.style.color=color; }
+function setMsg(el,text,color){el.textContent=text; el.style.color=color;}
 
-function loginSuccess() {
+function loginSuccess(){
   hide('login-screen'); hide('home-screen');
   document.getElementById('main-app').style.display='flex';
-  const badge = document.getElementById('role-badge');
-  if (currentRole==='admin') {
-    badge.textContent='◈ ADMIN'; badge.style.background='rgba(224,64,251,0.1)'; badge.style.border='1px solid rgba(224,64,251,0.3)'; badge.style.color='var(--c-accent)';
-  } else {
-    badge.textContent=`◉ ${currentUser.toUpperCase()}`; badge.style.background='rgba(160,60,255,0.06)'; badge.style.border='1px solid rgba(160,60,255,0.22)'; badge.style.color='var(--c-primary)';
-  }
+  const badge=document.getElementById('role-badge');
+  if(currentRole==='admin'){badge.textContent='◈ ADMIN'; badge.style.background='rgba(224,64,251,0.1)'; badge.style.border='1px solid rgba(224,64,251,0.3)'; badge.style.color='var(--c-accent)';}
+  else{badge.textContent=`◉ ${currentUser.toUpperCase()}`; badge.style.background='rgba(160,60,255,0.06)'; badge.style.border='1px solid rgba(160,60,255,0.22)'; badge.style.color='var(--c-primary)';}
   document.getElementById('logout-btn').onclick=logout;
   renderSidebar(); loadProjects(); lucide.createIcons();
 }
 
-function goToGuestView() {
+function goToGuestView(){
   currentRole='guest'; currentUser='Guest';
   hide('home-screen'); hide('login-screen');
   document.getElementById('main-app').style.display='flex';
@@ -609,22 +1154,21 @@ function goToGuestView() {
   renderSidebar(); loadProjects(); lucide.createIcons();
 }
 
-function logout() { goToHome(); }
+function logout(){ goToHome(); }
 
 // ═══════════════════════════════════════════════════════════════
 // SIDEBAR
 // ═══════════════════════════════════════════════════════════════
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('hidden'); }
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('hidden'); }
 
-function renderSidebar() {
-  const nav = document.getElementById('unit-nav');
-  nav.innerHTML='';
-  UNITS.forEach(u => {
-    const btn = document.createElement('button');
+function renderSidebar(){
+  const nav=document.getElementById('unit-nav'); nav.innerHTML='';
+  UNITS.forEach(u=>{
+    const btn=document.createElement('button');
     btn.className=`sidebar-item w-full text-left px-4 py-2.5 rounded mb-1 font-display text-xs tracking-wider ${u===selectedUnit?'active':''}`;
     btn.style.color=u===selectedUnit?'var(--c-primary)':'var(--c-secondary)';
     btn.innerHTML=`<span class="ml-3">UNIDAD ${u}</span>`;
-    btn.onclick=()=>{ selectedUnit=u; selectedWeek=null; renderSidebar(); renderContent(); };
+    btn.onclick=()=>{selectedUnit=u; selectedWeek=null; renderSidebar(); renderContent();};
     nav.appendChild(btn);
   });
   lucide.createIcons();
@@ -633,23 +1177,23 @@ function renderSidebar() {
 // ═══════════════════════════════════════════════════════════════
 // CONTENT
 // ═══════════════════════════════════════════════════════════════
-function renderContent() {
-  const area = document.getElementById('content-area');
-  if (searchQuery.trim()) { renderSearchResults(area); return; }
-  const weeks = getWeeksForUnit(selectedUnit);
-  let html = `<div class="mb-6 flex items-center gap-3">
+function renderContent(){
+  const area=document.getElementById('content-area');
+  if(searchQuery.trim()){renderSearchResults(area);return;}
+  const weeks=getWeeksForUnit(selectedUnit);
+  let html=`<div class="mb-6 flex items-center gap-3">
     <div class="w-1 h-8" style="background:var(--c-primary); box-shadow:0 0 8px var(--c-primary);"></div>
     <div>
       <h2 class="font-display text-xl font-black neon-text tracking-widest">UNIDAD ${selectedUnit}</h2>
       <p class="font-mono text-xs" style="color:var(--c-secondary);">// semanas ${weeks[0]} → ${weeks[weeks.length-1]}</p>
     </div>
   </div>`;
-  if (selectedWeek) { html += renderWeekDetail(selectedWeek); }
-  else {
-    html += '<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">';
-    weeks.forEach((w,i) => {
-      const count = allProjects.filter(p=>p.unit==selectedUnit&&p.week==w).length;
-      html += `<div class="card-enter game-card rounded p-5 cursor-pointer" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.16); animation-delay:${i*60}ms;" onclick="selectWeek(${w})">
+  if(selectedWeek){html+=renderWeekDetail(selectedWeek);}
+  else{
+    html+='<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">';
+    weeks.forEach((w,i)=>{
+      const count=allProjects.filter(p=>p.unit==selectedUnit&&p.week==w).length;
+      html+=`<div class="card-enter game-card rounded p-5 cursor-pointer" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.16); backdrop-filter:blur(8px); animation-delay:${i*60}ms;" onclick="selectWeek(${w})">
         <div class="flex items-center justify-between mb-3">
           <span class="font-display text-xs neon-text tracking-wider">SEMANA ${w}</span>
           <span class="font-mono text-xs px-2 py-0.5 rounded" style="background:rgba(160,60,255,0.08); color:var(--c-secondary); border:1px solid rgba(160,60,255,0.12);">${count} trabajos</span>
@@ -658,15 +1202,15 @@ function renderContent() {
         <p class="font-mono text-xs" style="color:var(--c-secondary);">&gt; click para explorar</p>
       </div>`;
     });
-    html += '</div>';
+    html+='</div>';
   }
   area.innerHTML=html; lucide.createIcons();
 }
 
-function selectWeek(w) { selectedWeek=w; renderContent(); }
+function selectWeek(w){selectedWeek=w; renderContent();}
 
-function renderWeekDetail(w) {
-  const projects = allProjects.filter(p=>p.unit==selectedUnit&&p.week==w);
+function renderWeekDetail(w){
+  const projects=allProjects.filter(p=>p.unit==selectedUnit&&p.week==w);
   let html=`<button onclick="selectedWeek=null;renderContent();" class="flex items-center gap-1 font-mono text-xs mb-5 hover:underline" style="color:var(--c-primary);">
     <i data-lucide="arrow-left" style="width:12px;height:12px;"></i> VOLVER A UNIDAD ${selectedUnit}
   </button>
@@ -677,8 +1221,8 @@ function renderWeekDetail(w) {
     </div>
     ${currentRole==='admin'?`<button onclick="openAddModal()" class="btn-primary flex items-center gap-1.5 px-3 py-2 rounded text-xs"><i data-lucide="plus" style="width:12px;height:12px;"></i> AGREGAR</button>`:''}
   </div>`;
-  if (!projects.length) {
-    html+=`<div class="text-center py-16 corner-box" style="border:1px solid rgba(160,60,255,0.12); background:rgba(13,8,24,0.6);">
+  if(!projects.length){
+    html+=`<div class="text-center py-16 corner-box" style="border:1px solid rgba(160,60,255,0.12); background:rgba(13,8,24,0.5); backdrop-filter:blur(8px);">
       <div class="font-display text-4xl mb-3" style="color:rgba(160,60,255,0.2);">□</div>
       <p class="font-mono text-sm" style="color:var(--c-secondary);">// sin registros en esta semana</p>
     </div>`;
@@ -687,7 +1231,7 @@ function renderWeekDetail(w) {
   projects.forEach((p,i)=>{
     const sc=p.status==='completado'?'var(--c-green)':p.status==='en progreso'?'var(--c-warning)':'var(--c-secondary)';
     const si=p.status==='completado'?'✓':p.status==='en progreso'?'◈':'○';
-    html+=`<div class="card-enter game-card rounded p-5 mb-3" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.12); animation-delay:${i*60}ms;">
+    html+=`<div class="card-enter game-card rounded p-5 mb-3" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.12); backdrop-filter:blur(8px); animation-delay:${i*60}ms;">
       <div class="flex items-start justify-between gap-3">
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1">
@@ -703,46 +1247,38 @@ function renderWeekDetail(w) {
         </div>
         ${currentRole==='admin'?`<div class="flex gap-1 shrink-0">
           <button onclick="openEditModal(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-primary); border:1px solid rgba(160,60,255,0.12);"><i data-lucide="edit" style="width:12px;height:12px;"></i></button>
-          <button onclick="openAttachmentsModal(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-green); border:1px solid rgba(160,60,255,0.18);" title="Archivos y enlaces"><i data-lucide="paperclip" style="width:12px;height:12px;"></i></button>
+          <button onclick="openAttachmentsModal(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-green); border:1px solid rgba(160,60,255,0.18);"><i data-lucide="paperclip" style="width:12px;height:12px;"></i></button>
           <button onclick="confirmDelete(${p.id})" class="p-1.5 rounded hover:bg-white/5" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.15);"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
         </div>`:''}
       </div>
     </div>`;
   });
-  setTimeout(()=>{ projects.forEach(p=>loadAttachmentsInline(p.id)); }, 100);
+  setTimeout(()=>{projects.forEach(p=>loadAttachmentsInline(p.id));},100);
   return html;
 }
 
-async function loadAttachmentsInline(projectId) {
-  const container = document.getElementById(`attachments-${projectId}`);
-  if (!container) return;
-  const [files, links] = await Promise.all([dbGetFiles(projectId), dbGetLinks(projectId)]);
-  if (!files.length && !links.length) return;
+async function loadAttachmentsInline(projectId){
+  const container=document.getElementById(`attachments-${projectId}`); if(!container) return;
+  const [files,links]=await Promise.all([dbGetFiles(projectId),dbGetLinks(projectId)]);
+  if(!files.length&&!links.length) return;
   let html='<div class="flex flex-wrap gap-2 mt-1">';
   files.forEach(f=>{
-    const type = f.file_type||'';
-    const cls  = type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
-    const icon = type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';
-    html+=`<a href="${escHtml(f.file_url)}" target="_blank" rel="noopener noreferrer" class="file-badge ${cls} font-mono" style="text-decoration:none;">
-      <i data-lucide="${icon}" style="width:10px;height:10px;"></i> ${escHtml(f.file_name.length>20?f.file_name.substring(0,18)+'…':f.file_name)}
-    </a>`;
+    const type=f.file_type||''; const cls=type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
+    const icon=type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';
+    html+=`<a href="${escHtml(f.file_url)}" target="_blank" rel="noopener noreferrer" class="file-badge ${cls} font-mono" style="text-decoration:none;"><i data-lucide="${icon}" style="width:10px;height:10px;"></i> ${escHtml(f.file_name.length>20?f.file_name.substring(0,18)+'…':f.file_name)}</a>`;
   });
   links.forEach(l=>{
-    html+=`<a href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer" class="file-badge file-badge-other font-mono" style="text-decoration:none;">
-      <i data-lucide="link" style="width:10px;height:10px;"></i> ${escHtml(l.label.length>20?l.label.substring(0,18)+'…':l.label)}
-    </a>`;
+    html+=`<a href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer" class="file-badge file-badge-other font-mono" style="text-decoration:none;"><i data-lucide="link" style="width:10px;height:10px;"></i> ${escHtml(l.label.length>20?l.label.substring(0,18)+'…':l.label)}</a>`;
   });
-  html+='</div>';
-  container.innerHTML=html;
-  lucide.createIcons();
+  html+='</div>'; container.innerHTML=html; lucide.createIcons();
 }
 
-function renderSearchResults(area) {
+function renderSearchResults(area){
   const q=searchQuery.toLowerCase();
   const results=allProjects.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.description||'').toLowerCase().includes(q));
-  let html=`<div class="mb-5"><h2 class="font-display text-lg neon-text tracking-widest">BÚSQUEDA: "${escHtml(searchQuery)}"</h2><p class="font-mono text-xs" style="color:var(--c-secondary);">// ${results.length} resultado${results.length!==1?'s':''} encontrado${results.length!==1?'s':''}</p></div>`;
+  let html=`<div class="mb-5"><h2 class="font-display text-lg neon-text tracking-widest">BÚSQUEDA: "${escHtml(searchQuery)}"</h2><p class="font-mono text-xs" style="color:var(--c-secondary);">// ${results.length} resultado${results.length!==1?'s':''}</p></div>`;
   results.forEach((p,i)=>{
-    html+=`<div class="card-enter game-card rounded p-4 mb-2 cursor-pointer" style="background:rgba(13,8,24,0.85); border:1px solid rgba(160,60,255,0.12); animation-delay:${i*40}ms;" onclick="selectedUnit=${p.unit};selectedWeek=${p.week};searchQuery='';document.getElementById('search-input').value='';renderSidebar();renderContent();">
+    html+=`<div class="card-enter game-card rounded p-4 mb-2 cursor-pointer" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.12); backdrop-filter:blur(8px); animation-delay:${i*40}ms;" onclick="selectedUnit=${p.unit};selectedWeek=${p.week};searchQuery='';document.getElementById('search-input').value='';renderSidebar();renderContent();">
       <div class="font-mono text-xs mb-1" style="color:var(--c-secondary);">// unidad ${p.unit} · semana ${p.week}</div>
       <h4 class="font-display text-sm" style="color:var(--c-primary);">${escHtml(p.title)}</h4>
     </div>`;
@@ -750,116 +1286,84 @@ function renderSearchResults(area) {
   area.innerHTML=html; lucide.createIcons();
 }
 
-function handleSearch(v) { searchQuery=v; renderContent(); }
+function handleSearch(v){searchQuery=v; renderContent();}
 
 // ═══════════════════════════════════════════════════════════════
-// MODAL — ADD / EDIT PROJECT
+// MODALS
 // ═══════════════════════════════════════════════════════════════
 const FS=`background:rgba(160,60,255,0.03); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);`;
 const LS=`font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--c-secondary);`;
 
-function openAddModal() {
-  if (currentRole!=='admin') { showToast('ACCESO DENEGADO','error'); return; }
+function openAddModal(){
+  if(currentRole!=='admin'){showToast('ACCESO DENEGADO','error');return;}
   document.getElementById('modal-content').innerHTML=`
     <h3 class="font-display text-sm font-black neon-text tracking-widest mb-5">+ NUEVO REGISTRO</h3>
     <form id="project-form" onsubmit="handleAdd(event)">
       <label class="block mb-1" style="${LS}">&gt; TÍTULO *</label>
       <input id="pf-title" required class="w-full px-3 py-2 rounded mb-3 text-sm" style="${FS}">
-
       <label class="block mb-1" style="${LS}">&gt; DESCRIPCIÓN</label>
       <textarea id="pf-desc" rows="2" class="w-full px-3 py-2 rounded mb-3 text-sm resize-none" style="${FS}"></textarea>
-
       <label class="block mb-1" style="${LS}">&gt; ENLACE URL PRINCIPAL (opcional)</label>
       <input id="pf-link" type="url" class="w-full px-3 py-2 rounded mb-3 text-sm" style="${FS}" placeholder="https://...">
-
       <label class="block mb-1" style="${LS}">&gt; ESTADO</label>
       <select id="pf-status" class="w-full px-3 py-2 rounded mb-4 text-sm" style="${FS} background:rgba(6,2,15,0.95);">
         <option value="pendiente">PENDIENTE</option>
         <option value="en progreso">EN PROGRESO</option>
         <option value="completado">COMPLETADO</option>
       </select>
-
       <label class="block mb-1" style="${LS}">&gt; ARCHIVOS ADJUNTOS (opcional)</label>
       <div class="drop-zone p-4 text-center rounded mb-1" id="add-drop-zone" onclick="document.getElementById('pf-files').click()">
         <i data-lucide="upload-cloud" style="width:20px;height:20px;color:var(--c-primary);margin:0 auto 6px;display:block;"></i>
         <p class="font-mono text-xs" style="color:var(--c-secondary);">Click o arrastra archivos aquí</p>
-        <p class="font-mono text-xs mt-1" style="color:rgba(90,56,120,0.6);">PDF, Word, Excel, imágenes...</p>
       </div>
       <input type="file" id="pf-files" style="display:none;" multiple onchange="previewSelectedFiles(event)">
       <div id="pf-files-preview" class="flex flex-wrap gap-2 mt-2 mb-4"></div>
-
       <div class="flex gap-3 justify-end">
         <button type="button" onclick="closeModal()" class="btn-accent px-4 py-2 rounded text-xs">CANCELAR</button>
         <button type="submit" id="add-btn" class="btn-primary px-4 py-2 rounded text-xs">GUARDAR</button>
       </div>
     </form>`;
-  showModal();
-  lucide.createIcons();
-  const zone = document.getElementById('add-drop-zone');
-  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag-over'); });
-  zone.addEventListener('dragleave', ()=>zone.classList.remove('drag-over'));
-  zone.addEventListener('drop', e=>{
-    e.preventDefault(); zone.classList.remove('drag-over');
-    const dt = new DataTransfer();
-    const existing = document.getElementById('pf-files').files;
-    for (const f of existing) dt.items.add(f);
-    for (const f of e.dataTransfer.files) dt.items.add(f);
-    document.getElementById('pf-files').files = dt.files;
-    previewSelectedFiles({ target: document.getElementById('pf-files') });
+  showModal(); lucide.createIcons();
+  const zone=document.getElementById('add-drop-zone');
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('drag-over');
+    const dt=new DataTransfer(); const existing=document.getElementById('pf-files').files;
+    for(const f of existing)dt.items.add(f); for(const f of e.dataTransfer.files)dt.items.add(f);
+    document.getElementById('pf-files').files=dt.files; previewSelectedFiles({target:document.getElementById('pf-files')});
   });
 }
 
-function previewSelectedFiles(e) {
-  const files = [...e.target.files];
-  const preview = document.getElementById('pf-files-preview');
-  if (!preview) return;
-  preview.innerHTML = files.map((f,i)=>{
-    const type = f.type||'';
-    const cls  = type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
-    const icon = type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';
-    const name = f.name.length>22 ? f.name.substring(0,20)+'…' : f.name;
-    return `<span class="file-badge ${cls} font-mono">
-      <i data-lucide="${icon}" style="width:10px;height:10px;"></i> ${escHtml(name)}
-    </span>`;
-  }).join('');
-  lucide.createIcons();
+function previewSelectedFiles(e){
+  const files=[...e.target.files]; const preview=document.getElementById('pf-files-preview'); if(!preview) return;
+  preview.innerHTML=files.map((f)=>{
+    const type=f.type||''; const cls=type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
+    const icon=type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';
+    const name=f.name.length>22?f.name.substring(0,20)+'…':f.name;
+    return `<span class="file-badge ${cls} font-mono"><i data-lucide="${icon}" style="width:10px;height:10px;"></i> ${escHtml(name)}</span>`;
+  }).join(''); lucide.createIcons();
 }
 
-async function handleAdd(e) {
+async function handleAdd(e){
   e.preventDefault();
   const btn=document.getElementById('add-btn'); btn.disabled=true; btn.textContent='GUARDANDO...';
-
-  const r=await dbCreate({
-    unit:selectedUnit, week:selectedWeek,
-    title:document.getElementById('pf-title').value.trim(),
-    description:document.getElementById('pf-desc').value.trim(),
-    link:document.getElementById('pf-link').value.trim(),
-    status:document.getElementById('pf-status').value,
-    created_by:currentUser, created_at:new Date().toISOString()
-  });
-
-  if (!r.ok) { showToast('ERROR: '+(r.err||'fallo al guardar'),'error'); btn.disabled=false; btn.textContent='GUARDAR'; return; }
-
-  const projectId = r.data && r.data[0] ? r.data[0].id : null;
-  const fileInput = document.getElementById('pf-files');
-  if (projectId && fileInput && fileInput.files.length > 0) {
+  const r=await dbCreate({unit:selectedUnit,week:selectedWeek,title:document.getElementById('pf-title').value.trim(),description:document.getElementById('pf-desc').value.trim(),link:document.getElementById('pf-link').value.trim(),status:document.getElementById('pf-status').value,created_by:currentUser,created_at:new Date().toISOString()});
+  if(!r.ok){showToast('ERROR: '+(r.err||'fallo al guardar'),'error'); btn.disabled=false; btn.textContent='GUARDAR'; return;}
+  const projectId=r.data&&r.data[0]?r.data[0].id:null;
+  const fileInput=document.getElementById('pf-files');
+  if(projectId&&fileInput&&fileInput.files.length>0){
     btn.textContent='SUBIENDO ARCHIVOS...';
-    const files = [...fileInput.files];
-    for (const file of files) {
-      const upRes = await sbUploadFile(file);
-      if (upRes.ok) {
-        await dbAddFile({ project_id:projectId, file_name:file.name, file_url:upRes.url, file_type:file.type, file_size:file.size, uploaded_by:currentUser });
-      } else {
-        showToast('Error subiendo: '+file.name,'error');
-      }
+    for(const file of [...fileInput.files]){
+      const upRes=await sbUploadFile(file);
+      if(upRes.ok) await dbAddFile({project_id:projectId,file_name:file.name,file_url:upRes.url,file_type:file.type,file_size:file.size,uploaded_by:currentUser});
+      else showToast('Error subiendo: '+file.name,'error');
     }
   }
-
-  showToast('REGISTRO CREADO'); await loadProjects();
-  closeModal();
+  showToast('REGISTRO CREADO'); await loadProjects(); closeModal();
 }
 
-function openEditModal(id) {
+function openEditModal(id){
   const p=allProjects.find(x=>x.id===id); if(!p) return;
   document.getElementById('modal-content').innerHTML=`
     <h3 class="font-display text-sm font-black tracking-widest mb-5" style="color:var(--c-accent); text-shadow:0 0 10px var(--c-accent);">✎ EDITAR REGISTRO</h3>
@@ -884,90 +1388,78 @@ function openEditModal(id) {
   showModal();
 }
 
-async function handleEdit(e,id) {
+async function handleEdit(e,id){
   e.preventDefault();
   const btn=document.getElementById('edit-btn'); btn.disabled=true; btn.textContent='ACTUALIZANDO...';
-  const r=await dbUpdate(id,{ title:document.getElementById('ef-title').value.trim(), description:document.getElementById('ef-desc').value.trim(), link:document.getElementById('ef-link').value.trim(), status:document.getElementById('ef-status').value });
-  if (r.ok) { showToast('REGISTRO ACTUALIZADO'); await loadProjects(); }
-  else { showToast('ERROR AL ACTUALIZAR','error'); }
+  const r=await dbUpdate(id,{title:document.getElementById('ef-title').value.trim(),description:document.getElementById('ef-desc').value.trim(),link:document.getElementById('ef-link').value.trim(),status:document.getElementById('ef-status').value});
+  if(r.ok){showToast('REGISTRO ACTUALIZADO'); await loadProjects();}
+  else showToast('ERROR AL ACTUALIZAR','error');
   closeModal();
 }
 
-// ═══════════════════════════════════════════════════════════════
-// MODAL — ARCHIVOS Y ENLACES (solo admin)
-// ═══════════════════════════════════════════════════════════════
-async function openAttachmentsModal(projectId) {
-  if (currentRole!=='admin') { showToast('ACCESO DENEGADO','error'); return; }
+async function openAttachmentsModal(projectId){
+  if(currentRole!=='admin'){showToast('ACCESO DENEGADO','error');return;}
   const p=allProjects.find(x=>x.id===projectId); if(!p) return;
-
   document.getElementById('modal-content').innerHTML=`
     <h3 class="font-display text-xs font-black tracking-widest mb-1" style="color:var(--c-green); text-shadow:0 0 10px var(--c-green);">◈ ARCHIVOS &amp; ENLACES</h3>
     <p class="font-mono text-xs mb-4" style="color:var(--c-secondary);">// ${escHtml(p.title)}</p>
-
     <div class="mb-5">
       <p class="font-mono text-xs mb-2" style="color:var(--c-primary);">&gt; ARCHIVOS ADJUNTOS</p>
       <div id="files-list" class="mb-3 min-h-8"><div class="spinner mx-auto"></div></div>
       <div class="drop-zone p-4 text-center rounded mb-1" id="drop-zone" onclick="document.getElementById('file-input').click()">
         <i data-lucide="upload-cloud" style="width:20px;height:20px;color:var(--c-primary);margin:0 auto 6px;display:block;"></i>
         <p class="font-mono text-xs" style="color:var(--c-secondary);">Click o arrastra archivos aquí</p>
-        <p class="font-mono text-xs mt-1" style="color:rgba(90,56,120,0.7);">PDF, Word, Excel, imágenes y más</p>
         <div class="upload-bar mt-2" id="upload-bar" style="display:none;"><div class="upload-bar-fill" id="upload-bar-fill" style="width:0%;"></div></div>
       </div>
       <input type="file" id="file-input" style="display:none;" multiple onchange="handleFileSelect(event,${projectId})">
     </div>
-
     <div class="mb-5">
       <p class="font-mono text-xs mb-2" style="color:var(--c-primary);">&gt; ENLACES URL</p>
       <div id="links-list" class="mb-3 min-h-8"><div class="spinner mx-auto"></div></div>
       <div class="flex gap-2">
         <div class="flex-1">
-          <input id="new-link-label" placeholder="Etiqueta (ej: Ver PDF en Drive)" class="w-full px-3 py-2 rounded text-xs mb-2" style="${FS}">
+          <input id="new-link-label" placeholder="Etiqueta..." class="w-full px-3 py-2 rounded text-xs mb-2" style="${FS}">
           <input id="new-link-url" type="url" placeholder="https://..." class="w-full px-3 py-2 rounded text-xs" style="${FS}">
         </div>
         <button onclick="handleAddLink(${projectId})" class="btn-primary px-3 py-2 rounded self-end text-xs shrink-0"><i data-lucide="plus" style="width:12px;height:12px;"></i></button>
       </div>
     </div>
-
     <div class="flex justify-end">
       <button onclick="closeModal();renderContent();" class="btn-primary px-4 py-2 rounded text-xs">CERRAR</button>
     </div>`;
-
-  showModal();
-  lucide.createIcons();
-  setupDragDrop(projectId);
-  refreshAttachmentLists(projectId);
+  showModal(); lucide.createIcons();
+  setupDragDrop(projectId); refreshAttachmentLists(projectId);
 }
 
-async function refreshAttachmentLists(projectId) {
-  const [files, links] = await Promise.all([dbGetFiles(projectId), dbGetLinks(projectId)]);
-  const fl = document.getElementById('files-list'); if(!fl) return;
-  if (!files.length) { fl.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin archivos adjuntos</p>`; }
-  else {
+async function refreshAttachmentLists(projectId){
+  const [files,links]=await Promise.all([dbGetFiles(projectId),dbGetLinks(projectId)]);
+  const fl=document.getElementById('files-list'); if(!fl) return;
+  if(!files.length){fl.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin archivos adjuntos</p>`;}
+  else{
     fl.innerHTML=files.map(f=>{
-      const type=f.file_type||'';
-      const cls=type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
+      const type=f.file_type||''; const cls=type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';
       const icon=type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';
       const size=f.file_size?` (${(f.file_size/1024).toFixed(1)}KB)`:'';
       return `<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.12);">
         <a href="${escHtml(f.file_url)}" target="_blank" rel="noopener" class="file-badge ${cls} font-mono" style="text-decoration:none; flex:1; min-width:0;">
-          <i data-lucide="${icon}" style="width:10px;height:10px; shrink:0;"></i>
+          <i data-lucide="${icon}" style="width:10px;height:10px;"></i>
           <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(f.file_name)}${size}</span>
         </a>
-        <button onclick="handleDeleteFile(${f.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);" title="Eliminar">
+        <button onclick="handleDeleteFile(${f.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);">
           <i data-lucide="x" style="width:10px;height:10px;"></i>
         </button>
       </div>`;
     }).join('');
   }
-  const ll = document.getElementById('links-list'); if(!ll) return;
-  if (!links.length) { ll.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin enlaces añadidos</p>`; }
-  else {
+  const ll=document.getElementById('links-list'); if(!ll) return;
+  if(!links.length){ll.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin enlaces añadidos</p>`;}
+  else{
     ll.innerHTML=links.map(l=>`<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.12);">
       <a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="file-badge file-badge-other font-mono" style="text-decoration:none; flex:1; min-width:0;">
-        <i data-lucide="link" style="width:10px;height:10px; shrink:0;"></i>
+        <i data-lucide="link" style="width:10px;height:10px;"></i>
         <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(l.label)}</span>
       </a>
-      <button onclick="handleDeleteLink(${l.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);" title="Eliminar">
+      <button onclick="handleDeleteLink(${l.id},${projectId})" class="ml-2 p-1 rounded shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);">
         <i data-lucide="x" style="width:10px;height:10px;"></i>
       </button>
     </div>`).join('');
@@ -975,106 +1467,73 @@ async function refreshAttachmentLists(projectId) {
   lucide.createIcons();
 }
 
-function setupDragDrop(projectId) {
-  const zone = document.getElementById('drop-zone'); if(!zone) return;
-  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag-over'); });
-  zone.addEventListener('dragleave', ()=>zone.classList.remove('drag-over'));
-  zone.addEventListener('drop', e=>{
-    e.preventDefault(); zone.classList.remove('drag-over');
-    const files=[...e.dataTransfer.files]; if(files.length) uploadFiles(files, projectId);
-  });
+function setupDragDrop(projectId){
+  const zone=document.getElementById('drop-zone'); if(!zone) return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over'); const files=[...e.dataTransfer.files]; if(files.length) uploadFiles(files,projectId);});
 }
 
-async function handleFileSelect(e, projectId) {
-  const files=[...e.target.files]; if(!files.length) return;
-  await uploadFiles(files, projectId);
-  e.target.value='';
-}
+async function handleFileSelect(e,projectId){ const files=[...e.target.files]; if(!files.length) return; await uploadFiles(files,projectId); e.target.value=''; }
 
-async function uploadFiles(files, projectId) {
+async function uploadFiles(files,projectId){
   const bar=document.getElementById('upload-bar'); const fill=document.getElementById('upload-bar-fill');
   if(bar) bar.style.display='block';
   let done=0;
-  for (const file of files) {
+  for(const file of files){
     const upRes=await sbUploadFile(file);
-    if (!upRes.ok) { showToast('ERROR subiendo: '+file.name,'error'); }
-    else {
-      const dbRes=await dbAddFile({ project_id:projectId, file_name:file.name, file_url:upRes.url, file_type:file.type, file_size:file.size, uploaded_by:currentUser });
-      if (dbRes.ok) showToast('ARCHIVO SUBIDO: '+file.name);
-      else showToast('Error registrando archivo','error');
+    if(!upRes.ok){showToast('ERROR subiendo: '+file.name,'error');}
+    else{
+      const dbRes=await dbAddFile({project_id:projectId,file_name:file.name,file_url:upRes.url,file_type:file.type,file_size:file.size,uploaded_by:currentUser});
+      if(dbRes.ok) showToast('ARCHIVO SUBIDO: '+file.name); else showToast('Error registrando archivo','error');
     }
     done++; if(fill) fill.style.width=`${(done/files.length)*100}%`;
   }
-  setTimeout(()=>{ if(bar) bar.style.display='none'; if(fill) fill.style.width='0%'; }, 800);
+  setTimeout(()=>{ if(bar) bar.style.display='none'; if(fill) fill.style.width='0%'; },800);
   refreshAttachmentLists(projectId);
 }
 
-async function handleAddLink(projectId) {
+async function handleAddLink(projectId){
   const label=document.getElementById('new-link-label').value.trim();
   const url=document.getElementById('new-link-url').value.trim();
-  if (!label||!url) { showToast('Completa etiqueta y URL','error'); return; }
-  try { new URL(url); } catch { showToast('URL no válida','error'); return; }
-  const r=await dbAddLink({ project_id:projectId, label, url, added_by:currentUser });
-  if (r.ok) { showToast('ENLACE AÑADIDO'); document.getElementById('new-link-label').value=''; document.getElementById('new-link-url').value=''; refreshAttachmentLists(projectId); }
+  if(!label||!url){showToast('Completa etiqueta y URL','error');return;}
+  try{new URL(url);}catch{showToast('URL no válida','error');return;}
+  const r=await dbAddLink({project_id:projectId,label,url,added_by:currentUser});
+  if(r.ok){showToast('ENLACE AÑADIDO'); document.getElementById('new-link-label').value=''; document.getElementById('new-link-url').value=''; refreshAttachmentLists(projectId);}
   else showToast('ERROR AL AÑADIR ENLACE','error');
 }
 
-async function handleDeleteFile(fileId, projectId) {
-  const r=await dbDeleteFile(fileId);
-  if (r.ok) { showToast('ARCHIVO ELIMINADO'); refreshAttachmentLists(projectId); }
-  else showToast('ERROR AL ELIMINAR','error');
-}
+async function handleDeleteFile(fileId,projectId){ const r=await dbDeleteFile(fileId); if(r.ok){showToast('ARCHIVO ELIMINADO'); refreshAttachmentLists(projectId);}else showToast('ERROR AL ELIMINAR','error'); }
+async function handleDeleteLink(linkId,projectId){ const r=await dbDeleteLink(linkId); if(r.ok){showToast('ENLACE ELIMINADO'); refreshAttachmentLists(projectId);}else showToast('ERROR AL ELIMINAR','error'); }
 
-async function handleDeleteLink(linkId, projectId) {
-  const r=await dbDeleteLink(linkId);
-  if (r.ok) { showToast('ENLACE ELIMINADO'); refreshAttachmentLists(projectId); }
-  else showToast('ERROR AL ELIMINAR','error');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// DELETE PROJECT
-// ═══════════════════════════════════════════════════════════════
-function confirmDelete(id) {
-  pendingDeleteId=id;
-  document.getElementById('delete-overlay').style.display='flex';
+function confirmDelete(id){
+  pendingDeleteId=id; document.getElementById('delete-overlay').style.display='flex';
   document.getElementById('confirm-delete-btn').onclick=async()=>{
-    document.getElementById('confirm-delete-btn').disabled=true;
-    document.getElementById('confirm-delete-btn').textContent='ELIMINANDO...';
+    document.getElementById('confirm-delete-btn').disabled=true; document.getElementById('confirm-delete-btn').textContent='ELIMINANDO...';
     const r=await dbDelete(pendingDeleteId);
-    if (r.ok) { showToast('REGISTRO ELIMINADO'); await loadProjects(); }
-    else showToast('ERROR AL ELIMINAR','error');
+    if(r.ok){showToast('REGISTRO ELIMINADO'); await loadProjects();}else showToast('ERROR AL ELIMINAR','error');
     closeDelete();
   };
 }
-function closeDelete() {
-  document.getElementById('delete-overlay').style.display='none';
-  const btn=document.getElementById('confirm-delete-btn'); btn.disabled=false; btn.textContent='ELIMINAR';
-  pendingDeleteId=null;
-}
+function closeDelete(){ document.getElementById('delete-overlay').style.display='none'; const btn=document.getElementById('confirm-delete-btn'); btn.disabled=false; btn.textContent='ELIMINAR'; pendingDeleteId=null; }
 
 function showModal()  { document.getElementById('modal-overlay').style.display='flex'; lucide.createIcons(); }
 function closeModal() { document.getElementById('modal-overlay').style.display='none'; }
 
-function showToast(msg, type='success') {
+function showToast(msg,type='success'){
   const c=document.getElementById('toast-container');
   const t=document.createElement('div');
   t.className='toast-anim flex items-center gap-2 px-4 py-2.5 rounded font-mono text-xs shadow-lg';
-  if (type==='error') {
-    t.style.cssText='background:rgba(8,3,18,0.99); border:1px solid rgba(224,64,251,0.5); color:var(--c-accent); box-shadow:0 0 18px rgba(224,64,251,0.3);';
-    t.innerHTML=`<span style="color:var(--c-accent);">✗</span> ${escHtml(msg)}`;
-  } else {
-    t.style.cssText='background:rgba(8,3,18,0.99); border:1px solid rgba(160,60,255,0.45); color:var(--c-green); box-shadow:0 0 18px rgba(160,60,255,0.25);';
-    t.innerHTML=`<span style="color:var(--c-green);">✓</span> ${escHtml(msg)}`;
-  }
-  c.appendChild(t);
-  lucide.createIcons();
+  if(type==='error'){t.style.cssText='background:rgba(6,2,15,0.99); border:1px solid rgba(224,64,251,0.5); color:var(--c-accent); box-shadow:0 0 18px rgba(224,64,251,0.3);'; t.innerHTML=`<span style="color:var(--c-accent);">✗</span> ${escHtml(msg)}`;}
+  else{t.style.cssText='background:rgba(6,2,15,0.99); border:1px solid rgba(160,60,255,0.45); color:var(--c-green); box-shadow:0 0 18px rgba(160,60,255,0.25);'; t.innerHTML=`<span style="color:var(--c-green);">✓</span> ${escHtml(msg)}`;}
+  c.appendChild(t); lucide.createIcons();
   setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(()=>t.remove(),300); },2500);
 }
 
-function show(id, display='flex') { document.getElementById(id).style.display=display; document.getElementById(id).classList.remove('hidden'); }
-function hide(id) { document.getElementById(id).style.display='none'; document.getElementById(id).classList.add('hidden'); }
-function escHtml(s) { const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
-function escAttr(s) { return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function show(id,display='flex'){ document.getElementById(id).style.display=display; document.getElementById(id).classList.remove('hidden'); }
+function hide(id){ document.getElementById(id).style.display='none'; document.getElementById(id).classList.add('hidden'); }
+function escHtml(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+function escAttr(s){ return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 lucide.createIcons();
 </script>
