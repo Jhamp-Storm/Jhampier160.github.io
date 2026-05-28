@@ -21,12 +21,12 @@
     :root {
       --c-bg: #06020f;
       --c-surface: #0d0818;
-      --c-text: #e8d8ff;
-      --c-primary: #b060ff;
-      --c-secondary: #5a3878;
-      --c-accent: #e040fb;
-      --c-green: #cc44ff;
-      --c-warning: #ff44aa;
+      --c-text: #e8f8ff;
+      --c-primary: #00bfff;
+      --c-secondary: #1a6080;
+      --c-accent: #e0f7ff;
+      --c-green: #00e5ff;
+      --c-warning: #ff6b9d;
     }
 
     /* ═══════════════════════════════════
@@ -43,14 +43,12 @@
       will-change: transform, left, top;
     }
 
-    /* SVG flame particles */
     .flame-svg {
       width: 100%;
       height: 100%;
       overflow: visible;
     }
 
-    /* Outer glow ring that follows cursor */
     #cursor-glow {
       position: fixed;
       pointer-events: none;
@@ -58,13 +56,12 @@
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(180,60,255,0.35) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(0,191,255,0.35) 0%, transparent 70%);
       transform: translate(-50%, -50%);
       transition: width 0.15s, height 0.15s;
-      box-shadow: 0 0 12px rgba(180,60,255,0.6), 0 0 24px rgba(180,60,255,0.3);
+      box-shadow: 0 0 12px rgba(0,191,255,0.6), 0 0 24px rgba(0,191,255,0.3);
     }
 
-    /* Flame animation keyframes */
     @keyframes flameDance1 {
       0%   { d: path("M14 38 C8 30 4 22 7 14 C9 8 13 4 14 2 C15 4 16 7 18 10 C20 14 22 18 20 24 C18 30 16 34 14 38Z"); transform: scaleX(1); }
       25%  { d: path("M14 38 C7 29 3 21 6 13 C8 7 12 3 14 1 C16 4 17 8 19 11 C21 15 22 19 19 25 C17 31 15 35 14 38Z"); transform: scaleX(0.97); }
@@ -124,7 +121,7 @@
       content: '';
       position: fixed;
       inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(160,60,255,0.012) 2px, rgba(160,60,255,0.012) 4px);
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,191,255,0.012) 2px, rgba(0,191,255,0.012) 4px);
       pointer-events: none;
       z-index: 9999;
     }
@@ -140,8 +137,8 @@
     .grid-bg {
       background-color: transparent;
       background-image:
-        linear-gradient(rgba(140,40,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(140,40,255,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(0,180,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,180,255,0.04) 1px, transparent 1px);
       background-size: 40px 40px;
       animation: gridScroll 25s linear infinite;
     }
@@ -160,20 +157,20 @@
       filter: blur(80px);
       animation: nebulaPulse 8s ease-in-out infinite alternate;
     }
-    .nebula-1 { width:700px;height:500px;top:-15%;left:-10%;background:radial-gradient(ellipse,rgba(100,20,220,0.22) 0%,transparent 70%);animation-delay:0s; }
-    .nebula-2 { width:600px;height:600px;bottom:-20%;right:-15%;background:radial-gradient(ellipse,rgba(200,30,240,0.18) 0%,transparent 70%);animation-delay:3s; }
-    .nebula-3 { width:400px;height:300px;top:40%;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(80,10,160,0.12) 0%,transparent 70%);animation-delay:1.5s; }
+    .nebula-1 { width:700px;height:500px;top:-15%;left:-10%;background:radial-gradient(ellipse,rgba(0,140,255,0.22) 0%,transparent 70%);animation-delay:0s; }
+    .nebula-2 { width:600px;height:600px;bottom:-20%;right:-15%;background:radial-gradient(ellipse,rgba(0,191,255,0.18) 0%,transparent 70%);animation-delay:3s; }
+    .nebula-3 { width:400px;height:300px;top:40%;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(0,100,200,0.12) 0%,transparent 70%);animation-delay:1.5s; }
     @keyframes nebulaPulse { from{opacity:.7;transform:scale(1)} to{opacity:1;transform:scale(1.08)} }
 
     /* ═══════════════════════════════════
        NEON TEXT & BORDERS
     ═══════════════════════════════════ */
-    .neon-text   { text-shadow: 0 0 10px var(--c-primary), 0 0 30px var(--c-primary), 0 0 60px rgba(160,60,255,0.4); }
-    .neon-accent { text-shadow: 0 0 10px var(--c-accent), 0 0 30px var(--c-accent), 0 0 60px rgba(224,64,251,0.4); }
+    .neon-text   { text-shadow: 0 0 10px var(--c-primary), 0 0 30px var(--c-primary), 0 0 60px rgba(0,191,255,0.4); }
+    .neon-accent { text-shadow: 0 0 10px var(--c-accent), 0 0 30px var(--c-accent), 0 0 60px rgba(224,242,255,0.4); }
     .neon-green  { text-shadow: 0 0 10px var(--c-green), 0 0 30px var(--c-green); }
 
-    .neon-border { border: 1px solid var(--c-primary); box-shadow: 0 0 8px rgba(160,60,255,0.35), inset 0 0 8px rgba(160,60,255,0.07); }
-    .neon-border-accent { border: 1px solid var(--c-accent); box-shadow: 0 0 8px rgba(224,64,251,0.35), inset 0 0 8px rgba(224,64,251,0.07); }
+    .neon-border { border: 1px solid var(--c-primary); box-shadow: 0 0 8px rgba(0,191,255,0.35), inset 0 0 8px rgba(0,191,255,0.07); }
+    .neon-border-accent { border: 1px solid var(--c-accent); box-shadow: 0 0 8px rgba(224,242,255,0.35), inset 0 0 8px rgba(224,242,255,0.07); }
 
     /* ═══════════════════════════════════
        GLITCH
@@ -181,13 +178,13 @@
     .glitch { position: relative; }
     .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .glitch::before { left: 2px; text-shadow: -2px 0 var(--c-accent); clip: rect(24px,550px,90px,0); animation: glitch-anim 3s infinite linear alternate-reverse; }
-    .glitch::after  { left: -2px; text-shadow: -2px 0 #7b00ff, 2px 2px var(--c-primary); clip: rect(85px,550px,140px,0); animation: glitch-anim2 3s infinite linear alternate-reverse; }
+    .glitch::after  { left: -2px; text-shadow: -2px 0 #005fcc, 2px 2px var(--c-primary); clip: rect(85px,550px,140px,0); animation: glitch-anim2 3s infinite linear alternate-reverse; }
     @keyframes glitch-anim  { 0%{clip:rect(42px,9999px,44px,0)} 25%{clip:rect(12px,9999px,59px,0)} 50%{clip:rect(48px,9999px,29px,0)} 75%{clip:rect(72px,9999px,17px,0)} 100%{clip:rect(2px,9999px,67px,0)} }
     @keyframes glitch-anim2 { 0%{clip:rect(65px,9999px,100px,0)} 25%{clip:rect(52px,9999px,74px,0)} 50%{clip:rect(79px,9999px,55px,0)} 75%{clip:rect(14px,9999px,44px,0)} 100%{clip:rect(34px,9999px,22px,0)} }
 
     .shooting-star {
       position: fixed; width: 120px; height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(200,100,255,0.9), transparent);
+      background: linear-gradient(90deg, transparent, rgba(0,200,255,0.9), transparent);
       border-radius: 50%; pointer-events: none; z-index: 2; opacity: 0;
     }
     @keyframes shoot {
@@ -202,7 +199,7 @@
     ═══════════════════════════════════ */
     .sidebar-item { transition: all 0.2s ease; position: relative; }
     .sidebar-item:hover { transform: translateX(4px); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); }
-    .sidebar-item.active { border-left: 2px solid var(--c-primary); background: rgba(160,60,255,0.08); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); box-shadow: inset 0 0 15px rgba(160,60,255,0.07); }
+    .sidebar-item.active { border-left: 2px solid var(--c-primary); background: rgba(0,191,255,0.08); color: var(--c-primary) !important; text-shadow: 0 0 8px var(--c-primary); box-shadow: inset 0 0 15px rgba(0,191,255,0.07); }
     .sidebar-item::before { content: '▶'; position: absolute; left: 8px; opacity: 0; color: var(--c-primary); font-size: 8px; transition: opacity 0.2s; }
     .sidebar-item:hover::before, .sidebar-item.active::before { opacity: 1; }
 
@@ -212,7 +209,6 @@
     .card-enter { animation: cardIn 0.3s ease forwards; }
     @keyframes cardIn { from{opacity:0;transform:translateY(12px) scale(0.98)} to{opacity:1;transform:translateY(0) scale(1)} }
 
-    /* 🆕 FLOAT ON HOVER — applied to skill cards, week cards, project cards */
     .float-hover {
       transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
                   box-shadow 0.35s ease,
@@ -220,9 +216,9 @@
     }
     .float-hover:hover {
       transform: translateY(-8px) !important;
-      box-shadow: 0 16px 40px rgba(160,60,255,0.3),
-                  0 0 22px rgba(160,60,255,0.2),
-                  inset 0 0 20px rgba(160,60,255,0.05) !important;
+      box-shadow: 0 16px 40px rgba(0,191,255,0.3),
+                  0 0 22px rgba(0,191,255,0.2),
+                  inset 0 0 20px rgba(0,191,255,0.05) !important;
     }
 
     .game-card {
@@ -235,7 +231,7 @@
       position: absolute;
       top: -50%; left: -50%;
       width: 200%; height: 200%;
-      background: linear-gradient(45deg, transparent 30%, rgba(160,60,255,0.07) 50%, transparent 70%);
+      background: linear-gradient(45deg, transparent 30%, rgba(0,191,255,0.07) 50%, transparent 70%);
       transform: translateX(-100%) rotate(45deg);
       transition: transform 0.5s ease;
     }
@@ -255,21 +251,18 @@
     /* ═══════════════════════════════════
        BUTTONS
     ═══════════════════════════════════ */
-    .btn-primary { background:transparent; border:1px solid var(--c-primary); color:var(--c-primary); text-shadow:0 0 8px var(--c-primary); box-shadow:0 0 12px rgba(160,60,255,0.25), inset 0 0 10px rgba(160,60,255,0.06); transition:all 0.2s ease; font-family:'Orbitron',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-radius:8px !important; }
-    .btn-primary:hover { background:rgba(160,60,255,0.15); box-shadow:0 0 22px rgba(160,60,255,0.5), inset 0 0 20px rgba(160,60,255,0.12); transform:translateY(-2px); }
-    .btn-accent { background:transparent; border:1px solid var(--c-accent); color:var(--c-accent); text-shadow:0 0 8px var(--c-accent); box-shadow:0 0 12px rgba(224,64,251,0.25); transition:all 0.2s ease; font-family:'Orbitron',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-radius:8px !important; }
-    .btn-accent:hover { background:rgba(224,64,251,0.15); box-shadow:0 0 22px rgba(224,64,251,0.5); transform:translateY(-2px); }
+    .btn-primary { background:transparent; border:1px solid var(--c-primary); color:var(--c-primary); text-shadow:0 0 8px var(--c-primary); box-shadow:0 0 12px rgba(0,191,255,0.25), inset 0 0 10px rgba(0,191,255,0.06); transition:all 0.2s ease; font-family:'Orbitron',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-radius:8px !important; }
+    .btn-primary:hover { background:rgba(0,191,255,0.15); box-shadow:0 0 22px rgba(0,191,255,0.5), inset 0 0 20px rgba(0,191,255,0.12); transform:translateY(-2px); }
+    .btn-accent { background:transparent; border:1px solid var(--c-accent); color:var(--c-accent); text-shadow:0 0 8px var(--c-accent); box-shadow:0 0 12px rgba(224,242,255,0.25); transition:all 0.2s ease; font-family:'Orbitron',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-radius:8px !important; }
+    .btn-accent:hover { background:rgba(224,242,255,0.15); box-shadow:0 0 22px rgba(224,242,255,0.5); transform:translateY(-2px); }
 
     /* ═══════════════════════════════════
-       🆕 ROUNDED CORNERS — replaces sharp .corner-box
+       ROUNDED CORNERS
     ═══════════════════════════════════ */
     .corner-box {
       border-radius: 12px !important;
     }
-    /* Remove the sharp corner pseudo-elements */
     .corner-box::before, .corner-box::after { display: none !important; }
-
-    /* Give all game cards rounded corners too */
     .game-card { border-radius: 12px !important; }
 
     .blink { animation: blink 1s step-end infinite; }
@@ -279,38 +272,38 @@
     .status-bar-fill { height:100%; border-radius:2px; box-shadow:0 0 6px currentColor; }
 
     @keyframes pulse-neon {
-      0%,100% { box-shadow:0 0 12px rgba(160,60,255,0.35), inset 0 0 12px rgba(160,60,255,0.06) }
-      50%     { box-shadow:0 0 28px rgba(160,60,255,0.7), 0 0 60px rgba(224,64,251,0.2), inset 0 0 28px rgba(160,60,255,0.12) }
+      0%,100% { box-shadow:0 0 12px rgba(0,191,255,0.35), inset 0 0 12px rgba(0,191,255,0.06) }
+      50%     { box-shadow:0 0 28px rgba(0,191,255,0.7), 0 0 60px rgba(224,242,255,0.2), inset 0 0 28px rgba(0,191,255,0.12) }
     }
     .pulse-neon { animation: pulse-neon 2s ease-in-out infinite; }
 
-    .spinner { width:20px; height:20px; border:2px solid rgba(160,60,255,0.2); border-top-color:var(--c-primary); border-radius:50%; animation:spin 0.8s linear infinite; }
+    .spinner { width:20px; height:20px; border:2px solid rgba(0,191,255,0.2); border-top-color:var(--c-primary); border-radius:50%; animation:spin 0.8s linear infinite; }
     @keyframes spin { to{transform:rotate(360deg)} }
 
     input, textarea, select { font-family:'Share Tech Mono',monospace; border-radius:8px !important; }
     input::placeholder, textarea::placeholder { color:var(--c-secondary) !important; }
-    input:focus, textarea:focus, select:focus { border-color:var(--c-primary) !important; box-shadow:0 0 8px rgba(160,60,255,0.35) !important; outline:none; }
+    input:focus, textarea:focus, select:focus { border-color:var(--c-primary) !important; box-shadow:0 0 8px rgba(0,191,255,0.35) !important; outline:none; }
 
-    .drop-zone { border:2px dashed rgba(160,60,255,0.3); border-radius:10px; transition:all 0.2s; }
-    .drop-zone:hover, .drop-zone.drag-over { border-color:var(--c-primary); background:rgba(160,60,255,0.06); box-shadow:0 0 14px rgba(160,60,255,0.25); }
+    .drop-zone { border:2px dashed rgba(0,191,255,0.3); border-radius:10px; transition:all 0.2s; }
+    .drop-zone:hover, .drop-zone.drag-over { border-color:var(--c-primary); background:rgba(0,191,255,0.06); box-shadow:0 0 14px rgba(0,191,255,0.25); }
 
     .file-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:6px; font-size:10px; }
-    .file-badge-pdf   { background:rgba(224,64,251,0.12); border:1px solid rgba(224,64,251,0.35); color:var(--c-accent); }
-    .file-badge-word  { background:rgba(100,40,200,0.15);  border:1px solid rgba(100,40,200,0.4);  color:#c090ff; }
-    .file-badge-other { background:rgba(160,60,255,0.08);  border:1px solid rgba(160,60,255,0.25);  color:var(--c-primary); }
+    .file-badge-pdf   { background:rgba(224,242,255,0.12); border:1px solid rgba(224,242,255,0.35); color:var(--c-accent); }
+    .file-badge-word  { background:rgba(0,100,200,0.15);  border:1px solid rgba(0,100,200,0.4);  color:#aaeeff; }
+    .file-badge-other { background:rgba(0,191,255,0.08);  border:1px solid rgba(0,191,255,0.25);  color:var(--c-primary); }
 
-    .upload-bar { height:3px; border-radius:2px; background:rgba(160,60,255,0.1); overflow:hidden; margin-top:4px; }
+    .upload-bar { height:3px; border-radius:2px; background:rgba(0,191,255,0.1); overflow:hidden; margin-top:4px; }
     .upload-bar-fill { height:100%; background:var(--c-primary); box-shadow:0 0 6px var(--c-primary); transition:width 0.3s; }
 
     header {
       background:rgba(6,2,15,0.85) !important;
-      border-bottom:1px solid rgba(160,60,255,0.2) !important;
+      border-bottom:1px solid rgba(0,191,255,0.2) !important;
       backdrop-filter:blur(20px) !important;
       border-radius:0 !important;
     }
     #sidebar {
       background:rgba(4,1,10,0.88) !important;
-      border-right:1px solid rgba(140,40,255,0.1) !important;
+      border-right:1px solid rgba(0,180,255,0.1) !important;
       backdrop-filter:blur(16px) !important;
     }
     #modal-overlay > div, #delete-overlay > div {
@@ -318,13 +311,13 @@
       border-radius:16px !important;
     }
     #login-screen > div {
-      box-shadow:0 0 80px rgba(160,60,255,0.2) !important;
+      box-shadow:0 0 80px rgba(0,191,255,0.2) !important;
       backdrop-filter:blur(10px);
       border-radius:16px !important;
     }
 
     /* ═══════════════════════════════════
-       🆕 DRAGGABLE CHATBOT
+       DRAGGABLE CHATBOT
     ═══════════════════════════════════ */
     #chatbot-bubble {
       position: fixed;
@@ -335,7 +328,7 @@
       border-radius: 50%;
       background: rgba(6,2,15,0.95);
       border: 1px solid var(--c-primary);
-      box-shadow: 0 0 20px rgba(160,60,255,0.5), 0 0 40px rgba(160,60,255,0.2);
+      box-shadow: 0 0 20px rgba(0,191,255,0.5), 0 0 40px rgba(0,191,255,0.2);
       display: flex; align-items: center; justify-content: center;
       cursor: grab !important;
       transition: box-shadow 0.3s ease, border-color 0.3s ease;
@@ -345,14 +338,14 @@
     #chatbot-bubble.dragging {
       cursor: grabbing !important;
       animation: none;
-      box-shadow: 0 0 35px rgba(160,60,255,0.8), 0 0 70px rgba(224,64,251,0.3);
+      box-shadow: 0 0 35px rgba(0,191,255,0.8), 0 0 70px rgba(224,242,255,0.3);
       transform: scale(1.08);
     }
     @keyframes bubblePulse {
-      0%,100%{box-shadow:0 0 20px rgba(160,60,255,0.5),0 0 40px rgba(160,60,255,0.2)}
-      50%{box-shadow:0 0 35px rgba(160,60,255,0.8),0 0 70px rgba(224,64,251,0.3)}
+      0%,100%{box-shadow:0 0 20px rgba(0,191,255,0.5),0 0 40px rgba(0,191,255,0.2)}
+      50%{box-shadow:0 0 35px rgba(0,191,255,0.8),0 0 70px rgba(224,242,255,0.3)}
     }
-    #chatbot-bubble.open { animation: none; border-color: var(--c-accent); box-shadow: 0 0 25px rgba(224,64,251,0.6); }
+    #chatbot-bubble.open { animation: none; border-color: var(--c-accent); box-shadow: 0 0 25px rgba(224,242,255,0.6); }
 
     #chatbot-panel {
       position: fixed;
@@ -362,9 +355,9 @@
       width: 320px;
       max-height: 480px;
       background: rgba(6,2,15,0.97);
-      border: 1px solid rgba(160,60,255,0.35);
+      border: 1px solid rgba(0,191,255,0.35);
       border-radius: 16px;
-      box-shadow: 0 0 40px rgba(160,60,255,0.25), 0 20px 60px rgba(0,0,0,0.8);
+      box-shadow: 0 0 40px rgba(0,191,255,0.25), 0 20px 60px rgba(0,0,0,0.8);
       backdrop-filter: blur(20px);
       display: none;
       flex-direction: column;
@@ -377,14 +370,14 @@
 
     #chatbot-header {
       padding: 12px 16px;
-      background: rgba(160,60,255,0.06);
-      border-bottom: 1px solid rgba(160,60,255,0.15);
+      background: rgba(0,191,255,0.06);
+      border-bottom: 1px solid rgba(0,191,255,0.15);
       display: flex; align-items: center; gap: 10px;
     }
     #chatbot-header .bot-avatar {
       width: 32px; height: 32px; border-radius: 50%;
-      background: rgba(160,60,255,0.1);
-      border: 1px solid rgba(160,60,255,0.35);
+      background: rgba(0,191,255,0.1);
+      border: 1px solid rgba(0,191,255,0.35);
       display: flex; align-items: center; justify-content: center;
       animation: pulse-neon 2s ease-in-out infinite;
     }
@@ -403,43 +396,41 @@
     }
     @keyframes msgIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
 
-    .chat-msg.bot  { background:rgba(160,60,255,0.08); border:1px solid rgba(160,60,255,0.2); color:var(--c-text); align-self:flex-start; border-bottom-left-radius:4px; }
-    .chat-msg.user { background:rgba(224,64,251,0.08); border:1px solid rgba(224,64,251,0.2); color:var(--c-accent); align-self:flex-end; border-bottom-right-radius:4px; }
+    .chat-msg.bot  { background:rgba(0,191,255,0.08); border:1px solid rgba(0,191,255,0.2); color:var(--c-text); align-self:flex-start; border-bottom-left-radius:4px; }
+    .chat-msg.user { background:rgba(224,242,255,0.08); border:1px solid rgba(224,242,255,0.2); color:var(--c-accent); align-self:flex-end; border-bottom-right-radius:4px; }
 
     .chat-quick-btn {
       font-family:'Share Tech Mono',monospace; font-size:10px; padding:4px 10px; border-radius:6px;
-      background:rgba(160,60,255,0.06); border:1px solid rgba(160,60,255,0.25); color:var(--c-primary);
+      background:rgba(0,191,255,0.06); border:1px solid rgba(0,191,255,0.25); color:var(--c-primary);
       transition:all 0.15s; text-align:left;
     }
-    .chat-quick-btn:hover { background:rgba(160,60,255,0.15); box-shadow:0 0 8px rgba(160,60,255,0.3); }
+    .chat-quick-btn:hover { background:rgba(0,191,255,0.15); box-shadow:0 0 8px rgba(0,191,255,0.3); }
 
-    #chatbot-input-area { padding:10px; border-top:1px solid rgba(160,60,255,0.12); display:flex; gap:8px; align-items:center; }
-    #chatbot-input { flex:1; background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.2); border-radius:8px; padding:6px 10px; font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--c-primary); outline:none; }
-    #chatbot-input:focus { border-color:var(--c-primary); box-shadow:0 0 8px rgba(160,60,255,0.3); }
-    #chatbot-send { width:30px; height:30px; border-radius:8px; background:rgba(160,60,255,0.1); border:1px solid rgba(160,60,255,0.3); color:var(--c-primary); display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
-    #chatbot-send:hover { background:rgba(160,60,255,0.25); box-shadow:0 0 10px rgba(160,60,255,0.4); }
+    #chatbot-input-area { padding:10px; border-top:1px solid rgba(0,191,255,0.12); display:flex; gap:8px; align-items:center; }
+    #chatbot-input { flex:1; background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.2); border-radius:8px; padding:6px 10px; font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--c-primary); outline:none; }
+    #chatbot-input:focus { border-color:var(--c-primary); box-shadow:0 0 8px rgba(0,191,255,0.3); }
+    #chatbot-send { width:30px; height:30px; border-radius:8px; background:rgba(0,191,255,0.1); border:1px solid rgba(0,191,255,0.3); color:var(--c-primary); display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
+    #chatbot-send:hover { background:rgba(0,191,255,0.25); box-shadow:0 0 10px rgba(0,191,255,0.4); }
 
     .typing-indicator { display:flex; gap:4px; align-items:center; padding:6px 4px; }
     .typing-dot { width:5px; height:5px; border-radius:50%; background:var(--c-primary); animation:typingBounce 0.8s ease-in-out infinite; }
     .typing-dot:nth-child(2){animation-delay:0.15s} .typing-dot:nth-child(3){animation-delay:0.3s}
     @keyframes typingBounce { 0%,100%{transform:translateY(0);opacity:0.4} 50%{transform:translateY(-4px);opacity:1} }
 
-    .planet-ring { position:absolute; border-radius:50%; border:1px solid rgba(160,60,255,0.15); animation:ringRotate 20s linear infinite; }
+    .planet-ring { position:absolute; border-radius:50%; border:1px solid rgba(0,191,255,0.15); animation:ringRotate 20s linear infinite; }
     @keyframes ringRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
     #home-screen, #login-screen, #main-app { position:relative; z-index:10; }
 
-    /* 🆕 Extra hover float for hero icon box */
     .hero-box {
       transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
                   box-shadow 0.4s ease !important;
     }
     .hero-box:hover {
       transform: translateY(-10px) rotate(2deg) !important;
-      box-shadow: 0 20px 50px rgba(160,60,255,0.4), 0 0 30px rgba(224,64,251,0.2) !important;
+      box-shadow: 0 20px 50px rgba(0,191,255,0.4), 0 0 30px rgba(224,242,255,0.2) !important;
     }
 
-    /* 🆕 Float effect for sidebar items */
     .sidebar-item {
       transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1) !important;
     }
@@ -450,48 +441,38 @@
 </head>
 <body class="h-full" style="color:var(--c-text); background:#06020f;">
 
-<!-- ═══════════════════════════════════
-     🔥 FLAME CURSOR
-═══════════════════════════════════ -->
+<!-- FLAME CURSOR -->
 <div id="cursor-glow"></div>
 <div id="flame-cursor">
   <svg class="flame-svg" viewBox="0 0 28 42" xmlns="http://www.w3.org/2000/svg">
-    <!-- Sparks -->
-    <circle class="spark spark1" cx="10" cy="8" r="1.2" fill="#ff88ff" opacity="0"/>
-    <circle class="spark spark2" cx="18" cy="6" r="1.0" fill="#cc44ff" opacity="0"/>
-    <circle class="spark spark3" cx="14" cy="5" r="0.8" fill="#ffffff" opacity="0"/>
+    <circle class="spark spark1" cx="10" cy="8" r="1.2" fill="#aaf0ff" opacity="0"/>
+    <circle class="spark spark2" cx="18" cy="6" r="1.0" fill="#00d4ff" opacity="0"/>
+    <circle class="spark spark3" cx="14" cy="5" r="0.8" fill="#e0faff" opacity="0"/>
 
-    <!-- Outer flame — deep purple -->
     <path class="flame-outer" d="M14 38 C8 30 4 22 7 14 C9 8 13 4 14 2 C15 4 16 7 18 10 C20 14 22 18 20 24 C18 30 16 34 14 38Z"
       fill="url(#grad-outer)" opacity="0.95"/>
-
-    <!-- Mid flame — violet -->
     <path class="flame-mid" d="M14 36 C10 29 7 22 9 16 C11 11 13 8 14 6 C15 8 16 10 18 13 C20 17 21 21 19 26 C17 31 15 34 14 36Z"
       fill="url(#grad-mid)" opacity="0.9"/>
-
-    <!-- Core — bright pink/white -->
     <path class="flame-core" d="M14 34 C11 28 10 23 11 18 C12 14 13 11 14 9 C15 11 16 14 17 17 C18 21 18 25 17 29 C16 32 15 33 14 34Z"
       fill="url(#grad-core)" opacity="1"/>
-
-    <!-- Tip glow -->
-    <circle cx="14" cy="9" r="3" fill="rgba(255,200,255,0.4)" style="animation:flameCore 0.25s ease-in-out infinite alternate"/>
+    <circle cx="14" cy="9" r="3" fill="rgba(0,220,255,0.4)" style="animation:flameCore 0.25s ease-in-out infinite alternate"/>
 
     <defs>
       <radialGradient id="grad-outer" cx="50%" cy="80%" r="60%">
-        <stop offset="0%"   stop-color="#9900dd"/>
-        <stop offset="50%"  stop-color="#7700cc"/>
-        <stop offset="100%" stop-color="#44007a"/>
+        <stop offset="0%"   stop-color="#005fa3"/>
+        <stop offset="50%"  stop-color="#004d8c"/>
+        <stop offset="100%" stop-color="#003366"/>
       </radialGradient>
       <radialGradient id="grad-mid" cx="50%" cy="75%" r="55%">
-        <stop offset="0%"   stop-color="#cc44ff"/>
-        <stop offset="60%"  stop-color="#aa22ee"/>
-        <stop offset="100%" stop-color="#7700bb"/>
+        <stop offset="0%"   stop-color="#00bfff"/>
+        <stop offset="60%"  stop-color="#0088cc"/>
+        <stop offset="100%" stop-color="#006699"/>
       </radialGradient>
       <radialGradient id="grad-core" cx="50%" cy="70%" r="50%">
-        <stop offset="0%"   stop-color="#ffffff"/>
-        <stop offset="30%"  stop-color="#ffaaff"/>
-        <stop offset="80%"  stop-color="#dd66ff"/>
-        <stop offset="100%" stop-color="#aa22cc"/>
+        <stop offset="0%"   stop-color="#e0faff"/>
+        <stop offset="30%"  stop-color="#aaf0ff"/>
+        <stop offset="80%"  stop-color="#33ccff"/>
+        <stop offset="100%" stop-color="#0077aa"/>
       </radialGradient>
     </defs>
   </svg>
@@ -537,8 +518,7 @@
             <div class="planet-ring" style="inset:65px; animation-duration:15s;"></div>
           </div>
 
-          <!-- Hero icon — now floats on hover -->
-          <div class="w-28 h-28 rounded-2xl mx-auto mb-6 flex items-center justify-center pulse-neon corner-box hero-box" style="background:rgba(160,60,255,0.06); border:1px solid rgba(160,60,255,0.32); position:relative; z-index:2;">
+          <div class="w-28 h-28 rounded-2xl mx-auto mb-6 flex items-center justify-center pulse-neon corner-box hero-box" style="background:rgba(0,191,255,0.06); border:1px solid rgba(0,191,255,0.32); position:relative; z-index:2;">
             <i data-lucide="user" style="width:52px;height:52px;color:var(--c-primary); filter:drop-shadow(0 0 10px var(--c-primary));"></i>
           </div>
           <div class="font-mono text-xs mb-3" style="color:var(--c-secondary);">SISTEMA INICIADO <span class="blink" style="color:var(--c-green);">█</span></div>
@@ -547,23 +527,22 @@
           <p class="text-base" style="color:var(--c-secondary);"> RUIZ GCENCHO KEVIN JHAMPIER &lt;/3 </p>
         </div>
 
-        <!-- SKILL CARDS — float-hover applied -->
         <div class="mb-12">
           <div class="font-display text-xs text-center mb-6 neon-text tracking-widest">── HABILIDADES DESBLOQUEADAS ──</div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px);">
+            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(0,191,255,0.2); backdrop-filter:blur(8px);">
               <div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div>
               <p class="font-mono text-xs font-semibold">JavaScript</p>
             </div>
-            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px); animation-delay:60ms;">
+            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(0,191,255,0.2); backdrop-filter:blur(8px); animation-delay:60ms;">
               <div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div>
               <p class="font-mono text-xs font-semibold">Diseño UX</p>
             </div>
-            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px); animation-delay:120ms;">
+            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(0,191,255,0.2); backdrop-filter:blur(8px); animation-delay:120ms;">
               <div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div>
               <p class="font-mono text-xs font-semibold">Comunicación</p>
             </div>
-            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.2); backdrop-filter:blur(8px); animation-delay:180ms;">
+            <div class="card-enter game-card float-hover p-4 text-center" style="background:rgba(13,8,24,0.7); border:1px solid rgba(0,191,255,0.2); backdrop-filter:blur(8px); animation-delay:180ms;">
               <div class="font-display text-2xl mb-1" style="color:var(--c-primary);">★</div>
               <p class="font-mono text-xs font-semibold">Liderazgo</p>
             </div>
@@ -578,14 +557,14 @@
         </div>
       </div>
     </main>
-    <footer class="shrink-0 text-center py-3" style="color:var(--c-secondary); border-top:1px solid rgba(160,60,255,0.1);">
+    <footer class="shrink-0 text-center py-3" style="color:var(--c-secondary); border-top:1px solid rgba(0,191,255,0.1);">
       <span class="font-mono text-xs">// © 2024 Mi Portafolio //</span>
     </footer>
   </div>
 
   <!-- LOGIN SCREEN -->
   <div id="login-screen" class="h-full w-full flex items-center justify-center hidden">
-    <div class="w-full max-w-sm p-8 corner-box" style="background:rgba(6,2,15,0.92); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 70px rgba(160,60,255,0.18); backdrop-filter:blur(16px);">
+    <div class="w-full max-w-sm p-8 corner-box" style="background:rgba(6,2,15,0.92); border:1px solid rgba(0,191,255,0.32); box-shadow:0 0 70px rgba(0,191,255,0.18); backdrop-filter:blur(16px);">
       <div class="font-mono text-xs mb-1" style="color:var(--c-secondary);">SISTEMA DE ACCESO v2.0</div>
       <h1 class="font-display text-xl font-black mb-1 neon-text">PORTFOLIO.EXE</h1>
       <p class="font-mono text-xs mb-6" style="color:var(--c-secondary);">SELECCIONA ROL PARA CONTINUAR <span class="blink">█</span></p>
@@ -598,39 +577,39 @@
       <button onclick="goToHome()" class="w-full py-3 px-4 rounded flex items-center justify-center gap-2 font-display text-xs float-hover" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--c-secondary); letter-spacing:1px; border-radius:8px;">
         <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> VOLVER
       </button>
-      <div id="viewer-options" class="mt-4 pt-4" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
+      <div id="viewer-options" class="mt-4 pt-4" style="border-top:1px solid rgba(0,191,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-3 neon-text tracking-widest text-center">[ MODO VISUALIZADOR ]</h3>
         <button onclick="showViewerRegister()" class="btn-primary w-full py-2.5 px-4 rounded mb-2 flex items-center justify-center gap-2 float-hover" style="font-size:10px;">
           <i data-lucide="user-plus" style="width:12px;height:12px;"></i> REGISTRARSE
         </button>
-        <button onclick="showAuthForm('viewer')" class="w-full py-2.5 px-4 rounded flex items-center justify-center gap-2 font-display text-xs float-hover" style="background:transparent; border:1px solid rgba(160,60,255,0.22); color:var(--c-primary); letter-spacing:1px; border-radius:8px;">
+        <button onclick="showAuthForm('viewer')" class="w-full py-2.5 px-4 rounded flex items-center justify-center gap-2 font-display text-xs float-hover" style="background:transparent; border:1px solid rgba(0,191,255,0.22); color:var(--c-primary); letter-spacing:1px; border-radius:8px;">
           <i data-lucide="log-in" style="width:12px;height:12px;"></i> YA TENGO CUENTA
         </button>
         <button onclick="closeViewerOptions()" class="w-full mt-2 py-2 px-4 rounded font-display text-xs" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--c-secondary); letter-spacing:1px; border-radius:8px;">CANCELAR</button>
       </div>
-      <div id="auth-form-container" class="mt-6 pt-6" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
+      <div id="auth-form-container" class="mt-6 pt-6" style="border-top:1px solid rgba(0,191,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center" id="auth-title"></h3>
         <form id="auth-form" onsubmit="handleAuth(event)">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; USUARIO</label>
-          <input id="auth-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="identificador...">
+          <input id="auth-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.22); color:var(--c-primary);" placeholder="identificador...">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONTRASEÑA</label>
-          <input id="auth-pass" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="••••••••">
+          <input id="auth-pass" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.22); color:var(--c-primary);" placeholder="••••••••">
           <button type="submit" id="auth-btn" class="btn-primary w-full py-2.5 px-4 rounded mb-2 float-hover">INICIAR SESIÓN</button>
-          <button type="button" onclick="closeAuthForm()" class="w-full py-2.5 px-4 rounded font-display text-xs float-hover" style="background:transparent; border:1px solid rgba(224,64,251,0.3); color:var(--c-accent); letter-spacing:1px; border-radius:8px;">CANCELAR</button>
+          <button type="button" onclick="closeAuthForm()" class="w-full py-2.5 px-4 rounded font-display text-xs float-hover" style="background:transparent; border:1px solid rgba(224,242,255,0.3); color:var(--c-accent); letter-spacing:1px; border-radius:8px;">CANCELAR</button>
         </form>
         <p class="font-mono text-xs text-center mt-3" id="auth-msg"></p>
       </div>
-      <div id="viewer-register-container" class="mt-6 pt-6" style="border-top:1px solid rgba(160,60,255,0.12); display:none;">
+      <div id="viewer-register-container" class="mt-6 pt-6" style="border-top:1px solid rgba(0,191,255,0.12); display:none;">
         <h3 class="font-display text-xs font-bold mb-4 neon-text tracking-widest text-center">[ NUEVO VISUALIZADOR ]</h3>
         <form id="register-form" onsubmit="handleRegister(event)">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; USUARIO</label>
-          <input id="reg-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="elige un nombre...">
+          <input id="reg-user" required type="text" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.22); color:var(--c-primary);" placeholder="elige un nombre...">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONTRASEÑA</label>
-          <input id="reg-pass" required type="password" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="••••••••">
+          <input id="reg-pass" required type="password" class="w-full px-3 py-2 rounded mb-3 text-sm" style="background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.22); color:var(--c-primary);" placeholder="••••••••">
           <label class="block font-mono text-xs mb-1" style="color:var(--c-secondary);">&gt; CONFIRMAR CONTRASEÑA</label>
-          <input id="reg-confirm" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary);" placeholder="••••••••">
+          <input id="reg-confirm" required type="password" class="w-full px-3 py-2 rounded mb-4 text-sm" style="background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.22); color:var(--c-primary);" placeholder="••••••••">
           <button type="submit" id="reg-btn" class="btn-primary w-full py-2.5 px-4 rounded mb-2 float-hover">REGISTRARSE</button>
-          <button type="button" onclick="showViewerOptions()" class="w-full py-2.5 px-4 rounded font-display text-xs float-hover" style="background:transparent; border:1px solid rgba(224,64,251,0.3); color:var(--c-accent); letter-spacing:1px; border-radius:8px;">VOLVER</button>
+          <button type="button" onclick="showViewerOptions()" class="w-full py-2.5 px-4 rounded font-display text-xs float-hover" style="background:transparent; border:1px solid rgba(224,242,255,0.3); color:var(--c-accent); letter-spacing:1px; border-radius:8px;">VOLVER</button>
         </form>
         <p class="font-mono text-xs text-center mt-3" id="reg-msg"></p>
       </div>
@@ -649,7 +628,7 @@
           <h1 class="font-display text-sm font-bold neon-text tracking-widest">PORTFOLIO.EXE</h1>
         </div>
         <div class="flex items-center gap-3">
-          <div id="search-box" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm" style="background:rgba(160,60,255,0.05); border:1px solid rgba(160,60,255,0.16); backdrop-filter:blur(8px);">
+          <div id="search-box" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm" style="background:rgba(0,191,255,0.05); border:1px solid rgba(0,191,255,0.16); backdrop-filter:blur(8px);">
             <i data-lucide="search" style="width:12px;height:12px;color:var(--c-secondary);"></i>
             <input id="search-input" type="text" placeholder="buscar misiones..." class="bg-transparent border-none text-sm font-mono" style="color:var(--c-primary); width:140px;" oninput="handleSearch(this.value)">
           </div>
@@ -666,7 +645,7 @@
         </aside>
         <main id="content-area" class="flex-1 overflow-y-auto scrollbar-thin p-5 lg:p-8"></main>
       </div>
-      <footer class="shrink-0 text-center py-2" style="color:var(--c-secondary); border-top:1px solid rgba(160,60,255,0.1);">
+      <footer class="shrink-0 text-center py-2" style="color:var(--c-secondary); border-top:1px solid rgba(0,191,255,0.1);">
         <span class="font-mono text-xs">// © 2024 Mi Portafolio //</span>
       </footer>
     </div>
@@ -678,14 +657,14 @@
 
 <!-- MODAL -->
 <div id="modal-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.88); overflow-y:auto; backdrop-filter:blur(6px);">
-  <div class="w-full max-w-lg p-6 corner-box my-4" style="background:rgba(6,2,15,0.99); border:1px solid rgba(160,60,255,0.32); box-shadow:0 0 60px rgba(160,60,255,0.2);">
+  <div class="w-full max-w-lg p-6 corner-box my-4" style="background:rgba(6,2,15,0.99); border:1px solid rgba(0,191,255,0.32); box-shadow:0 0 60px rgba(0,191,255,0.2);">
     <div id="modal-content"></div>
   </div>
 </div>
 
 <!-- DELETE CONFIRM -->
 <div id="delete-overlay" class="fixed inset-0 z-40 items-center justify-center p-4 modal-bg" style="display:none; background:rgba(0,0,0,0.88); backdrop-filter:blur(6px);">
-  <div class="w-full max-w-sm p-6 text-center corner-box" style="background:rgba(6,2,15,0.99); border:1px solid rgba(224,64,251,0.4); box-shadow:0 0 40px rgba(224,64,251,0.25);">
+  <div class="w-full max-w-sm p-6 text-center corner-box" style="background:rgba(6,2,15,0.99); border:1px solid rgba(224,242,255,0.4); box-shadow:0 0 40px rgba(224,242,255,0.25);">
     <div class="font-display text-3xl mb-3" style="color:var(--c-accent); text-shadow:0 0 20px var(--c-accent);">⚠</div>
     <p class="font-display text-sm font-bold mb-1" style="color:var(--c-accent); letter-spacing:2px;">¿ELIMINAR REGISTRO?</p>
     <p class="font-mono text-xs mb-5" style="color:var(--c-secondary);">Esta acción no se puede deshacer.</p>
@@ -696,9 +675,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════
-     CHATBOT — DRAGGABLE
-═══════════════════════════════════ -->
+<!-- CHATBOT DRAGGABLE -->
 <div id="chatbot-bubble" title="Asistente de navegación">
   <i data-lucide="bot" style="width:22px;height:22px;color:var(--c-primary);"></i>
 </div>
@@ -740,7 +717,6 @@
     flame.style.top  = my + 'px';
   });
 
-  // Glow follows with slight lag
   function animateGlow() {
     glowX += (mx - glowX) * 0.18;
     glowY += (my - glowY) * 0.18;
@@ -750,14 +726,13 @@
   }
   animateGlow();
 
-  // Click ripple effect
   document.addEventListener('mousedown', e => {
     const ripple = document.createElement('div');
     ripple.style.cssText = `
       position:fixed; left:${e.clientX}px; top:${e.clientY}px;
       width:8px; height:8px; border-radius:50%;
-      background:rgba(180,60,255,0.7);
-      box-shadow:0 0 12px rgba(180,60,255,0.8);
+      background:rgba(0,191,255,0.7);
+      box-shadow:0 0 12px rgba(0,191,255,0.8);
       transform:translate(-50%,-50%) scale(0);
       pointer-events:none; z-index:99997;
       animation:rippleClick 0.4s ease-out forwards;
@@ -766,7 +741,6 @@
     setTimeout(() => ripple.remove(), 500);
   });
 
-  // Inject ripple keyframe
   const style = document.createElement('style');
   style.textContent = `
     @keyframes rippleClick {
@@ -788,12 +762,10 @@
   let isDragging = false;
   let hasDragged = false;
   let startX, startY, origLeft, origTop;
-  // Initial position (bottom-right)
   let posX = window.innerWidth  - 24 - 54;
   let posY = window.innerHeight - 24 - 54;
 
   function setBubblePos(x, y) {
-    // Clamp within viewport
     x = Math.max(0, Math.min(window.innerWidth  - 54, x));
     y = Math.max(0, Math.min(window.innerHeight - 54, y));
     posX = x; posY = y;
@@ -801,8 +773,6 @@
     bubble.style.top    = y + 'px';
     bubble.style.right  = 'auto';
     bubble.style.bottom = 'auto';
-
-    // Move panel relative to bubble
     updatePanelPos();
   }
 
@@ -832,7 +802,6 @@
     if (!isDragging) return;
     const newX = e.clientX - startX;
     const newY = e.clientY - startY;
-    // Detect actual movement
     if (Math.abs(e.clientX - (startX + posX)) > 4 || Math.abs(e.clientY - (startY + posY)) > 4) {
       hasDragged = true;
     }
@@ -843,14 +812,11 @@
     if (!isDragging) return;
     isDragging = false;
     bubble.classList.remove('dragging');
-
-    // Only toggle if it was a click (not a drag)
     if (!hasDragged) {
       toggleChatbot();
     }
   });
 
-  // Touch support
   bubble.addEventListener('touchstart', e => {
     isDragging = true;
     hasDragged = false;
@@ -898,7 +864,7 @@
   function initStars() {
     stars=[];
     const count=Math.floor((W*H)/2200);
-    for(let i=0;i<count;i++) stars.push({ x:rnd(0,W),y:rnd(0,H),r:rnd(0.2,1.8),alpha:rnd(0.3,1),twinkleSpeed:rnd(0.005,0.02),twinkleDir:Math.random()>0.5?1:-1,color:Math.random()>0.85?`hsl(${rnd(260,300)},80%,80%)`:Math.random()>0.6?'#ffffff':`hsl(${rnd(200,240)},60%,90%)` });
+    for(let i=0;i<count;i++) stars.push({ x:rnd(0,W),y:rnd(0,H),r:rnd(0.2,1.8),alpha:rnd(0.3,1),twinkleSpeed:rnd(0.005,0.02),twinkleDir:Math.random()>0.5?1:-1,color:Math.random()>0.85?`hsl(${rnd(185,215)},90%,75%)`:Math.random()>0.6?'#ffffff':`hsl(${rnd(185,215)},80%,88%)` });
   }
 
   function initConstellations() {
@@ -912,7 +878,7 @@
   }
 
   (function initFireflies() {
-    for(let i=0;i<55;i++) fireflies.push({ x:rnd(0,window.innerWidth),y:rnd(window.innerHeight*0.1,window.innerHeight),vx:rnd(-0.4,0.4),vy:rnd(-1.2,-0.3),r:rnd(1.5,3.5),alpha:rnd(0.4,1),alphaDir:Math.random()>0.5?1:-1,alphaSpeed:rnd(0.008,0.025),hue:rnd(260,310),wobble:rnd(0,Math.PI*2),wobbleSpeed:rnd(0.01,0.04),wobbleAmp:rnd(0.2,0.6) });
+    for(let i=0;i<55;i++) fireflies.push({ x:rnd(0,window.innerWidth),y:rnd(window.innerHeight*0.1,window.innerHeight),vx:rnd(-0.4,0.4),vy:rnd(-1.2,-0.3),r:rnd(1.5,3.5),alpha:rnd(0.4,1),alphaDir:Math.random()>0.5?1:-1,alphaSpeed:rnd(0.008,0.025),hue:rnd(185,215),wobble:rnd(0,Math.PI*2),wobbleSpeed:rnd(0.01,0.04),wobbleAmp:rnd(0.2,0.6) });
   })();
 
   function drawStars() {
@@ -920,11 +886,11 @@
   }
 
   function drawConstellations() {
-    constellationLines.forEach(line=>{ ctx.save();ctx.globalAlpha=line.alpha;ctx.strokeStyle='rgba(160,80,255,1)';ctx.lineWidth=0.5;ctx.setLineDash([3,8]);ctx.beginPath();ctx.moveTo(line.a.x,line.a.y);ctx.lineTo(line.b.x,line.b.y);ctx.stroke();ctx.restore(); [line.a,line.b].forEach(n=>{ ctx.save();ctx.globalAlpha=line.alpha*2.5;ctx.fillStyle='rgba(180,100,255,1)';ctx.shadowColor='rgba(180,100,255,1)';ctx.shadowBlur=5;ctx.beginPath();ctx.arc(n.x,n.y,1.5,0,Math.PI*2);ctx.fill();ctx.restore(); }); });
+    constellationLines.forEach(line=>{ ctx.save();ctx.globalAlpha=line.alpha;ctx.strokeStyle='rgba(0,191,255,1)';ctx.lineWidth=0.5;ctx.setLineDash([3,8]);ctx.beginPath();ctx.moveTo(line.a.x,line.a.y);ctx.lineTo(line.b.x,line.b.y);ctx.stroke();ctx.restore(); [line.a,line.b].forEach(n=>{ ctx.save();ctx.globalAlpha=line.alpha*2.5;ctx.fillStyle='rgba(0,210,255,1)';ctx.shadowColor='rgba(0,210,255,1)';ctx.shadowBlur=5;ctx.beginPath();ctx.arc(n.x,n.y,1.5,0,Math.PI*2);ctx.fill();ctx.restore(); }); });
   }
 
   function drawFireflies() {
-    fireflies.forEach(f=>{ f.wobble+=f.wobbleSpeed;f.x+=f.vx+Math.sin(f.wobble)*f.wobbleAmp;f.y+=f.vy;f.alpha+=f.alphaSpeed*f.alphaDir;if(f.alpha>=1){f.alpha=1;f.alphaDir=-1;}if(f.alpha<=0.1){f.alpha=0.1;f.alphaDir=1;} if(f.y<-10){f.y=H+10;f.x=rnd(0,W);} if(f.x<-10)f.x=W+10; if(f.x>W+10)f.x=-10; ctx.save();ctx.globalAlpha=f.alpha*0.25;const g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*5);g.addColorStop(0,`hsla(${f.hue},80%,70%,1)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.arc(f.x,f.y,f.r*5,0,Math.PI*2);ctx.fill();ctx.restore(); ctx.save();ctx.globalAlpha=f.alpha;ctx.fillStyle=`hsl(${f.hue},90%,80%)`;ctx.shadowColor=`hsl(${f.hue},80%,70%)`;ctx.shadowBlur=10;ctx.beginPath();ctx.arc(f.x,f.y,f.r*0.5,0,Math.PI*2);ctx.fill();ctx.restore(); });
+    fireflies.forEach(f=>{ f.wobble+=f.wobbleSpeed;f.x+=f.vx+Math.sin(f.wobble)*f.wobbleAmp;f.y+=f.vy;f.alpha+=f.alphaSpeed*f.alphaDir;if(f.alpha>=1){f.alpha=1;f.alphaDir=-1;}if(f.alpha<=0.1){f.alpha=0.1;f.alphaDir=1;} if(f.y<-10){f.y=H+10;f.x=rnd(0,W);} if(f.x<-10)f.x=W+10; if(f.x>W+10)f.x=-10; ctx.save();ctx.globalAlpha=f.alpha*0.25;const g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*5);g.addColorStop(0,`hsla(${f.hue},90%,65%,1)`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.arc(f.x,f.y,f.r*5,0,Math.PI*2);ctx.fill();ctx.restore(); ctx.save();ctx.globalAlpha=f.alpha;ctx.fillStyle=`hsl(${f.hue},100%,75%)`;ctx.shadowColor=`hsl(${f.hue},90%,65%)`;ctx.shadowBlur=10;ctx.beginPath();ctx.arc(f.x,f.y,f.r*0.5,0,Math.PI*2);ctx.fill();ctx.restore(); });
   }
 
   function loop() { ctx.clearRect(0,0,W,H); drawConstellations(); drawStars(); drawFireflies(); requestAnimationFrame(loop); }
@@ -1125,8 +1091,8 @@ function loginSuccess(){
   hide('login-screen');hide('home-screen');
   document.getElementById('main-app').style.display='flex';
   const badge=document.getElementById('role-badge');
-  if(currentRole==='admin'){badge.textContent='◈ ADMIN';badge.style.background='rgba(224,64,251,0.1)';badge.style.border='1px solid rgba(224,64,251,0.3)';badge.style.color='var(--c-accent)';}
-  else{badge.textContent=`◉ ${currentUser.toUpperCase()}`;badge.style.background='rgba(160,60,255,0.06)';badge.style.border='1px solid rgba(160,60,255,0.22)';badge.style.color='var(--c-primary)';}
+  if(currentRole==='admin'){badge.textContent='◈ ADMIN';badge.style.background='rgba(224,242,255,0.1)';badge.style.border='1px solid rgba(224,242,255,0.3)';badge.style.color='var(--c-accent)';}
+  else{badge.textContent=`◉ ${currentUser.toUpperCase()}`;badge.style.background='rgba(0,191,255,0.06)';badge.style.border='1px solid rgba(0,191,255,0.22)';badge.style.color='var(--c-primary)';}
   document.getElementById('logout-btn').onclick=logout;
   renderSidebar();loadProjects();lucide.createIcons();
 }
@@ -1179,10 +1145,10 @@ function renderContent(){
     html+='<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">';
     weeks.forEach((w,i)=>{
       const count=allProjects.filter(p=>p.unit==selectedUnit&&p.week==w).length;
-      html+=`<div class="card-enter game-card float-hover rounded-xl p-5" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.16); backdrop-filter:blur(8px); animation-delay:${i*60}ms; cursor:pointer;" onclick="selectWeek(${w})">
+      html+=`<div class="card-enter game-card float-hover rounded-xl p-5" style="background:rgba(13,8,24,0.7); border:1px solid rgba(0,191,255,0.16); backdrop-filter:blur(8px); animation-delay:${i*60}ms; cursor:pointer;" onclick="selectWeek(${w})">
         <div class="flex items-center justify-between mb-3">
           <span class="font-display text-xs neon-text tracking-wider">SEMANA ${w}</span>
-          <span class="font-mono text-xs px-2 py-0.5 rounded-md" style="background:rgba(160,60,255,0.08); color:var(--c-secondary); border:1px solid rgba(160,60,255,0.12);">${count} trabajos</span>
+          <span class="font-mono text-xs px-2 py-0.5 rounded-md" style="background:rgba(0,191,255,0.08); color:var(--c-secondary); border:1px solid rgba(0,191,255,0.12);">${count} trabajos</span>
         </div>
         <div class="status-bar mb-2"><div class="status-bar-fill" style="width:${Math.min(count*33,100)}%; background:var(--c-primary); color:var(--c-primary);"></div></div>
         <p class="font-mono text-xs" style="color:var(--c-secondary);">&gt; click para explorar</p>
@@ -1208,8 +1174,8 @@ function renderWeekDetail(w){
     ${currentRole==='admin'?`<button onclick="openAddModal()" class="btn-primary flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs float-hover"><i data-lucide="plus" style="width:12px;height:12px;"></i> AGREGAR</button>`:''}
   </div>`;
   if(!projects.length){
-    html+=`<div class="text-center py-16 rounded-xl" style="border:1px solid rgba(160,60,255,0.12); background:rgba(13,8,24,0.5); backdrop-filter:blur(8px);">
-      <div class="font-display text-4xl mb-3" style="color:rgba(160,60,255,0.2);">□</div>
+    html+=`<div class="text-center py-16 rounded-xl" style="border:1px solid rgba(0,191,255,0.12); background:rgba(13,8,24,0.5); backdrop-filter:blur(8px);">
+      <div class="font-display text-4xl mb-3" style="color:rgba(0,191,255,0.2);">□</div>
       <p class="font-mono text-sm" style="color:var(--c-secondary);">// sin registros en esta semana</p>
     </div>`;
     return html;
@@ -1217,7 +1183,7 @@ function renderWeekDetail(w){
   projects.forEach((p,i)=>{
     const sc=p.status==='completado'?'var(--c-green)':p.status==='en progreso'?'var(--c-warning)':'var(--c-secondary)';
     const si=p.status==='completado'?'✓':p.status==='en progreso'?'◈':'○';
-    html+=`<div class="card-enter game-card float-hover rounded-xl p-5 mb-3" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.12); backdrop-filter:blur(8px); animation-delay:${i*60}ms;">
+    html+=`<div class="card-enter game-card float-hover rounded-xl p-5 mb-3" style="background:rgba(13,8,24,0.7); border:1px solid rgba(0,191,255,0.12); backdrop-filter:blur(8px); animation-delay:${i*60}ms;">
       <div class="flex items-start justify-between gap-3">
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1">
@@ -1232,9 +1198,9 @@ function renderWeekDetail(w){
           <div id="attachments-${p.id}" class="mt-2"></div>
         </div>
         ${currentRole==='admin'?`<div class="flex gap-1 shrink-0">
-          <button onclick="openEditModal(${p.id})" class="p-1.5 rounded-lg hover:bg-white/5 float-hover" style="color:var(--c-primary); border:1px solid rgba(160,60,255,0.12);"><i data-lucide="edit" style="width:12px;height:12px;"></i></button>
-          <button onclick="openAttachmentsModal(${p.id})" class="p-1.5 rounded-lg hover:bg-white/5 float-hover" style="color:var(--c-green); border:1px solid rgba(160,60,255,0.18);"><i data-lucide="paperclip" style="width:12px;height:12px;"></i></button>
-          <button onclick="confirmDelete(${p.id})" class="p-1.5 rounded-lg hover:bg-white/5 float-hover" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.15);"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
+          <button onclick="openEditModal(${p.id})" class="p-1.5 rounded-lg hover:bg-white/5 float-hover" style="color:var(--c-primary); border:1px solid rgba(0,191,255,0.12);"><i data-lucide="edit" style="width:12px;height:12px;"></i></button>
+          <button onclick="openAttachmentsModal(${p.id})" class="p-1.5 rounded-lg hover:bg-white/5 float-hover" style="color:var(--c-green); border:1px solid rgba(0,191,255,0.18);"><i data-lucide="paperclip" style="width:12px;height:12px;"></i></button>
+          <button onclick="confirmDelete(${p.id})" class="p-1.5 rounded-lg hover:bg-white/5 float-hover" style="color:var(--c-accent); border:1px solid rgba(224,242,255,0.15);"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
         </div>`:''}
       </div>
     </div>`;
@@ -1258,7 +1224,7 @@ function renderSearchResults(area){
   const results=allProjects.filter(p=>(p.title||'').toLowerCase().includes(q)||(p.description||'').toLowerCase().includes(q));
   let html=`<div class="mb-5"><h2 class="font-display text-lg neon-text tracking-widest">BÚSQUEDA: "${escHtml(searchQuery)}"</h2><p class="font-mono text-xs" style="color:var(--c-secondary);">// ${results.length} resultado${results.length!==1?'s':''}</p></div>`;
   results.forEach((p,i)=>{
-    html+=`<div class="card-enter game-card float-hover rounded-xl p-4 mb-2" style="background:rgba(13,8,24,0.7); border:1px solid rgba(160,60,255,0.12); backdrop-filter:blur(8px); animation-delay:${i*40}ms; cursor:pointer;" onclick="selectedUnit=${p.unit};selectedWeek=${p.week};searchQuery='';document.getElementById('search-input').value='';renderSidebar();renderContent();">
+    html+=`<div class="card-enter game-card float-hover rounded-xl p-4 mb-2" style="background:rgba(13,8,24,0.7); border:1px solid rgba(0,191,255,0.12); backdrop-filter:blur(8px); animation-delay:${i*40}ms; cursor:pointer;" onclick="selectedUnit=${p.unit};selectedWeek=${p.week};searchQuery='';document.getElementById('search-input').value='';renderSidebar();renderContent();">
       <div class="font-mono text-xs mb-1" style="color:var(--c-secondary);">// unidad ${p.unit} · semana ${p.week}</div>
       <h4 class="font-display text-sm" style="color:var(--c-primary);">${escHtml(p.title)}</h4>
     </div>`;
@@ -1271,7 +1237,7 @@ function handleSearch(v){searchQuery=v;renderContent();}
 // ═══════════════════════════════════════════════════════════════
 // MODALS
 // ═══════════════════════════════════════════════════════════════
-const FS=`background:rgba(160,60,255,0.03); border:1px solid rgba(160,60,255,0.22); color:var(--c-primary); border-radius:8px;`;
+const FS=`background:rgba(0,191,255,0.03); border:1px solid rgba(0,191,255,0.22); color:var(--c-primary); border-radius:8px;`;
 const LS=`font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--c-secondary);`;
 
 function openAddModal(){
@@ -1394,11 +1360,11 @@ async function openAttachmentsModal(projectId){
 async function refreshAttachmentLists(projectId){
   const[files,links]=await Promise.all([dbGetFiles(projectId),dbGetLinks(projectId)]);
   const fl=document.getElementById('files-list');if(!fl)return;
-  if(!files.length){fl.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin archivos adjuntos</p>`;}
-  else{fl.innerHTML=files.map(f=>{const type=f.file_type||'';const cls=type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';const icon=type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';const size=f.file_size?` (${(f.file_size/1024).toFixed(1)}KB)`:'';return`<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded-lg" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.12);"><a href="${escHtml(f.file_url)}" target="_blank" rel="noopener" class="file-badge ${cls} font-mono" style="text-decoration:none; flex:1; min-width:0;"><i data-lucide="${icon}" style="width:10px;height:10px;"></i><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(f.file_name)}${size}</span></a><button onclick="handleDeleteFile(${f.id},${projectId})" class="ml-2 p-1 rounded-md shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);"><i data-lucide="x" style="width:10px;height:10px;"></i></button></div>`;}).join('');}
+  if(!files.length){fl.innerHTML=`<p class="font-mono text-xs" style="color:rgba(0,100,150,0.6);">// sin archivos adjuntos</p>`;}
+  else{fl.innerHTML=files.map(f=>{const type=f.file_type||'';const cls=type.includes('pdf')?'file-badge-pdf':type.includes('word')||type.includes('doc')?'file-badge-word':'file-badge-other';const icon=type.includes('pdf')?'file-text':type.includes('word')||type.includes('doc')?'file-type':'file';const size=f.file_size?` (${(f.file_size/1024).toFixed(1)}KB)`:'';return`<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded-lg" style="background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.12);"><a href="${escHtml(f.file_url)}" target="_blank" rel="noopener" class="file-badge ${cls} font-mono" style="text-decoration:none; flex:1; min-width:0;"><i data-lucide="${icon}" style="width:10px;height:10px;"></i><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(f.file_name)}${size}</span></a><button onclick="handleDeleteFile(${f.id},${projectId})" class="ml-2 p-1 rounded-md shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,242,255,0.22);"><i data-lucide="x" style="width:10px;height:10px;"></i></button></div>`;}).join('');}
   const ll=document.getElementById('links-list');if(!ll)return;
-  if(!links.length){ll.innerHTML=`<p class="font-mono text-xs" style="color:rgba(90,56,120,0.6);">// sin enlaces añadidos</p>`;}
-  else{ll.innerHTML=links.map(l=>`<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded-lg" style="background:rgba(160,60,255,0.04); border:1px solid rgba(160,60,255,0.12);"><a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="file-badge file-badge-other font-mono" style="text-decoration:none; flex:1; min-width:0;"><i data-lucide="link" style="width:10px;height:10px;"></i><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(l.label)}</span></a><button onclick="handleDeleteLink(${l.id},${projectId})" class="ml-2 p-1 rounded-md shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,64,251,0.22);"><i data-lucide="x" style="width:10px;height:10px;"></i></button></div>`).join('');}
+  if(!links.length){ll.innerHTML=`<p class="font-mono text-xs" style="color:rgba(0,100,150,0.6);">// sin enlaces añadidos</p>`;}
+  else{ll.innerHTML=links.map(l=>`<div class="flex items-center justify-between mb-1.5 px-2 py-1.5 rounded-lg" style="background:rgba(0,191,255,0.04); border:1px solid rgba(0,191,255,0.12);"><a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="file-badge file-badge-other font-mono" style="text-decoration:none; flex:1; min-width:0;"><i data-lucide="link" style="width:10px;height:10px;"></i><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(l.label)}</span></a><button onclick="handleDeleteLink(${l.id},${projectId})" class="ml-2 p-1 rounded-md shrink-0" style="color:var(--c-accent); border:1px solid rgba(224,242,255,0.22);"><i data-lucide="x" style="width:10px;height:10px;"></i></button></div>`).join('');}
   lucide.createIcons();
 }
 
@@ -1448,8 +1414,8 @@ function closeModal(){document.getElementById('modal-overlay').style.display='no
 function showToast(msg,type='success'){
   const c=document.getElementById('toast-container'),t=document.createElement('div');
   t.className='toast-anim flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs shadow-lg';
-  if(type==='error'){t.style.cssText='background:rgba(6,2,15,0.99); border:1px solid rgba(224,64,251,0.5); color:var(--c-accent); box-shadow:0 0 18px rgba(224,64,251,0.3);';t.innerHTML=`<span style="color:var(--c-accent);">✗</span> ${escHtml(msg)}`;}
-  else{t.style.cssText='background:rgba(6,2,15,0.99); border:1px solid rgba(160,60,255,0.45); color:var(--c-green); box-shadow:0 0 18px rgba(160,60,255,0.25);';t.innerHTML=`<span style="color:var(--c-green);">✓</span> ${escHtml(msg)}`;}
+  if(type==='error'){t.style.cssText='background:rgba(6,2,15,0.99); border:1px solid rgba(224,242,255,0.5); color:var(--c-accent); box-shadow:0 0 18px rgba(224,242,255,0.3);';t.innerHTML=`<span style="color:var(--c-accent);">✗</span> ${escHtml(msg)}`;}
+  else{t.style.cssText='background:rgba(6,2,15,0.99); border:1px solid rgba(0,191,255,0.45); color:var(--c-green); box-shadow:0 0 18px rgba(0,191,255,0.25);';t.innerHTML=`<span style="color:var(--c-green);">✓</span> ${escHtml(msg)}`;}
   c.appendChild(t);lucide.createIcons();
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300);},2500);
 }
