@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sendero Treecko · Cuestionario UPLA — Grados y Títulos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0a130c;
+  --panel:#0f1f14;
+  --panel-2:#132a1b;
+  --line: rgba(150,220,160,.14);
+  --mist:#dff2df;
+  --mist-dim:#9fc2a6;
+
+  /* stage accents */
+  --s1-a:#8bd450; --s1-b:#e2574c; --s1-glow: rgba(139,212,80,.35);
+  --s2-a:#49b25a; --s2-b:#2f7a3d; --s2-glow: rgba(73,178,90,.35);
+  --s3-a:#1f9d63; --s3-b:#d9463b; --s3-glow: rgba(31,157,99,.35);
+  --s4-a:#e0464f; --s4-b:#f2c14e; --s4-glow: rgba(224,70,79,.4);
+  --s5-a:#f2c14e; --s5-b:#ff6b4a; --s5-glow: rgba(242,193,78,.4);
+
+  --radius: 18px;
+  --disp: 'Rajdhani', sans-serif;
+  --body: 'Manrope', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 700px at 15% -10%, rgba(139,212,80,.10), transparent 60%),
+    radial-gradient(1000px 800px at 100% 20%, rgba(31,157,99,.10), transparent 55%),
+    var(--void);
+  color:var(--mist);
+  font-family:var(--body);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background: var(--s1-a); color:#08130a; }
+
+a{color:inherit;}
+button{font-family:inherit;}
+
+/* leaf-vein background texture (decorative, generic geometric motif, low opacity) */
+.leaf-field{
+  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.05;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(180,230,160,.6) 0px, rgba(180,230,160,.6) 1px, transparent 1px, transparent 90px),
+    repeating-linear-gradient(25deg, rgba(180,230,160,.4) 0px, rgba(180,230,160,.4) 1px, transparent 1px, transparent 130px);
+}
+
+/* ============ TOP BAR / EVOLUTION NAV ============ */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background: rgba(9,18,12,.82);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1180px; margin:0 auto; padding:12px 24px;
+  display:flex; align-items:center; gap:22px;
+}
+.brand{
+  display:flex; align-items:center; gap:10px; flex-shrink:0;
+  font-family:var(--disp); font-weight:700; letter-spacing:.03em;
+  font-size:1.05rem; color:var(--mist);
+}
+.brand .dex-lens{
+  width:30px; height:30px; border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, #eafbe0, var(--s1-a) 45%, #14401d 100%);
+  box-shadow: 0 0 0 3px #0d1f13, 0 0 14px var(--s1-glow);
+  flex-shrink:0;
+}
+.brand small{ display:block; font-family:var(--mono); font-weight:400; font-size:.62rem; color:var(--mist-dim); letter-spacing:.08em; }
+
+.evo-tabs{
+  display:flex; gap:6px; overflow-x:auto; flex:1;
+  scrollbar-width:none;
+}
+.evo-tabs::-webkit-scrollbar{display:none;}
+.evo-tab{
+  display:flex; align-items:center; gap:8px;
+  padding:7px 12px 7px 8px; border-radius:999px;
+  border:1px solid var(--line); background:rgba(255,255,255,.02);
+  cursor:pointer; white-space:nowrap; transition:.2s;
+  font-size:.78rem; font-family:var(--mono); color:var(--mist-dim);
+}
+.evo-tab:hover{ border-color:rgba(180,230,160,.4); color:var(--mist); }
+.evo-tab.active{
+  background: linear-gradient(120deg, rgba(139,212,80,.18), rgba(139,212,80,.04));
+  border-color: var(--stage-a, var(--s1-a));
+  color:var(--mist);
+}
+.evo-tab .badge{
+  width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.62rem; font-weight:700; font-family:var(--disp);
+  background: rgba(255,255,255,.06); color:var(--mist-dim);
+  border:1px solid var(--line);
+}
+.evo-tab.active .badge{ background:var(--stage-a); color:#0a130a; border-color:var(--stage-a); }
+.evo-tab .prog{ font-size:.65rem; opacity:.7; }
+
+.crystal-wrap{ flex-shrink:0; display:flex; align-items:center; gap:10px; }
+.crystal{ width:38px; height:38px; position:relative; }
+.crystal svg{ width:100%; height:100%; display:block; }
+.crystal-label{ font-family:var(--mono); font-size:.62rem; color:var(--mist-dim); text-align:right; line-height:1.3;}
+.crystal-label b{ color:var(--mist); font-size:.85rem; font-family:var(--disp); }
+
+/* ============ HERO ============ */
+.hero{
+  position:relative; z-index:1;
+  max-width:1180px; margin:0 auto; padding:64px 24px 40px;
+}
+.hero-eyebrow{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+  color: var(--s1-a); margin-bottom:14px; display:flex; align-items:center; gap:10px;
+}
+.hero-eyebrow::before{ content:''; width:26px; height:1px; background:var(--s1-a); display:inline-block; }
+.hero h1{
+  font-family:var(--disp); font-weight:700; font-size:clamp(2.4rem, 5.6vw, 4.4rem);
+  line-height:.98; margin:0 0 18px; letter-spacing:-.01em;
+  background: linear-gradient(100deg, #eafbe0 10%, var(--s1-a) 45%, var(--s3-a) 70%, var(--s4-b));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero p.lead{ max-width:640px; color:var(--mist-dim); font-size:1.05rem; margin:0 0 34px;}
+
+.chain{
+  display:flex; align-items:center; gap:0; flex-wrap:wrap; margin-bottom:10px;
+}
+.chain-node{
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  width:118px; text-align:center;
+}
+.chain-node .ring{
+  width:64px; height:64px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--node-c); background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.12), transparent 60%), rgba(255,255,255,.02);
+  box-shadow: 0 0 22px var(--node-glow, transparent);
+  cursor:pointer; transition:.25s;
+}
+.chain-node:hover .ring{ transform:translateY(-3px); }
+.chain-node svg{ width:30px; height:30px; }
+.chain-node .name{ font-family:var(--disp); font-weight:700; font-size:.85rem; }
+.chain-node .stagelabel{ font-family:var(--mono); font-size:.6rem; color:var(--mist-dim); }
+.chain-arrow{ width:34px; height:2px; background:linear-gradient(90deg, var(--line), var(--line)); position:relative; margin:0 -2px 30px; flex-shrink:0;}
+.chain-arrow::after{ content:'▸'; position:absolute; right:-8px; top:50%; transform:translateY(-50%); color:var(--mist-dim); font-size:.7rem; }
+
+.hero-stats{
+  display:flex; gap:28px; margin-top:34px; flex-wrap:wrap;
+}
+.hstat b{ font-family:var(--disp); font-size:1.6rem; display:block; color:var(--mist); }
+.hstat span{ font-family:var(--mono); font-size:.68rem; color:var(--mist-dim); text-transform:uppercase; letter-spacing:.06em; }
+
+/* ============ CHAPTER SECTION ============ */
+.chapter{
+  position:relative; z-index:1;
+  padding:70px 24px 40px;
+  border-top:1px solid var(--line);
+}
+.chapter-inner{ max-width:1180px; margin:0 auto; }
+.chapter-head{
+  display:flex; gap:28px; align-items:flex-end; flex-wrap:wrap;
+  margin-bottom:42px; padding-bottom:26px; border-bottom:1px dashed var(--line);
+}
+.chapter-mark{
+  display:flex; align-items:center; gap:16px;
+}
+.chapter-emblem{
+  width:74px; height:74px; border-radius:22px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(155deg, var(--stage-glow), transparent 70%), var(--panel);
+  border:1px solid var(--stage-a);
+  box-shadow: 0 0 30px var(--stage-glow);
+}
+.chapter-emblem svg{ width:40px; height:40px; }
+.chapter-titles .eyebrow{
+  font-family:var(--mono); font-size:.68rem; color:var(--stage-a); letter-spacing:.12em; text-transform:uppercase; margin-bottom:4px;
+}
+.chapter-titles h2{ font-family:var(--disp); font-size:clamp(1.6rem,3vw,2.3rem); margin:0 0 4px; font-weight:700;}
+.chapter-titles .sub{ color:var(--mist-dim); font-size:.95rem; max-width:520px;}
+.chapter-score{
+  margin-left:auto; text-align:right; font-family:var(--mono);
+}
+.chapter-score .n{ font-family:var(--disp); font-size:2rem; color:var(--stage-a); }
+.chapter-score .lbl{ font-size:.66rem; color:var(--mist-dim); text-transform:uppercase; letter-spacing:.08em;}
+.chapter-bar{ width:160px; height:6px; border-radius:4px; background:rgba(255,255,255,.06); overflow:hidden; margin-top:8px;}
+.chapter-bar i{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--stage-a), var(--stage-b)); transition:width .4s; }
+
+.blurb{
+  font-size:.92rem; color:var(--mist-dim); max-width:760px; margin:-24px 0 34px; font-style:italic;
+  border-left:2px solid var(--stage-a); padding-left:14px;
+}
+
+/* question cards */
+.qgrid{ display:flex; flex-direction:column; gap:16px; }
+.qcard{
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border:1px solid var(--line); border-radius:var(--radius);
+  padding:22px 24px; position:relative; overflow:hidden;
+}
+.qcard::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background: var(--stage-a); opacity:.5;
+}
+.qcard.answered.correct::before{ background:#5fd66d; opacity:1; }
+.qcard.answered.wrong::before{ background:#e2574c; opacity:1; }
+
+.qhead{ display:flex; gap:14px; margin-bottom:14px; }
+.qnum{
+  font-family:var(--disp); font-weight:700; font-size:1.3rem; color:var(--stage-a);
+  flex-shrink:0; width:32px;
+}
+.qtext{ font-size:1rem; color:var(--mist); white-space:pre-wrap; }
+.qtext code, .qcode{
+  display:block; margin-top:10px; background:#08120a; border:1px solid var(--line);
+  border-radius:10px; padding:12px 14px; font-family:var(--mono); font-size:.78rem;
+  color:#bfe8c3; white-space:pre; overflow-x:auto;
+}
+
+.opts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-left:46px; }
+@media (max-width:640px){ .opts{ grid-template-columns:1fr; } .qhead{gap:10px;} .qnum{width:24px;font-size:1.05rem;} .opts{margin-left:34px;} }
+
+.opt{
+  text-align:left; padding:11px 14px; border-radius:11px;
+  border:1px solid var(--line); background:rgba(255,255,255,.02);
+  color:var(--mist-dim); font-size:.88rem; cursor:pointer; transition:.15s;
+  display:flex; gap:10px; align-items:flex-start;
+}
+.opt .let{ font-family:var(--mono); font-weight:600; color:var(--stage-a); flex-shrink:0; }
+.opt:hover:not(.locked){ border-color:var(--stage-a); color:var(--mist); transform:translateX(2px); }
+.opt.locked{ cursor:default; }
+.opt.pick-correct{ border-color:#5fd66d; background:rgba(95,214,109,.1); color:#e7ffe9; }
+.opt.pick-wrong{ border-color:#e2574c; background:rgba(226,87,76,.1); color:#ffe4e1; }
+.opt.reveal-correct{ border-color:#5fd66d; }
+
+.just{
+  margin-left:46px; margin-top:14px; padding:12px 16px; border-radius:11px;
+  background:rgba(139,212,80,.06); border:1px solid rgba(139,212,80,.2);
+  font-size:.85rem; color:var(--mist-dim);
+  display:none;
+}
+@media (max-width:640px){ .just{margin-left:34px;} }
+.just.show{ display:block; animation: slidein .3s ease; }
+.just b{ color:var(--stage-a); font-family:var(--mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:4px;}
+@keyframes slidein{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+
+/* chapter footer badge */
+.chapter-foot{
+  margin-top:40px; padding:22px; border-radius:var(--radius);
+  border:1px dashed var(--stage-a); display:flex; align-items:center; gap:18px;
+  background: linear-gradient(120deg, var(--stage-glow), transparent);
+}
+.chapter-foot .medal{
+  width:52px;height:52px;border-radius:50%; flex-shrink:0;
+  background:radial-gradient(circle at 35% 30%, #fff8, var(--stage-a) 45%, var(--stage-b));
+  display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; color:#0a130a;
+}
+.chapter-foot .txt b{ display:block; font-family:var(--disp); font-size:1.05rem;}
+.chapter-foot .txt span{ color:var(--mist-dim); font-size:.85rem;}
+
+/* ============ FINALE ============ */
+.finale{
+  text-align:center; padding:90px 24px 60px; position:relative; z-index:1;
+  border-top:1px solid var(--line);
+}
+.finale h2{ font-family:var(--disp); font-size:clamp(2rem,4vw,3rem); margin:0 0 12px;
+  background:linear-gradient(100deg,#f2c14e,#ff6b4a); -webkit-background-clip:text;background-clip:text;color:transparent;}
+.finale p{ color:var(--mist-dim); max-width:520px; margin:0 auto 30px;}
+.finale-ring{ width:180px; height:180px; margin:0 auto 30px; position:relative;}
+.finale-ring svg{ width:100%; height:100%; }
+.finale-ring .center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.finale-ring .center b{ font-family:var(--disp); font-size:2.4rem; }
+.finale-ring .center span{ font-family:var(--mono); font-size:.65rem; color:var(--mist-dim); }
+.finale-btn{
+  display:inline-block; margin-top:6px; padding:13px 26px; border-radius:999px;
+  background: linear-gradient(100deg, var(--s1-a), var(--s3-a)); color:#08130a; font-weight:700;
+  font-family:var(--disp); font-size:1rem; letter-spacing:.02em; cursor:pointer; border:none;
+}
+
+footer.site-foot{ text-align:center; padding:30px 20px 50px; color:var(--mist-dim); font-family:var(--mono); font-size:.72rem; position:relative; z-index:1;}
+
+/* toast */
+.toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--panel-2); border:1px solid var(--stage-a, var(--s1-a)); color:var(--mist);
+  padding:12px 20px; border-radius:12px; font-family:var(--mono); font-size:.8rem;
+  opacity:0; pointer-events:none; transition:.3s; z-index:200; box-shadow:0 10px 30px rgba(0,0,0,.4);
+  display:flex; align-items:center; gap:10px;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="leaf-field"></div>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="dex-lens"></div>
+      <div>Sendero Treecko<small>UPLA · GRADOS Y TÍTULOS</small></div>
+    </div>
+    <nav class="evo-tabs" id="evoTabs"></nav>
+    <div class="crystal-wrap">
+      <div class="crystal" id="crystalIcon"></div>
+      <div class="crystal-label"><b id="crystalPct">0%</b>completado</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-eyebrow">Proyecto UPLA · Base de datos GradosTitulos</div>
+  <h1>El sendero evolutivo<br>de Azure SQL</h1>
+  <p class="lead">Cinco capítulos, cinco etapas de dominio. Igual que un Treecko se transforma en Mega Sceptile, aquí evolucionamos de conectarnos a SQL Azure hasta dominar transacciones y permisos por completo. Responde, revisa la justificación y avanza de fase.</p>
+
+  <div class="chain" id="evoChain"></div>
+
+  <div class="hero-stats">
+    <div class="hstat"><b id="statTotal">100</b><span>Preguntas totales</span></div>
+    <div class="hstat"><b id="statAnswered">0</b><span>Respondidas</span></div>
+    <div class="hstat"><b id="statAcc">—</b><span>Precisión</span></div>
+    <div class="hstat"><b id="statChaptersDone">0/5</b><span>Fases completas</span></div>
+  </div>
+</section>
+
+<!-- Chapters injected here -->
+<main id="chapters"></main>
+
+<!-- ============ FINALE ============ -->
+<section class="finale" id="finale">
+  <div class="finale-ring">
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+      <circle id="finaleArc" cx="50" cy="50" r="44" fill="none" stroke="url(#finaleGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5" transform="rotate(-90 50 50)"/>
+      <defs>
+        <linearGradient id="finaleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#8bd450"/>
+          <stop offset="50%" stop-color="#1f9d63"/>
+          <stop offset="100%" stop-color="#f2c14e"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="center"><b id="finaleScore">0/100</b><span>PUNTAJE FINAL</span></div>
+  </div>
+  <h2>El Templo Ancestral te espera</h2>
+  <p>Completa las cinco fases para ver tu evolución final desplegarse por completo, desde el brote de Treecko hasta el poder absoluto de Mega Sceptile.</p>
+  <button class="finale-btn" onclick="document.getElementById('evoChain').scrollIntoView({behavior:'smooth'})">Volver al inicio del sendero</button>
+</section>
+
+<footer class="site-foot">CUESTIONARIO 16 · CONTENIDO ORIGINAL PRESERVADO · DISEÑO TEMÁTICO SENDERO TREECKO</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATOS DEL CUESTIONARIO — Proyecto UPLA: Grados y Títulos
+// Contenido original preservado tal cual (preguntas, opciones,
+// respuestas y justificaciones). Solo cambia la piel visual.
+// ============================================================
+
+const QUIZ_DATA = [
+  // ---------------------------------------------------------
+  // CAPÍTULO 5 — Fase I: TREECKO — "El Brote del Bosque"
+  // ---------------------------------------------------------
+  {
+    id: "ch5",
+    stage: 1,
+    mascot: "Treecko",
+    roman: "I",
+    number: "05",
+    title: "Capítulo 5",
+    subtitle: "Conectar con SQL Azure",
+    zone: "El Brote del Bosque",
+    blurb: "Los primeros pasos: cómo un Treecko explora el terreno antes de saltar, aquí exploramos las formas de conectarse a Azure SQL Database.",
+    questions: [
+      { q: "¿Cuál es el protocolo utilizado por Azure SQL Database para las conexiones?", options: ["HTTP", "TDS sobre SSL", "FTP", "SMB"], correct: 1, just: "Azure SQL Database usa TDS (Tabular Data Stream) sobre SSL para garantizar conexiones seguras y compatibles con SQL Server." },
+      { q: "¿Qué información es obligatoria en una cadena de conexión ADO.NET para Azure SQL Database?", options: ["Server y Database", "Data Source y Initial Catalog", "User ID y Password", "Port y File Name"], correct: 0, just: "Mínimo se requiere Server y Database para identificar el servidor y la base de datos." },
+      { q: "¿Qué autenticación es compatible en Azure SQL Database?", options: ["Solo Windows Authentication", "Solo SQL Authentication", "SQL Authentication y Azure AD Authentication", "Solo Kerberos"], correct: 2, just: "Azure SQL Database permite SQL Authentication y Azure AD Authentication (Microsoft Entra ID)." },
+      { q: "Para conectarse usando SQL Server Management Studio (SSMS), ¿qué debes ingresar como nombre de servidor?", options: ["El nombre de la instancia local", "El nombre lógico del servidor Azure ej: miservidor.database.windows.net", "localhost", "127.0.0.1"], correct: 1, just: "En Azure se usa el FQDN del servidor lógico proporcionado durante la creación del servidor SQL." },
+      { q: "¿Qué puerto utiliza Azure SQL Database de forma predeterminada?", options: ["1433", "3389", "1521", "8080"], correct: 0, just: "El puerto 1433 es el predeterminado para las conexiones TDS en Azure SQL Database." },
+      { q: "¿Qué cadena de conexión ADO.NET es correcta para SQL Authentication?", options: ["Data Source=miservidor.database.windows.net; Initial Catalog=GradosTitulos; Integrated Security=True;", "Data Source=miservidor.database.windows.net; Initial Catalog=GradosTitulos; User ID=usuario;Password=clave;", "Server=miservidor; Database=GradosTitulos; Trusted_Connection=True;", "Data Source=localhost; Initial Catalog=GradosTitulos; User ID=sa;"], correct: 1, just: "Debe incluir Data Source, Initial Catalog, User ID y Password para SQL Authentication." },
+      { q: "¿Qué herramienta de línea de comandos permite conectarse a Azure SQL Database?", options: ["sqlcmd", "bcp", "osql", "isql"], correct: 0, just: "sqlcmd es la utilidad oficial de Microsoft para ejecutar comandos T-SQL desde línea de comandos." },
+      { q: "¿Qué es requerido en el firewall de Azure SQL Database para permitir conexiones desde Internet?", options: ["Abrir el puerto 1433 en el servidor local", "Crear una regla de firewall con la IP pública del cliente", "Deshabilitar el firewall del servidor Azure", "Usar Always Encrypted"], correct: 1, just: "Debes crear una regla de firewall con la IP del cliente para permitir el acceso." },
+      { q: "En ADO.NET, ¿qué clase se usa para representar una conexión a SQL Azure?", options: ["SqlConnection", "Connection", "AzureConnection", "SqlAzureClient"], correct: 0, just: "La clase SqlConnection del namespace System.Data.SqlClient (o Microsoft.Data.SqlClient) se usa para conectarse a SQL Azure." },
+      { q: "En ASP.NET, ¿qué objeto se usa para acceder a SQL Azure?", options: ["SqlCommand", "SqlDataSource", "SqlClient", "SqlDataAdapter"], correct: 1, just: "SqlDataSource facilita el acceso a SQL Azure en aplicaciones web ASP.NET." },
+      { q: "¿Cuál es la principal ventaja de usar connection pooling con SQL Azure?", options: ["Aumenta el tamaño máximo de la base de datos", "Reduce la latencia al reutilizar conexiones existentes", "Permite conectarse sin autenticación", "Mejora la seguridad del firewall"], correct: 1, just: "Reutilizar conexiones reduce el tiempo y recursos de abrir una nueva conexión hacia Azure." },
+      { q: "¿Qué framework permite trabajar con entidades y LINQ para SQL Azure?", options: ["ADO.NET Core", "Entity Framework", "Dapper", "NHibernate"], correct: 1, just: "Entity Framework permite trabajar con modelos de datos y LINQ para consultar SQL Azure." },
+      { q: "¿Qué clase se usa en Entity Framework para definir el contexto de datos?", options: ["DbSet", "DbContext", "SqlContext", "DataSet"], correct: 1, just: "DbContext representa una sesión con la base de datos y permite trabajar con las entidades definidas." },
+      { q: "¿Qué lenguaje NO fue abordado en este capítulo para conectarse a SQL Azure?", options: ["C# (ADO.NET)", "ASP.NET", "Java (JDBC)", "VBA (Excel)"], correct: 3, just: "El capítulo cubre ADO.NET, ASP.NET, WCF Data Services, PHP y JDBC, no VBA." },
+      { q: "¿Qué mecanismo usa WCF Data Services para exponer datos de SQL Azure?", options: ["REST / OData", "SOAP", "FTP", "gRPC"], correct: 0, just: "WCF Data Services usa OData (REST) para exponer entidades de SQL Azure." },
+      { q: "¿Qué acción mejora el rendimiento de las aplicaciones que consultan SQL Azure?", options: ["Usar consultas SELECT * siempre", "Crear índices adecuados", "Desactivar el connection pooling", "Conectarse desde múltiples IPs"], correct: 1, just: "Los índices adecuados reducen el tiempo de respuesta de las consultas." },
+      { q: "¿Qué propiedad en la cadena de conexión permite cifrar la conexión?", options: ["Encrypt=True", "TrustServerCertificate=True", "Integrated Security=True", "Application Intent=ReadOnly"], correct: 0, just: "Encrypt=True asegura que la conexión se cifre usando SSL/TLS." },
+      { q: "¿Cuál es un error común al conectarse a SQL Azure?", options: ["Usar el nombre del servidor local", "Olvidar especificar la base de datos", "Usar SQL Authentication", "Usar el puerto 1433"], correct: 0, just: "Debes usar el nombre lógico completo del servidor Azure (FQDN), no localhost." },
+      { q: "¿Qué servicio de Azure permite hospedar aplicaciones cercanas a SQL Azure?", options: ["Azure Blob Storage", "Azure App Service", "Azure Active Directory", "Azure Key Vault"], correct: 1, just: "Azure App Service permite hospedar aplicaciones web y APIs cerca de SQL Azure." },
+      { q: "¿Qué estrategia reduce la cantidad de llamadas a la base de datos?", options: ["Caché de resultados", "Usar SELECT *", "Deshabilitar el firewall", "Conexión por cada consulta"], correct: 0, just: "La caché reduce el número de consultas repetitivas a SQL Azure, mejorando rendimiento y costos." }
+    ]
+  },
+
+  // ---------------------------------------------------------
+  // CAPÍTULO 6 — Fase II: GROVYLE — "La Espada de Hojas"
+  // ---------------------------------------------------------
+  {
+    id: "ch6",
+    stage: 2,
+    mascot: "Grovyle",
+    roman: "II",
+    number: "06",
+    title: "Capítulo 6",
+    subtitle: "Transact-SQL en SQL Azure — Tipos de datos, funciones y operadores",
+    zone: "La Espada de Hojas",
+    blurb: "Más veloz y afilado: Grovyle domina el terreno igual que aquí dominamos los tipos de datos, funciones y operadores de T-SQL.",
+    questions: [
+      { q: "¿Qué tipo de dato es más adecuado para almacenar el código de un estudiante en Academico.Estudiante (código numérico)?", options: ["INT", "VARCHAR(10)", "NVARCHAR(50)", "DATETIME2"], correct: 0, just: "El tipo INT es óptimo para valores numéricos enteros, ocupa menos espacio y tiene mejor rendimiento." },
+      { q: "¿Qué tipo de dato de Azure SQL Database permite almacenar textos largos como la descripción de Catalogo.LineaInvestigacion?", options: ["CHAR(100)", "VARCHAR(200)", "NVARCHAR(MAX)", "TEXT"], correct: 2, just: "NVARCHAR(MAX) admite cadenas muy largas (hasta 2 GB) y soporta caracteres Unicode, ideal para descripciones extensas." },
+      { q: "¿Qué tipo de dato se debe usar para almacenar el monto en Tramite.Pago (campo Monto)?", options: ["FLOAT", "MONEY", "DECIMAL(12,2)", "INT"], correct: 2, just: "DECIMAL(12,2) garantiza precisión exacta en valores monetarios, evitando errores de redondeo de FLOAT." },
+      { q: "¿Qué tipo de dato permite almacenar fechas y horas con mayor precisión en Azure SQL Database?", options: ["DATETIME", "DATETIME2", "SMALLDATETIME", "DATE"], correct: 1, just: "DATETIME2 tiene mayor precisión (100 ns) y rango de fechas más amplio que DATETIME y SMALLDATETIME." },
+      { q: "En Documento.TrabajoInvestigacion, para almacenar el archivo de trabajo (PDF), ¿qué tipo es el más adecuado?", options: ["VARCHAR(50)", "IMAGE", "VARBINARY(MAX)", "BINARY(8000)"], correct: 2, just: "VARBINARY(MAX) permite almacenar datos binarios grandes (hasta 2 GB). IMAGE está en desuso y no es recomendado." },
+      { q: "¿Qué tipo de dato espacial es ideal para registrar la ubicación geográfica de una sede de la universidad?", options: ["GEOMETRY", "GEOGRAPHY", "POINT", "COORDINATES"], correct: 1, just: "GEOGRAPHY está diseñado para datos geoespaciales en la superficie de la Tierra y trabaja con latitud/longitud." },
+      { q: "¿Qué tipo de dato especial permite gestionar jerarquías como la estructura de facultades y escuelas?", options: ["XML", "HIERARCHYID", "NTEXT", "GRAPH"], correct: 1, just: "HIERARCHYID permite representar datos jerárquicos de forma eficiente (árboles organizacionales)." },
+      { q: "¿Cuál función de agregado es la más apropiada para obtener el número total de trámites en Tramite.Tramite?", options: ["COUNT(*)", "SUM(IdTramite)", "AVG(IdTramite)", "MAX(IdTramite)"], correct: 0, just: "COUNT(*) devuelve el número total de filas, incluyendo valores nulos. SUM/AVG/MAX no cuentan filas." },
+      { q: "¿Qué función escalar devuelve el nombre de la facultad en mayúsculas?", options: ["UPPER(NombreFacultad)", "LOWER(NombreFacultad)", "CONCAT(NombreFacultad)", "LEN(NombreFacultad)"], correct: 0, just: "UPPER convierte el texto a mayúsculas. LOWER a minúsculas. CONCAT concatena textos y LEN devuelve longitud." },
+      { q: "¿Qué función de fecha devuelve el año del PlanTesis.FechaPlan?", options: ["YEAR(FechaPlan)", "GETYEAR(FechaPlan)", "EXTRACT(YEAR FROM FechaPlan)", "DATEPART(YY, FechaPlan)"], correct: 0, just: "YEAR() es compatible en Azure SQL Database. EXTRACT no es compatible. DATEPART es válido pero menos legible." },
+      { q: "¿Qué operador se usa para concatenar el nombre y apellido del estudiante?", options: ["+", "&", "||", "CONCAT"], correct: 0, just: "El operador + concatena cadenas en Azure SQL Database. || no está soportado." },
+      { q: "¿Qué operador lógico se usa para combinar condiciones en WHERE?", options: ["AND", "&&", "OR", "XOR"], correct: 0, just: "AND combina condiciones y devuelve verdadero solo si ambas son verdaderas." },
+      { q: "¿Qué operador de comparación se usa para verificar si el Monto es mayor a 500 en Tramite.Pago?", options: [">", "=>", "GE", "<>"], correct: 0, just: "> es el operador estándar para \"mayor que\". GE no existe en Transact-SQL." },
+      { q: "¿Qué vista del sistema muestra las columnas de todas las tablas de la base de datos actual?", options: ["INFORMATION_SCHEMA.COLUMNS", "sys.columns", "sys.tables", "sys.objects"], correct: 1, just: "sys.columns devuelve metadatos de columnas con más información de rendimiento y compatibilidad que INFORMATION_SCHEMA." },
+      { q: "¿Qué vista permite obtener información sobre el uso de CPU y tiempo de ejecución de las consultas?", options: ["sys.dm_exec_query_stats", "sys.tables", "sys.database_files", "sys.users"], correct: 0, just: "sys.dm_exec_query_stats contiene estadísticas de ejecución de consultas en Azure SQL Database." },
+      { q: "¿Qué vista de administración dinámica muestra las sesiones conectadas al servidor?", options: ["sys.dm_exec_sessions", "sys.sessions", "INFORMATION_SCHEMA.SESSIONS", "sys.dm_os_wait_stats"], correct: 1, just: "sys.dm_exec_sessions muestra detalles de cada sesión y conexión activa." },
+      { q: "¿Qué vista de catálogo muestra los índices de una tabla específica?", options: ["sys.indexes", "sys.objects", "sys.foreign_keys", "sys.check_constraints"], correct: 0, just: "sys.indexes devuelve información de todos los índices de las tablas." },
+      { q: "¿Qué función de agregación devuelve el promedio del monto de pagos?", options: ["AVG(Monto)", "SUM(Monto)", "COUNT(Monto)", "MIN(Monto)"], correct: 0, just: "AVG() calcula el promedio. SUM suma, COUNT cuenta, MIN obtiene el mínimo." },
+      { q: "¿Qué vista de sistema muestra las consultas que están consumiendo más CPU?", options: ["sys.dm_exec_query_stats (ordenado por total_worker_time)", "sys.dm_exec_sessions", "sys.dm_os_wait_stats", "sys.database_usage"], correct: 0, just: "total_worker_time en sys.dm_exec_query_stats indica el tiempo de CPU usado por consulta." },
+      { q: "¿Cuál es la ventaja principal de usar vistas de sistema (sys.*) en Azure SQL Database?", options: ["Administran copias de seguridad", "Permiten monitoreo y optimización", "Crean tablas automáticamente", "Manejan archivos físicos"], correct: 1, just: "Las vistas sys.* proporcionan información en tiempo real para monitoreo y mejora del rendimiento." }
+    ]
+  },
+
+  // ---------------------------------------------------------
+  // CAPÍTULO 7 — Fase III: SCEPTILE — "El Guardián Ancestral"
+  // ---------------------------------------------------------
+  {
+    id: "ch7",
+    stage: 3,
+    mascot: "Sceptile",
+    roman: "III",
+    number: "07",
+    title: "Capítulo 7",
+    subtitle: "Transact-SQL en SQL Azure — Instrucciones admitidas y procedimientos del sistema",
+    zone: "El Guardián Ancestral",
+    blurb: "Sceptile conoce cada rincón de su territorio: qué está permitido y qué no. Aquí distinguimos lo compatible de lo no soportado en Azure.",
+    questions: [
+      { q: "¿Cuál de las siguientes instrucciones Transact-SQL está COMPLETAMENTE ADMITIDA en Azure SQL Database?", options: ["CREATE TABLE", "BACKUP DATABASE", "ALTER DATABASE ... ADD FILE", "DBCC CHECKDB"], correct: 0, just: "CREATE TABLE es totalmente compatible en Azure SQL Database. Las opciones B, C y D no son soportadas porque implican recursos físicos administrados por Azure." },
+      { q: "¿Qué instrucción está NO SOPORTADA en Azure SQL Database?", options: ["CREATE INDEX", "ALTER INDEX REBUILD", "CREATE LOGIN", "ALTER DATABASE SET MAXSIZE"], correct: 2, just: "CREATE LOGIN es una instrucción de nivel de servidor y no está soportada. Los logins se crean desde el portal o mediante la API de administración, no con Transact-SQL." },
+      { q: "¿Qué instrucción está ADMITIDA de forma PARCIAL en Azure SQL Database?", options: ["CREATE DATABASE", "DROP DATABASE", "CREATE LOGIN", "ALTER DATABASE"], correct: 3, just: "ALTER DATABASE está soportada parcialmente; muchas opciones (FILE, FILEGROUP, REORGANIZE, etc.) no están disponibles en Azure." },
+      { q: "¿Cuál de las siguientes instrucciones NO ES COMPATIBLE por depender de recursos físicos?", options: ["CREATE TABLE", "DBCC SHRINKFILE", "CREATE VIEW", "INSERT INTO"], correct: 1, just: "DBCC SHRINKFILE actúa sobre archivos físicos (MDF/LDF), los cuales no existen ni pueden administrarse en Azure SQL Database." },
+      { q: "¿Qué es correcto respecto a las instrucciones SET en Azure SQL Database?", options: ["Todas las instrucciones SET están permitidas", "Algunas SET están admitidas y otras no", "Ninguna SET se admite", "Solo SET NOCOUNT está admitida"], correct: 1, just: "Muchas instrucciones SET están admitidas (ANSI_NULLS, QUOTED_IDENTIFIER, ARITHABORT, etc.) pero otras no (CONTEXT_INFO, TEXTSIZE > 2147483647, etc.)." },
+      { q: "¿Qué instrucción está PERMITIDA pero su funcionalidad es limitada en Azure SQL Database?", options: ["CREATE FUNCTION", "EXECUTE AS LOGIN", "CREATE TRIGGER", "MERGE"], correct: 1, just: "EXECUTE AS LOGIN no está soportada en Azure SQL Database, solo EXECUTE AS USER o EXECUTE AS CALLER." },
+      { q: "¿Cuál de los siguientes ejemplos funcionará correctamente en Azure SQL Database?\nCREATE TABLE Academico.Estudiante(\n  IdEstudiante INT IDENTITY(1,1) PRIMARY KEY,\n  CodigoEstudiante VARCHAR(20) NOT NULL,\n  Apellidos VARCHAR(150) NOT NULL\n);", options: ["Sí, totalmente compatible", "No, por el IDENTITY", "No, por la clave primaria", "No, por el esquema"], correct: 0, just: "IDENTITY, PRIMARY KEY y el uso de esquemas son completamente soportados." },
+      { q: "¿Qué procedimiento almacenado del sistema se usa para obtener información de espacio de las bases de datos?", options: ["sp_helpdb", "sp_spaceused", "sp_databases", "sp_who2"], correct: 1, just: "sp_spaceused devuelve el espacio utilizado y disponible por base de datos, tabla o índice en Azure SQL Database." },
+      { q: "¿Qué procedimiento del sistema muestra los archivos y tamaño lógico dentro de la base de datos?", options: ["sp_helpfile", "sp_helpdb", "sp_help", "sp_monitor"], correct: 0, just: "sp_helpfile muestra información de los archivos lógicos (no físicos) disponibles en la base de datos." },
+      { q: "¿Qué procedimiento del sistema permite obtener información de permisos y roles en la base de datos?", options: ["sp_helpremember", "sp_helpuser", "sp_helptext", "sp_tables"], correct: 1, just: "sp_helpuser muestra los usuarios y sus propiedades dentro de la base de datos, incluyendo esquemas y roles." },
+      { q: "¿Qué procedimiento devuelve las opciones de configuración actuales de la base de datos?", options: ["sp_configure", "sp_dboption", "sp_helpdb", "sp_helpsort"], correct: 1, just: "sp_dboption devuelve las opciones de la base de datos, como 'read only', 'auto close' y 'ANSI nulls' entre otras." },
+      { q: "¿Qué procedimiento del sistema se utiliza para obtener estadísticas de uso de los índices?", options: ["sp_indexusage", "sp_monitor", "sp_helpindex", "sp_perfinfo"], correct: 0, just: "sp_indexusage devuelve la actividad de cada índice (búsquedas, exploraciones, inserciones, actualizaciones y eliminaciones)." },
+      { q: "¿Qué instrucción NO ESTÁ SOPORTADA porque intenta modificar el motor de la base de datos?", options: ["ALTER DATABASE SET READ_WRITE", "ALTER DATABASE SET AUTO_CLOSE OFF", "ALTER DATABASE REGARDING FILES", "ALTER DATABASE SET COMPATIBILITY_LEVEL"], correct: 0, just: "Las opciones que hacen referencia a archivos o grupos de archivos no son soportadas en Azure SQL Database." },
+      { q: "¿Qué instrucción Transact-SQL se permite en Azure SQL Database para crear funciones escalares?\nCREATE FUNCTION Academico.fn_Edad (@FechaNacimiento DATE)\nRETURNS INT AS\nBEGIN\n  RETURN DATEDIFF(YEAR,@FechaNacimiento,GETDATE());\nEND;", options: ["Sí", "No, funciones no están permitidas", "Solo funciones de tabla", "No, por usar GETDATE()"], correct: 0, just: "Las funciones escalares son totalmente compatibles en Azure SQL Database." },
+      { q: "¿Qué instrucción NO está soportada para administrar el servidor en Azure SQL Database?", options: ["CREATE USER", "RECONFIGURE", "SHUTDOWN", "ALTER LOGIN"], correct: 2, just: "SHUTDOWN no está permitido porque Azure administra la infraestructura y los procesos del motor." },
+      { q: "¿Qué vista de catálogo NO existe en Azure SQL Database?", options: ["sys.tables", "sys.databases", "sys.server_principals", "sys.indexes"], correct: 2, just: "En Azure SQL Database no existe el nivel de servidor tradicional, por lo que sys.server_principals no está disponible." },
+      { q: "¿Qué excepción es común al tratar de usar una instrucción no soportada?", options: ["Msg 102, Incorrect syntax", "Msg 40501, Service busy", "Msg 40510, Feature not supported", "Msg 208, Invalid object name"], correct: 2, just: "Azure SQL Database devuelve el error 40510 cuando una característica o instrucción no está soportada en el servicio." },
+      { q: "¿Qué práctica se recomienda para migrar código Transact-SQL a Azure SQL Database?", options: ["Usar todas las características avanzadas de SQL Server", "Evitar vistas de sistema", "Revisar compatibilidad y eliminar instrucciones no soportadas", "Desconocer errores en producción"], correct: 2, just: "Siempre validar compatibilidad y adaptar el código a las limitaciones del servicio para evitar errores en producción." },
+      { q: "¿Cuál de los siguientes NO es un procedimiento almacenado del sistema disponible en Azure SQL Database?", options: ["sp_helpconstraint", "sp_helpindex", "sp_cycle_errorlog", "sp_helptext"], correct: 2, just: "sp_cycle_errorlog está relacionado con el error log del servidor físico, no disponible en el motor de Azure SQL Database." },
+      { q: "¿Qué muestra la vista sys.dm_exec_requests?", options: ["Solo conexiones", "Sesiones de los usuarios", "Consultas en ejecución y su estado", "Catálogo de tablas"], correct: 2, just: "Es una vista de administración dinámica que muestra las solicitudes activas en el motor de SQL Azure." }
+    ]
+  },
+
+  // ---------------------------------------------------------
+  // CAPÍTULO 8 — Fase IV: MEGA SCEPTILE — "La Forma Mega"
+  // ---------------------------------------------------------
+  {
+    id: "ch8",
+    stage: 4,
+    mascot: "Mega Sceptile",
+    roman: "IV",
+    number: "08",
+    title: "Capítulo 8",
+    subtitle: "Transact-SQL en SQL Azure — Lenguaje de Definición de Datos (DDL)",
+    zone: "La Forma Mega",
+    blurb: "La energía Mega desata todo el potencial: crear, alterar y eliminar objetos con DDL, con el poder pleno de Azure SQL Database.",
+    questions: [
+      { q: "¿Cuál de las siguientes instrucciones se usa para crear una tabla en Azure SQL Database?", options: ["CREATE TABLE", "NEW TABLE", "ADD TABLE", "MAKE TABLE"], correct: 0, just: "CREATE TABLE es la instrucción estándar y totalmente compatible para crear tablas en Azure SQL Database." },
+      { q: "¿Qué instrucción permite modificar la estructura de la tabla Academico.Estudiante agregando la columna CorreoElectronico?", options: ["ALTER TABLE", "MODIFY TABLE", "UPDATE TABLE", "CHANGE TABLE"], correct: 0, just: "ALTER TABLE permite agregar, modificar o eliminar columnas y restricciones en Azure SQL Database." },
+      { q: "¿Qué instrucción se utiliza para eliminar la tabla Tramite.Tramite?", options: ["REMOVE TABLE", "DROP TABLE", "DELETE TABLE", "ERASE TABLE"], correct: 1, just: "DROP TABLE elimina la tabla y todos sus datos. La opción DELETE solo elimina registros, no la estructura." },
+      { q: "¿Qué instrucción permite crear un índice en la columna CodigoEstudiante de la tabla Academico.Estudiante?", options: ["CREATE INDEX", "CREATE KEY", "ADD INDEX", "MAKE INDEX"], correct: 0, just: "CREATE INDEX es la instrucción correcta en Azure SQL Database." },
+      { q: "¿Cuál de las siguientes instrucciones NO está soportada en Azure SQL Database?", options: ["CREATE TABLE", "ALTER INDEX REBUILD", "CREATE DATABASE ... ON PRIMARY", "CREATE VIEW"], correct: 2, just: "Azure SQL Database NO permite especificar archivos ni grupos de archivos." },
+      { q: "¿Qué instrucción permite agregar una clave primaria a la tabla Documento.Resolucion?", options: ["ADD PRIMARY KEY", "ALTER TABLE", "CREATE PRIMARY KEY", "MODIFY PRIMARY KEY"], correct: 1, just: "Se usa ALTER TABLE ... ADD CONSTRAINT para agregar la clave primaria." },
+      { q: "¿Qué instrucción se utiliza para crear una vista que muestre estudiantes y su programa de estudios?", options: ["CREATE VIEW", "CREATE TABLE", "ALTER VIEW", "DROP VIEW"], correct: 0, just: "CREATE VIEW genera la vista virtual sin almacenar datos." },
+      { q: "¿Qué instrucción permite eliminar una vista en Azure SQL Database?", options: ["REMOVE VIEW", "DROP VIEW", "DELETE VIEW", "CLEAR VIEW"], correct: 1, just: "DROP VIEW elimina la vista y su definición del catálogo." },
+      { q: "¿Qué instrucción se utiliza para crear un procedimiento almacenado llamado Tramite.sp_RegistrarTramite?", options: ["CREATE PROCEDURE", "CREATE SP", "NEW PROCEDURE", "ADD PROCEDURE"], correct: 0, just: "CREATE PROCEDURE es la instrucción estándar en Azure SQL Database." },
+      { q: "¿Qué instrucción permite modificar un procedimiento almacenado existente?", options: ["ALTER PROCEDURE", "MODIFY PROCEDURE", "REPLACE PROCEDURE", "UPDATE PROCEDURE"], correct: 0, just: "ALTER PROCEDURE se usa para modificar el código del procedimiento." },
+      { q: "¿Qué instrucción crea una función escalar que devuelve el nombre de la facultad?", options: ["CREATE FUNCTION", "CREATE PROCEDURE", "CREATE VIEW", "CREATE SCALAR"], correct: 0, just: "Las funciones escalares se crean con CREATE FUNCTION." },
+      { q: "¿Qué instrucción crea una función de tabla que retorna una tabla con los trámites de un estudiante?", options: ["CREATE FUNCTION", "CREATE PROCEDURE", "CREATE TABLE FUNCTION", "CREATE VIEW"], correct: 0, just: "Las funciones de tabla se crean con CREATE FUNCTION y RETURN TABLE." },
+      { q: "¿Qué instrucción se utiliza para crear un esquema llamado Reportes?", options: ["CREATE SCHEMA", "NEW SCHEMA", "ADD SCHEMA", "MAKE SCHEMA"], correct: 0, just: "CREATE SCHEMA define un nuevo espacio de nombres lógico." },
+      { q: "¿Qué instrucción permite crear un tipo de dato definido por el usuario?", options: ["CREATE TYPE", "CREATE DATATYPE", "NEW TYPE", "ADD TYPE"], correct: 0, just: "CREATE TYPE genera tipos definidos por el usuario en Azure SQL Database." },
+      { q: "¿Qué instrucción permite crear un sinónimo para simplificar el acceso a Academico.Estudiante?", options: ["CREATE SYNONYM", "CREATE ALIAS", "CREATE SHORTCUT", "ADD SYNONYM"], correct: 0, just: "CREATE SYNONYM crea un alias para objetos, útil en migraciones." },
+      { q: "¿Qué instrucción crea un disparador (Trigger) que se ejecute al insertar en Tramite.Tramite?", options: ["CREATE TRIGGER", "CREATE EVENT", "CREATE ACTION", "ADD TRIGGER"], correct: 0, just: "CREATE TRIGGER define reglas que se ejecutan automáticamente ante eventos." },
+      { q: "¿Qué instrucción se usa para eliminar un índice llamado IX_Tramite_Estudiante?", options: ["DELETE INDEX", "DROP INDEX", "REMOVE INDEX", "CLEAR INDEX"], correct: 1, just: "DROP INDEX elimina el índice del catálogo y libera espacio." },
+      { q: "¿Qué instrucción permite eliminar una restricción de clave foránea?", options: ["DROP CONSTRAINT", "DELETE CONSTRAINT", "REMOVE CONSTRAINT", "ALTER CONSTRAINT DROP"], correct: 0, just: "DROP CONSTRAINT elimina la restricción especificada." },
+      { q: "¿Qué instrucción permite cambiar el tipo de dato de la columna NumSemestres en Academico.ProgramaEstudios?", options: ["ALTER TABLE ... ALTER COLUMN", "UPDATE COLUMN TYPE", "CHANGE COLUMN TYPE", "MODIFY COLUMN TYPE"], correct: 0, just: "ALTER TABLE ... ALTER COLUMN modifica el tipo de dato de una columna existente." },
+      { q: "¿Qué práctica es recomendada al eliminar objetos en Azure SQL Database?", options: ["Eliminar sin revisar dependencias", "Usar DROP CASCADE siempre", "Revisar dependencias antes de eliminar", "Usar DELETE en lugar de DROP siempre"], correct: 2, just: "Revisar dependencias evita errores y pérdida de objetos relacionados." }
+    ]
+  },
+
+  // ---------------------------------------------------------
+  // CAPÍTULO 9 — Prueba Suprema: MEGA SCEPTILE — "El Templo Final"
+  // ---------------------------------------------------------
+  {
+    id: "ch9",
+    stage: 5,
+    mascot: "Mega Sceptile",
+    roman: "IV",
+    number: "09",
+    title: "Capítulo 9",
+    subtitle: "Transact-SQL en SQL Azure — DML, DCL y TCL",
+    zone: "El Templo Final",
+    blurb: "La prueba definitiva del templo ancestral: manipular datos, controlar permisos y administrar transacciones con total dominio.",
+    questions: [
+      { q: "¿Qué instrucción se utiliza para insertar un trámite en la tabla Tramite.Tramite?", options: ["UPDATE Tramite.Tramite", "INSERT INTO Tramite.Tramite", "ADD Tramite.Tramite", "CREATE Tramite.Tramite"], correct: 1, just: "INSERT INTO agrega nuevas filas a una tabla existente." },
+      { q: "¿Qué instrucción permite modificar la fecha de inicio de un trámite?", options: ["CHANGE", "MODIFY", "UPDATE", "ALTER"], correct: 2, just: "UPDATE modifica datos existentes en las filas de una tabla." },
+      { q: "¿Qué instrucción elimina un registro de la tabla Pago.Pago?", options: ["REMOVE", "DELETE", "DROP", "CLEAR"], correct: 1, just: "DELETE elimina filas específicas sin eliminar la estructura de la tabla." },
+      { q: "¿Qué instrucción permite seleccionar estudiantes con estado de trámite APROBADO?", options: ["SELECT * FROM Tramite.Tramite WHERE IdEstadoTramite = 5", "GET FROM Tramite.Tramite", "READ FROM Tramite.Tramite", "SHOW FROM Tramite.Tramite"], correct: 0, just: "SELECT permite consultar datos según condiciones." },
+      { q: "¿Qué comando DCL otorga permiso SELECT sobre Academico.Estudiante a un rol?", options: ["PERMIT SELECT", "GRANT SELECT", "ALLOW SELECT", "AUTHORIZE SELECT"], correct: 1, just: "GRANT concede permisos específicos a roles o usuarios." },
+      { q: "¿Qué comando DCL revoca el permiso INSERT sobre Documento.TrabajoInvestigacion de un rol?", options: ["CANCEL INSERT", "REVOKE INSERT", "DENY INSERT", "REMOVE INSERT"], correct: 1, just: "REVOKE quita permisos previamente otorgados." },
+      { q: "¿Qué comando DCL niega el permiso UPDATE sobre Tramite.Tramite a un usuario?", options: ["REVOKE UPDATE", "DENY UPDATE", "GRANT UPDATE", "CANCEL UPDATE"], correct: 1, just: "DENY impide explícitamente una acción, incluso si existe permiso heredado." },
+      { q: "¿Qué comando permite ejecutar un procedimiento almacenado cuando quieres hacerlo como otro usuario?", options: ["EXECUTE AS", "RUN AS", "PERFORM AS", "EXEC AS"], correct: 0, just: "EXECUTE AS cambia el contexto de seguridad durante la ejecución." },
+      { q: "¿Qué rol tiene el permiso para crear nuevas bases de datos en SQL Azure?", options: ["db_owner", "db_ddladmin", "db_datawriter", "db_securityadmin"], correct: 0, just: "db_owner tiene todos los permisos dentro de la base de datos, incluido CREATE DATABASE." },
+      { q: "¿Qué comando permite cambiar el contexto de base de datos?", options: ["USE", "SET DATABASE", "GO TO DATABASE", "CHANGE DATABASE"], correct: 0, just: "USE establece la base de datos para el contexto actual." },
+      { q: "¿Qué comando inicia una transacción?", options: ["BEGIN TRANSACTION", "START TRANSACTION", "OPEN TRANSACTION", "INIT TRANSACTION"], correct: 0, just: "BEGIN TRANSACTION inicia una unidad de trabajo transaccional." },
+      { q: "¿Qué comando confirma los cambios realizados dentro de una transacción?", options: ["SAVE", "COMMIT", "CONFIRM", "APPLY"], correct: 1, just: "COMMIT confirma permanentemente todas las operaciones." },
+      { q: "¿Qué comando deshace los cambios realizados dentro de una transacción?", options: ["CANCEL", "UNDO", "ROLLBACK", "REVERSE"], correct: 2, just: "ROLLBACK revierte todas las operaciones desde el inicio de la transacción." },
+      { q: "¿Qué aislamiento garantiza que se lean únicamente datos confirmados?", options: ["READ UNCOMMITTED", "READ COMMITTED", "REPEATABLE READ", "SERIALIZABLE"], correct: 1, just: "READ COMMITTED evita lecturas sucias y solo muestra datos confirmados." },
+      { q: "¿Qué opción combina atomicidad, consistencia, aislamiento y durabilidad?", options: ["ACID", "BASE", "SQL", "DDL"], correct: 0, just: "ACID son las propiedades esenciales de las transacciones en bases de datos relacionales." },
+      { q: "¿Qué vista muestra los permisos que tiene el rol 'rol_consultas' para operaciones?", options: ["SELECT * FROM sys.permissions", "WHERE name = 'rol_consultas'", "Asignar permisos mínimos", "Permitir acceso sin autenticación"], correct: 1, just: "El principio de mínimo privilegio reduce riesgos de accesos indebidos." },
+      { q: "¿Qué vista permite ver los permisos otorgados a nivel de base de datos?", options: ["sys.database_permissions", "sys.server_permissions", "sys.sql_permissions", "sys.permissions_global"], correct: 0, just: "sys.database_permissions contiene los permisos a nivel de base." },
+      { q: "¿Qué acción mejora la seguridad al crear un usuario para cada persona?", options: ["Usar inicio de sesión compartido", "Usar roles fijos únicamente", "Asignar permisos mínimos", "Permitir acceso sin autenticación"], correct: 2, just: "El principio de mínimo privilegio reduce riesgos de accesos indebidos." },
+      { q: "¿Qué práctica ayuda a mantener la integridad en las operaciones financieras de Pago.Pago?", options: ["No usar transacciones", "Usar transacciones para agrupar operaciones relacionadas", "Conceder permisos a todos", "Evitar usar COMMIT"], correct: 1, just: "Las transacciones garantizan integridad y consistencia de los datos." },
+      { q: "¿Qué comando permite conceder ejecución de un procedimiento almacenado a un rol?", options: ["GRANT EXECUTE ON", "GRANT RUN ON", "AUTH EXEC ON", "EXECUTE GRANT ON"], correct: 0, just: "GRANT EXECUTE ON permite que el rol ejecute el procedimiento almacenado." }
+    ]
+  }
+];
+
+</script>
+<script>
+/* ============================================================
+   ICONOGRAFÍA — siluetas geométricas originales de "criaturas
+   reptil" inspiradas en el concepto de evolución (no reproducen
+   ilustraciones de personajes con derechos de autor).
+   ============================================================ */
+const STAGE_ICON = {
+  1: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 6c-7 0-12 5-12 12 0 5 3 8 3 12 0 6 4 10 9 10s9-4 9-10c0-4 3-7 3-12 0-7-5-12-12-12z" fill="currentColor" opacity=".85"/><circle cx="19" cy="16" r="2" fill="#08130a"/><circle cx="29" cy="16" r="2" fill="#08130a"/><path d="M14 30c-3 2-5 5-5 8M34 30c3 2 5 5 5 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+  2: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c-6 0-10 4-10 10 0 6 4 8 4 14 0 6 4 10 8 10s8-4 8-10c0-6 4-8 4-14 0-6-4-10-10-10z" fill="currentColor" opacity=".85"/><circle cx="18" cy="15" r="2" fill="#08130a"/><circle cx="26" cy="15" r="2" fill="#08130a"/><path d="M8 12c4-2 6 2 6 2M40 12c-4-2-6 2-6 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 40l-4 6M28 40l4 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+  3: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4c-7 0-11 5-11 11 0 7 4 9 4 16 0 7 3 13 7 13s7-6 7-13c0-7 4-9 4-16 0-6-4-11-11-11z" fill="currentColor" opacity=".85"/><circle cx="20" cy="14" r="2" fill="#08130a"/><circle cx="28" cy="14" r="2" fill="#08130a"/><path d="M6 8c6-3 9 3 9 3M42 8c-6-3-9 3-9 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M24 44c8 2 12-4 12-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".6"/></svg>`,
+  4: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 3c-8 0-12 6-12 12 0 8 5 10 5 18 0 7 3 12 7 12s7-5 7-12c0-8 5-10 5-18 0-6-4-12-12-12z" fill="currentColor" opacity=".9"/><circle cx="19" cy="14" r="2.2" fill="#08130a"/><circle cx="29" cy="14" r="2.2" fill="#08130a"/><path d="M4 6c7-4 11 4 11 4M44 6c-7-4-11 4-11 4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M24 45c10 2 15-6 15-14M24 45c-10 2-15-6-15-14" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".55"/></svg>`
+};
+STAGE_ICON[5] = STAGE_ICON[4];
+
+const STAGE_COLORS = {
+  1:['--s1-a','--s1-b','--s1-glow'],
+  2:['--s2-a','--s2-b','--s2-glow'],
+  3:['--s3-a','--s3-b','--s3-glow'],
+  4:['--s4-a','--s4-b','--s4-glow'],
+  5:['--s5-a','--s5-b','--s5-glow'],
+};
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function stageVars(stage){
+  const [a,b,g] = STAGE_COLORS[stage];
+  return { a: cssVar(a), b: cssVar(b), g: cssVar(g) };
+}
+
+/* ============ STATE ============ */
+const STATE = {}; // STATE[chapterId] = { answered:{qIdx:{picked,correct}} }
+QUIZ_DATA.forEach(ch => STATE[ch.id] = { answered:{} });
+
+function totalQuestions(){ return QUIZ_DATA.reduce((s,c)=>s+c.questions.length,0); }
+function totalAnswered(){ return QUIZ_DATA.reduce((s,c)=>s+Object.keys(STATE[c.id].answered).length,0); }
+function totalCorrect(){ return QUIZ_DATA.reduce((s,c)=>s+Object.values(STATE[c.id].answered).filter(a=>a.correct).length,0); }
+function chapterAnswered(ch){ return Object.keys(STATE[ch.id].answered).length; }
+function chapterCorrect(ch){ return Object.values(STATE[ch.id].answered).filter(a=>a.correct).length; }
+function chapterComplete(ch){ return chapterAnswered(ch) === ch.questions.length; }
+function chaptersCompleteCount(){ return QUIZ_DATA.filter(chapterComplete).length; }
+
+/* ============ RENDER: TOP NAV TABS ============ */
+const evoTabs = document.getElementById('evoTabs');
+function renderTabs(){
+  evoTabs.innerHTML = QUIZ_DATA.map(ch=>{
+    const v = stageVars(ch.stage);
+    const done = chapterAnswered(ch);
+    return `<div class="evo-tab" data-target="${ch.id}" style="--stage-a:${v.a}">
+      <span class="badge">${ch.roman}</span>
+      <span>${ch.mascot}</span>
+      <span class="prog">${done}/${ch.questions.length}</span>
+    </div>`;
+  }).join('');
+  evoTabs.querySelectorAll('.evo-tab').forEach(t=>{
+    t.addEventListener('click', ()=>{
+      document.getElementById('sec-'+t.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+/* ============ RENDER: HERO EVOLUTION CHAIN ============ */
+const evoChain = document.getElementById('evoChain');
+function renderChain(){
+  const stages = [1,2,3,4,5];
+  const uniqueMascots = [];
+  QUIZ_DATA.forEach(ch=>{ if(!uniqueMascots.find(m=>m.stage===ch.stage)) uniqueMascots.push(ch); });
+  let html='';
+  uniqueMascots.forEach((ch,i)=>{
+    const v = stageVars(ch.stage);
+    html += `<div class="chain-node" data-target="${ch.id}" style="--node-c:${v.a};--node-glow:${v.g}">
+      <div class="ring" style="color:${v.a}">${STAGE_ICON[ch.stage]}</div>
+      <div class="name">${ch.mascot}</div>
+      <div class="stagelabel">FASE ${ch.roman} · CAP. ${ch.number}</div>
+    </div>`;
+    if(i < uniqueMascots.length-1) html += `<div class="chain-arrow"></div>`;
+  });
+  evoChain.innerHTML = html;
+  evoChain.querySelectorAll('.chain-node').forEach(n=>{
+    n.addEventListener('click', ()=> document.getElementById('sec-'+n.dataset.target).scrollIntoView({behavior:'smooth'}));
+  });
+}
+
+/* ============ RENDER: CHAPTERS ============ */
+const chaptersEl = document.getElementById('chapters');
+function renderChapters(){
+  chaptersEl.innerHTML = QUIZ_DATA.map(ch=>{
+    const v = stageVars(ch.stage);
+    const qs = ch.questions.map((q,i)=>{
+      const letters=['A','B','C','D'];
+      const opts = q.options.map((o,oi)=>`<button class="opt" data-oi="${oi}"><span class="let">${letters[oi]}</span><span>${o}</span></button>`).join('');
+      return `<article class="qcard" id="${ch.id}-q${i}" data-ch="${ch.id}" data-qi="${i}">
+        <div class="qhead">
+          <div class="qnum">${String(i+1).padStart(2,'0')}</div>
+          <div class="qtext">${q.q.replace(/\n/g,'<br>')}</div>
+        </div>
+        <div class="opts">${opts}</div>
+        <div class="just" id="${ch.id}-just${i}"><b>Justificación</b>${q.just}</div>
+      </article>`;
+    }).join('');
+    return `<section class="chapter" id="sec-${ch.id}" style="--stage-a:${v.a};--stage-b:${v.b};--stage-glow:${v.g}">
+      <div class="chapter-inner">
+        <div class="chapter-head">
+          <div class="chapter-mark">
+            <div class="chapter-emblem" style="color:${v.a}">${STAGE_ICON[ch.stage]}</div>
+            <div class="chapter-titles">
+              <div class="eyebrow">Fase ${ch.roman} · ${ch.mascot} · “${ch.zone}”</div>
+              <h2>${ch.title} — ${ch.subtitle}</h2>
+              <div class="sub">Base de datos GradosTitulos · Azure SQL Database</div>
+            </div>
+          </div>
+          <div class="chapter-score">
+            <span class="n" id="${ch.id}-score">0/${ch.questions.length}</span>
+            <div class="lbl">correctas</div>
+            <div class="chapter-bar"><i id="${ch.id}-bar"></i></div>
+          </div>
+        </div>
+        <p class="blurb">${ch.blurb}</p>
+        <div class="qgrid">${qs}</div>
+        <div class="chapter-foot" id="${ch.id}-foot" style="display:none">
+          <div class="medal">${ch.roman}</div>
+          <div class="txt"><b>Fase completada: ${ch.mascot}</b><span id="${ch.id}-footmsg">¡Sigues evolucionando por el sendero!</span></div>
+        </div>
+      </div>
+    </section>`;
+  }).join('');
+
+  // bind option clicks
+  chaptersEl.querySelectorAll('.qcard').forEach(card=>{
+    const chId = card.dataset.ch, qi = +card.dataset.qi;
+    const ch = QUIZ_DATA.find(c=>c.id===chId);
+    const q = ch.questions[qi];
+    card.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(STATE[chId].answered[qi]) return; // already answered
+        const oi = +btn.dataset.oi;
+        const isCorrect = oi === q.correct;
+        STATE[chId].answered[qi] = { picked: oi, correct: isCorrect };
+        card.querySelectorAll('.opt').forEach(b=>b.classList.add('locked'));
+        btn.classList.add(isCorrect ? 'pick-correct' : 'pick-wrong');
+        if(!isCorrect){
+          card.querySelectorAll('.opt')[q.correct].classList.add('reveal-correct');
+        }
+        card.classList.add('answered', isCorrect?'correct':'wrong');
+        document.getElementById(`${chId}-just${qi}`).classList.add('show');
+        updateAll(chId);
+        showToast(isCorrect ? '¡Correcto! +1 punto de evolución' : 'No exactamente — revisa la justificación', isCorrect);
+      });
+    });
+  });
+}
+
+/* ============ UPDATE COUNTERS ============ */
+function updateAll(justChapterId){
+  // global
+  document.getElementById('statTotal').textContent = totalQuestions();
+  document.getElementById('statAnswered').textContent = totalAnswered();
+  const ans = totalAnswered();
+  document.getElementById('statAcc').textContent = ans ? Math.round(100*totalCorrect()/ans)+'%' : '—';
+  document.getElementById('statChaptersDone').textContent = chaptersCompleteCount()+'/5';
+
+  // per chapter
+  QUIZ_DATA.forEach(ch=>{
+    const done = chapterAnswered(ch), correct = chapterCorrect(ch), total = ch.questions.length;
+    const scoreEl = document.getElementById(`${ch.id}-score`);
+    if(scoreEl) scoreEl.textContent = `${correct}/${total}`;
+    const barEl = document.getElementById(`${ch.id}-bar`);
+    if(barEl) barEl.style.width = (done/total*100)+'%';
+    const footEl = document.getElementById(`${ch.id}-foot`);
+    if(footEl && done===total){
+      footEl.style.display='flex';
+      const pct = Math.round(100*correct/total);
+      document.getElementById(`${ch.id}-footmsg`).textContent =
+        pct===100 ? `¡Dominio perfecto! ${correct}/${total} — evolución óptima.` :
+        pct>=70 ? `Buen ritmo: ${correct}/${total} correctas. Casi lista la siguiente evolución.` :
+        `${correct}/${total} correctas. Repasa las justificaciones antes de avanzar.`;
+    }
+  });
+
+  renderTabs(); // refresh progress numbers + active state
+  markActiveTabOnScroll();
+  renderCrystal();
+  renderFinale();
+}
+
+/* ============ EVOLUTION CRYSTAL (signature progress element) ============ */
+const crystalIcon = document.getElementById('crystalIcon');
+function renderCrystal(){
+  const pct = Math.round(100*totalAnswered()/totalQuestions());
+  document.getElementById('crystalPct').textContent = pct+'%';
+  // color shifts lime -> gold as progress increases
+  const from = [139,212,80], to=[242,193,78];
+  const mix = from.map((c,i)=> Math.round(c + (to[i]-c)*(pct/100)));
+  const col = `rgb(${mix.join(',')})`;
+  crystalIcon.innerHTML = `<svg viewBox="0 0 40 40"><polygon points="20,2 34,14 28,38 12,38 6,14" fill="none" stroke="${col}" stroke-width="2"/><polygon points="20,2 34,14 28,38 12,38 6,14" fill="${col}" opacity="${0.12+pct/150}"/></svg>`;
+}
+
+/* ============ FINALE RING ============ */
+const finaleArc = document.getElementById('finaleArc');
+const CIRC = 2*Math.PI*44;
+function renderFinale(){
+  const t = totalQuestions(), c = totalCorrect();
+  document.getElementById('finaleScore').textContent = `${c}/${t}`;
+  const frac = t? c/t : 0;
+  finaleArc.setAttribute('stroke-dasharray', CIRC);
+  finaleArc.setAttribute('stroke-dashoffset', CIRC*(1-frac));
+}
+
+/* ============ ACTIVE TAB ON SCROLL ============ */
+function markActiveTabOnScroll(){
+  const sections = QUIZ_DATA.map(ch=>document.getElementById('sec-'+ch.id));
+  let currentId = QUIZ_DATA[0].id;
+  const y = window.scrollY + 140;
+  sections.forEach((sec,i)=>{ if(sec && sec.offsetTop <= y) currentId = QUIZ_DATA[i].id; });
+  evoTabs.querySelectorAll('.evo-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.target===currentId);
+  });
+}
+window.addEventListener('scroll', markActiveTabOnScroll, { passive:true });
+
+/* ============ TOAST ============ */
+let toastTimer;
+function showToast(msg, ok){
+  const t = document.getElementById('toast');
+  t.textContent = (ok ? '✓ ' : '✕ ') + msg;
+  t.style.borderColor = ok ? '#5fd66d' : '#e2574c';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ============ INIT ============ */
+renderTabs();
+renderChain();
+renderChapters();
+updateAll();
+</script>
+</body>
+</html>
